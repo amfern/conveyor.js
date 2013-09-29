@@ -73,14 +73,6 @@ module.exports = function(grunt) {
               message: "Minified and validated with success!"
             }
           }
-        },
-        connect: {
-          server: {
-            options: {
-	      keepalive:true,
-	      hostname: "*"
-            }
-          }
         }
     });
  
@@ -90,7 +82,5 @@ module.exports = function(grunt) {
 
     // Observe changes, concatenate, minify and validate files
     grunt.registerTask( "default", [ "coffee", "notify:coffee", "uglify", "notify:js" ]);
-
-    grunt.loadNpmTasks('grunt-contrib-connect');
 };
 
