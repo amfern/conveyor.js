@@ -1,5 +1,5 @@
 {
-  "name": "yourlibrary",
+  "name": "comp",
   "version": "0.0.1",
   "title": "YourLibrary",
   "homepage": "http://chris.enytc.com",
@@ -35,7 +35,11 @@
     "grunt-contrib-uglify": "~0.2.1",
     "grunt-contrib-coffee": "~0.7.0",
     "matchdep": "~0.1.2",
-    "express": "3.x"
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-bower-task": "~0.3.2",
+    "grunt-contrib-clean": "~0.5.0"
   },
   "engines": {
     "node": ">=0.10.17",
