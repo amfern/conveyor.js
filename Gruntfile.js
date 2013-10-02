@@ -71,13 +71,11 @@ module.exports = function(grunt) {
             'lib/performance/index.js', // performance.now() polyfill
             'lib/rAF/index.js', // requestAnimationFrame() polyfill
             
-            // engine core 
+            // engine
             // --------------------------------------------
-            'src/core/*.js',
-
-            // engine systems
-            // --------------------------------------------
-            'src/systems/**/*.js'
+            'src/core/*.js', // engine core 
+            'src/systems/**/*.js', // engine systems
+            'src/entities/**/*.js' // engine entities
           ],
         dest: '<%= dirs.build %>/<%= pkgFullName %>.js'
       }
@@ -104,6 +102,7 @@ module.exports = function(grunt) {
         tasks: ['compile'],
         options: {
           interrupt: true,
+          nospawn: true
         },
       },
     },
