@@ -1,86 +1,126 @@
 "use strict";
 
 module.exports = function(grunt) {
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-bower-task');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
-    require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
 
-    grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.initConfig({
 
-    grunt.initConfig({
+    // Define Directory
+    dirs: {
+      src:     "src",
+      build:  "dist"
+    },
 
-        // Define Directory
-        dirs: {
-            js:     "src/js",
-            coffee: "src/coffee",
-            build:  "dist"
-        },
+    // Metadata
+    pkg: grunt.file.readJSON("package.json"),
+    banner:
+    "\n" +
+    "/*\n" +
+     " * -------------------------------------------------------\n" +
+     " * Project: <%= pkg.title %>\n" +
+     " * Version: <%= pkg.version %>\n" +
+     " *\n" +
+     " * Author:  <%= pkg.author.name %>\n" +
+     " * Site:     <%= pkg.author.url %>\n" +
+     " * Contact: <%= pkg.author.email %>\n" +
+     " *\n" +
+     " *\n" +
+     " * Copyright (c) <%= grunt.template.today(\"yyyy\") %> <%= pkg.author.name %>\n" +
+     " * -------------------------------------------------------\n" +
+     " */\n" +
+     "\n",
 
-        // Metadata
-        pkg: grunt.file.readJSON("package.json"),
-        banner:
-        "\n" +
-        "/*\n" +
-         " * -------------------------------------------------------\n" +
-         " * Project: <%= pkg.title %>\n" +
-         " * Version: <%= pkg.version %>\n" +
-         " *\n" +
-         " * Author:  <%= pkg.author.name %>\n" +
-         " * Site:     <%= pkg.author.url %>\n" +
-         " * Contact: <%= pkg.author.email %>\n" +
-         " *\n" +
-         " *\n" +
-         " * Copyright (c) <%= grunt.template.today(\"yyyy\") %> <%= pkg.author.name %>\n" +
-         " * -------------------------------------------------------\n" +
-         " */\n" +
-         "\n",
+    pkgFullName: "<%= pkg.name %>-v<%= pkg.version%>",
 
-        // Compile CoffeeScript
-        coffee: {
-            compileBare: {
-              options: {
-                bare: true
-              },
-              files: {
-                "<%= dirs.js %>/yourLibrary.js" : "<%= dirs.coffee %>/yourLibrary.coffee"
-              }
-            }
-        },
-
-        // Minify and Concat archives
-        uglify: {
-            options: {
-                mangle: false,
-                banner: "<%= banner %>"
-            },
-            dist: {
-              files: {
-                  "<%= dirs.build %>/yourLibrary.min.js": "<%= dirs.js %>/yourLibrary.js"
-              }
-            }
-        },
-
-        // Notifications
-        notify: {
-          coffee: {
-            options: {
-              title: "CoffeeScript - <%= pkg.title %>",
-              message: "Compiled and minified with success!"
-            }
-          },
-          js: {
-            options: {
-              title: "Javascript - <%= pkg.title %>",
-              message: "Minified and validated with success!"
-            }
-          }
+    // Minify and Concat archives
+    uglify: {
+      options: {
+        mangle: false,
+        banner: "<%= banner %>"
+      },
+      dist: {
+        files: {
+          "<%= dirs.build %>/<%= pkgFullName %>.min.js": "<%= dirs.build %>/<%= pkgFullName %>.js"
         }
-    });
- 
+      }
+    },
 
-    // Register Taks
-    // --------------------------
+    // Notifications
+    notify: {
+      options: {
+        title: "Javascript - <%= pkg.title %>",
+        message: "Minified and validated with success!"
+      }
+    },
 
-    // Observe changes, concatenate, minify and validate files
-    grunt.registerTask( "default", [ "coffee", "notify:coffee", "uglify", "notify:js" ]);
+    // concat configuration
+    concat: {
+      options: {
+        banner: "<%= banner %>"
+      },
+      target : {
+        src: [
+            // Polyfillers
+            // --------------------------------------------
+            'lib/performance/index.js', // performance.now() polyfill
+            'lib/rAF/index.js', // requestAnimationFrame() polyfill
+            
+            // engine core 
+            // --------------------------------------------
+            'src/core/*.js',
+
+            // engine systems
+            // --------------------------------------------
+            'src/systems/**/*.js'
+          ],
+        dest: '<%= dirs.build %>/<%= pkgFullName %>.js'
+      }
+    },
+
+    jshint: {
+      beforeconcat: ['src/**/*.js'],
+      // afterconcat: ['<%= dirs.build %>/<%= pkgFullName %>.js']
+    },
+
+    bower: {
+      install: {
+        options: {
+          install: true,
+          copy: false
+        }
+      }
+    },
+
+    // Observe changes
+    watch: {
+      scripts: {
+        files: ['src/**/*.js', 'lib/**/*.js'],
+        tasks: ['compile'],
+        options: {
+          interrupt: true,
+        },
+      },
+    },
+
+    // clean 
+    clean: {
+      debug: ["<%= dirs.build %>/<%= pkgFullName %>.js"],
+      build: ["<%= dirs.build %>/"] 
+    }
+  });
+
+
+  // Register Taks
+  // --------------------------
+
+  // concatenate, minify and validate files
+  grunt.registerTask( "compile", [ "jshint", 'concat' ]);
+  grunt.registerTask( "debug", [ "clean:debug", "bower:install", "compile", "watch" ]);
+  grunt.registerTask( "build", [ "clean:build", "bower:install", "compile", "uglify" ]);
 };
-
