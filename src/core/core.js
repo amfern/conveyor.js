@@ -1,18 +1,25 @@
+
 window.comp = (function() {
-  var systems, updateInterval;
+  var systems, updateInterval, entities;
 
   systems = [];
+  entities = [];
   updateInterval = 0.03;
 
   // cycling over all systems and proccesing them
-  proccessSystems = function() {
+  proccessSystems = function(name, system) {
 
   };
 
   // pushes system to system array in the correct spot according to dependencies
-  registerSystem = function() {
+  registerSystem = function(system) {
 
   };
+
+  // add new entity
+  registerEntity = function(entity) {
+
+  };  
 
   // get better main loop
   mainLoop = function() {
@@ -54,10 +61,7 @@ window.comp = (function() {
     window.requestAnimationFrame(frameUpdate);
   };
 
-
-
-  return {
-    version: version,
-    hello: helloWorld
-  };
+  mainLoop.registerSystem = registerSystem;
+  mainLoop.registerEntity = registerEntity;
+  return mainLoop;
 })();
