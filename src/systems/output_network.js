@@ -1,12 +1,12 @@
-// Counting interval between last systems proccesss loop
+// uses network device from  NetworkInput system
 // -----------------------------------------
 new comp.System({
-  name: 'Interval',
+  name: 'OutputNetwork',
   dependencies: [], // systems that should run before this one
 
   // system component creates new components for entities
   component: function() {
-    return { interval: 0 };
+    return THREE;
   }, 
 
   // this func runs each loop processing components
