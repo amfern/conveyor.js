@@ -1,4 +1,3 @@
-
 window.comp = (function() {
   var systems, updateInterval, entities;
 
@@ -8,7 +7,9 @@ window.comp = (function() {
 
   // cycling over all systems and proccesing them
   proccessSystems = function(name, system) {
-
+    // for (var i = 0, x; x= p[i]; i += 1) {
+     
+    // }
   };
 
   // pushes system to system array in the correct spot according to dependencies
@@ -19,7 +20,7 @@ window.comp = (function() {
   // add new entity
   registerEntity = function(entity) {
 
-  };  
+  };
 
   // get better main loop
   mainLoop = function() {

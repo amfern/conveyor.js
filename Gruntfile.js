@@ -66,15 +66,28 @@ module.exports = function(grunt) {
       },
       target : {
         src: [
-            // Polyfillers
+            // polyfillers
             // --------------------------------------------
             'lib/performance/index.js', // performance.now() polyfill
             'lib/rAF/index.js', // requestAnimationFrame() polyfill
             
-            // engine
+            // engine core
             // --------------------------------------------
-            'src/core/*.js', // engine core 
-            'src/systems/**/*.js', // engine systems
+            'src/core/core.js',
+            'src/core/system.js',
+            'src/core/entity.js',
+
+            // engine core output/input systems
+            // --------------------------------------------
+            'src/systems/input.js', // keyboard, mouse, touch input
+            'src/systems/inputNetwork.js', // network input
+            'src/systems/interval.js', // interval between last loop(logic systems goes here): performance.now()
+            'src/systems/outputNetwork.js', // network output
+            'src/systems/graphic.js', // graphic output: THREE.js
+            'src/systems/audio.js', // audio output
+
+            // basic output/input systems
+            // --------------------------------------------
             'src/entities/**/*.js' // engine entities
           ],
         dest: '<%= dirs.build %>/<%= pkgFullName %>.js'
