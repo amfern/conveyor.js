@@ -1,12 +1,12 @@
-// Counting interval between last systems proccesss loop
+// Wraps THREE.js as graphic output
 // -----------------------------------------
 new comp.System({
-  name: 'Interval',
+  name: 'Graphic',
   dependencies: [], // systems that should run before this one
 
   // system component creates new components for entities
   component: function() {
-    return { interval: 0 };
+    return THREE;
   }, 
 
   // this func runs each loop processing components

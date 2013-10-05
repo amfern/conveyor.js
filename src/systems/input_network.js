@@ -1,12 +1,10 @@
-// Counting interval between last systems proccesss loop
+// Keyboard, mouse, touch .....
 // -----------------------------------------
 new comp.System({
-  name: 'Interval',
-  dependencies: [], // systems that should run before this one
-
+  name: 'InputNetwork',
   // system component creates new components for entities
   component: function() {
-    return { interval: 0 };
+    return {  };
   }, 
 
   // this func runs each loop processing components
