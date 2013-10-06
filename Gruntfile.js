@@ -7,6 +7,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
 
   grunt.initConfig({
@@ -65,7 +67,7 @@ module.exports = function(grunt) {
         banner: "<%= banner %>"
       },
       target : {
-        src: [            
+        src: [           
             // engine core
             // --------------------------------------------
             'src/core/core.js',
@@ -84,6 +86,13 @@ module.exports = function(grunt) {
           ],
         dest: '<%= dirs.build %>/<%= pkgFullName %>.js'
       }
+    },
+
+    copy: {
+      main: {
+        src: '<%= dirs.build %>/<%= pkgFullName %>.js',
+        dest: '<%= dirs.build %>/<%= pkg.name %>-latest.js',
+      },
     },
 
     jshint: {
@@ -116,6 +125,17 @@ module.exports = function(grunt) {
     clean: {
       debug: ["<%= dirs.build %>/<%= pkgFullName %>.js"],
       build: ["<%= dirs.build %>/"] 
+    },
+
+    // test server configuration
+    connect: {
+      server: {
+        options: {
+          port: 9001,
+          base: "examples",
+          hostname: "*"
+        }
+      }
     }
   });
 
@@ -124,7 +144,7 @@ module.exports = function(grunt) {
   // --------------------------
 
   // concatenate, minify and validate files
-  grunt.registerTask( "compile", [ "jshint", 'concat' ]);
-  grunt.registerTask( "debug", [ "clean:debug", "bower:install", "compile", "watch" ]);
+  grunt.registerTask( "compile", [ "jshint", "concat", "copy" ]);
+  grunt.registerTask( "debug", [ "clean:debug", "bower:install", "compile", "connect", "watch" ]);
   grunt.registerTask( "build", [ "clean:build", "bower:install", "compile", "uglify" ]);
 };
