@@ -1,12 +1,11 @@
-// uses network device from  NetworkInput system
+// Keyboard, mouse, touch .....
 // -----------------------------------------
 new comp.System({
-  name: 'OutputNetwork',
-  dependencies: [], // systems that should run before this one
-
+  name: 'InputNetwork',
+  
   // system component creates new components for entities
   component: function() {
-    return THREE;
+    return {  };
   }, 
 
   // this func runs each loop processing components

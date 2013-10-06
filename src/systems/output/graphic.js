@@ -2,7 +2,7 @@
 // -----------------------------------------
 new comp.System({
   name: 'Graphic',
-  dependencies: [], // systems that should run before this one
+  dependencies: ['OutputInterval'], // systems that should run before this one
 
   // system component creates new components for entities
   component: function() {
