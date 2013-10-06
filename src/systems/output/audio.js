@@ -1,8 +1,8 @@
-// Wraps THREE.js as graphic output
+// Wraps audio library
 // -----------------------------------------
 new comp.System({
   name: 'Audio',
-  dependencies: [], // systems that should run before this one
+  dependencies: ['OutputInterval'], // systems that should run before this one
 
   // system component creates new components for entities
   component: function() {

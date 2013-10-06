@@ -65,26 +65,18 @@ module.exports = function(grunt) {
         banner: "<%= banner %>"
       },
       target : {
-        src: [
-            // polyfillers
-            // --------------------------------------------
-            'lib/performance/index.js', // performance.now() polyfill
-            'lib/rAF/index.js', // requestAnimationFrame() polyfill
-            
+        src: [            
             // engine core
             // --------------------------------------------
             'src/core/core.js',
             'src/core/system.js',
             'src/core/entity.js',
+            'src/core/interval.js', // interval between last loop(logic systems goes here): performance.now()
+            'src/core/output-interval.js', // interval between and after logic system finished proccesing(output systems goes here): interval + performance.now()
 
-            // engine core output/input systems
+            // engine output/input core systems
             // --------------------------------------------
-            'src/systems/input.js', // keyboard, mouse, touch input
-            'src/systems/inputNetwork.js', // network input
-            'src/systems/interval.js', // interval between last loop(logic systems goes here): performance.now()
-            'src/systems/outputNetwork.js', // network output
-            'src/systems/graphic.js', // graphic output: THREE.js
-            'src/systems/audio.js', // audio output
+            'src/systems/**/*.js',
 
             // basic output/input systems
             // --------------------------------------------
