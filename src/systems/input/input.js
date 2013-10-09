@@ -2,7 +2,7 @@
 // API for register keyboard AND mouse AND touch combos, when the combo pressed api will set appropriate flag to true.
 // passing additional values will effect the behavior of the key
 // -----------------------------------------
-new comp.System({
+new comp.System.IO({
   name: 'Input',
   
   // system component creates new components for entities
@@ -11,7 +11,7 @@ new comp.System({
   }, 
 
   // this func runs each loop processing components
-  proccess: function(entities) {
+  proccess: function(entities, interpolation) {
     // gets interval components from each entity and updates the passed interval
   }
 });

@@ -74,7 +74,6 @@ module.exports = function(grunt) {
             'src/core/system.js',
             'src/core/entity.js',
             'src/core/interval.js', // interval between last loop(logic systems goes here): performance.now()
-            'src/core/output-interval.js', // interval between and after logic system finished proccesing(output systems goes here): interval + performance.now()
 
             // engine output/input core systems
             // --------------------------------------------
