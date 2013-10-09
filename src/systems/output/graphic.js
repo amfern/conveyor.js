@@ -1,8 +1,8 @@
 // Wraps THREE.js as graphic output
 // -----------------------------------------
-new comp.System({
+new comp.System.IO({
   name: 'Graphic',
-  dependencies: ['OutputInterval'], // systems that should run before this one
+  dependencies: [], // systems that should run before this one
 
   // system component creates new components for entities
   component: function() {
