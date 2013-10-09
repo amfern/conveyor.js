@@ -1,19 +1,28 @@
 window.comp = (function() {
   var systems, updateInterval, entities;
 
-  systems = [];
+  logicSystems = [];
+  inputSystems = [];
+  outputSystems = [];
   entities = [];
   updateInterval = 0.03;
 
-  // cycling over all systems and proccesing them
-  proccessSystems = function(name, system) {
+  // cycling over all logic systems and proccesing them
+  proccessLogic = function(systemType) {
     // for (var i = 0, x; x= p[i]; i += 1) {
      
     // }
   };
 
-  // pushes system to system array in the correct spot according to dependencies
-  registerSystem = function(system) {
+  // cycling over all input/output systems and proccesing them passing interpolation to each
+  proccessIO = function(systemType) {
+    // for (var i = 0, x; x= p[i]; i += 1) {
+     
+    // }
+  };
+
+  // pushes system to (logicSystem: 0; inputSystem: 1; outputSystem: 2;) array in the correct spot according to dependencies
+  registerSystem = function(type, system) {
 
   };
 
