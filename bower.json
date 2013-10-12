@@ -22,6 +22,7 @@
     "performance": "https://gist.github.com/paulirish/5438650/raw/9912fea136c32c58ae086372a2083813d984c6da/performance.now%28%29-polyfill.js",
     "threejs": "r60",
     "jasmine": "~1.3.1",
+    "lodash": "~2.2.1",
     "Keypress": "*"
   }
 }

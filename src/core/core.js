@@ -1,74 +1,81 @@
 window.comp = (function() {
-  var systems, updateInterval, entities;
+  var TICKS_PER_SECOND = 25,
+            SKIP_TICKS = 1000 / TICKS_PER_SECOND,
+         MAX_FRAMESKIP = 5,
+          logicSystems = [],
+             IOSystems = [],
+              entities = [];
 
-  logicSystems = [];
-  inputSystems = [];
-  outputSystems = [];
-  entities = [];
-  updateInterval = 0.03;
+  // Private
+  // --------------------------
+  systemIndex = function(systems, systemName) {
+    return _.findIndex(systems, function(system) { return system.name == systemName; });
+  };
+
+  systemLastDependancyPosition = function(systemsCollection, system) {
+    var sysIndex = 0;
+
+    _.each(system.dependencies, function(dependencySystem) {
+      depSysIndex = systemIndex(systemsCollection, dependencySystem.name);
+      deepDepSysIndex = systemLastDependancyPosition(dependencySystem);
+      deepDepSysIndex = deepDepSysIndex > depSysIndex ? deepDepSysIndex : depSysIndex;
+      sysIndex = deepDepSysIndex > sysIndex ? deepDepSysIndex : sysIndex;
+    });
+
+    return sysIndex;
+  };
 
   // cycling over all logic systems and proccesing them
-  proccessLogic = function(systemType) {
-    // for (var i = 0, x; x= p[i]; i += 1) {
-     
-    // }
+  proccessLogic = function() {
+    _.each(logicSystems, function(system) {
+      system.proccess(entities);
+    });
   };
 
   // cycling over all input/output systems and proccesing them passing interpolation to each
-  proccessIO = function(systemType) {
-    // for (var i = 0, x; x= p[i]; i += 1) {
-     
-    // }
+  proccessIO = function(interpolation) {
+    _.each(IOSystems, function(system) {
+      system.proccess(entities, interpolation);
+    });
   };
 
-  // pushes system to (logicSystem: 0; inputSystem: 1; outputSystem: 2;) array in the correct spot according to dependencies
-  registerSystem = function(type, system) {
+  // Public
+  // --------------------------
 
+  // pushes system to (logicSystem: 0; IOSystem: 1) array in the correct spot according to dependencies
+  registerSystem = function(type, system) {
+    var systemsCollection = type ? logicSystem : IOSystems,
+              systemIndex = systemLastDependancyPosition(systemsCollection, system);
+
+    systemsCollection.splice(systemIndex, 0, system);
   };
 
   // add new entity
   registerEntity = function(entity) {
-
+    entities.push(entity);
   };
 
   // get better main loop
   mainLoop = function() {
-    var time = 0,
-        deltaTime = this.updateInterval,
-        currentTime = window.perfNow() / 1000, // Maybe delegate this to an outer Timer class.
-        newTime = 0,
-        frameTime = 0,
-        accumulator = 0,
-        alpha,
-        that = this;
-      
-    function frameUpdate() {
-      newTime = window.perfNow() / 1000;
-      frameTime = newTime - currentTime;
-      
-      if (frameTime > deltaTime * 10) {
-        frameTime = deltaTime * 10; // avoiding spiral of death
-      } 
+    var nextGameTick = window.performance(),
+        interpolation,
+        loops;
 
-      currentTime = newTime;
-      
-      accumulator += frameTime;
-  
-      while(accumulator >= deltaTime) {
-        that.update(time, deltaTime);
-        
-        time += deltaTime;
-        accumulator -= deltaTime;
+    cycle = function() {
+      loops = 0;
+      while(window.performance() > nextGameTick && loops < MAX_FRAMESKIP) {
+        proccessLogic();
+        nextGameTick += SKIP_TICKS;
+        loops++;
       }
-      
-      alpha = accumulator / deltaTime;
-  
-      that.render(alpha);
-                  
-      window.requestAnimationFrame(frameUpdate);
-    }
 
-    window.requestAnimationFrame(frameUpdate);
+      interpolation = (window.performance() + SKIP_TICKS - nextGameTick) / SKIP_TICKS;
+      proccessIO(interpolation);
+
+      window.requestAnimationFrame(mainLoop);
+    };
+
+    window.requestAnimationFrame(mainLoop);
   };
 
   mainLoop.registerSystem = registerSystem;
