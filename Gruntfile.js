@@ -9,7 +9,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-connect');
-
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
 
   grunt.initConfig({
 
@@ -135,9 +135,21 @@ module.exports = function(grunt) {
           hostname: "*"
         }
       }
+    },
+
+    jasmine: {
+      src: '<%= dirs.build %>/<%= pkg.name %>-latest.js',
+      options: {
+        specs: 'spec/**/*.js',
+        vendor: [
+          "lib/performance/index.js",
+          "lib/rAF/index.js",
+          "lib/threejs/build/three.js",
+          "dist/lodash/dist/lodash.js"
+        ]
+      }
     }
   });
-
 
   // Register Taks
   // --------------------------
@@ -145,5 +157,6 @@ module.exports = function(grunt) {
   // concatenate, minify and validate files
   grunt.registerTask( "compile", [ "jshint", "concat", "copy" ]);
   grunt.registerTask( "debug", [ "clean:debug", "bower:install", "compile", "connect", "watch" ]);
+  grunt.registerTask( "test", [ "bower:install", "compile", "jasmine" ]);
   grunt.registerTask( "build", [ "clean:build", "bower:install", "compile", "uglify" ]);
 };

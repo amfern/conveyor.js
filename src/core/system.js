@@ -1,22 +1,27 @@
 comp.System = (function(type, config) {
-  // set defaults
-  config = config || {};
-  config.dependencies = config.dependencies || []; // systems that should run before this one
-  config.component = config.component || function() { return {}; }; // new component generator for this system
+  var constructor;
 
-  
-  // The heart of the system where entities are proccessed.
-  // whilte loop that loops througe all components of entities
-  // -----------------------------------------
-  if(typeof(config.proccess) != 'function') throw 'proccess function is mandatory'; 
+  constructor = function() {
+    // set defaults
+    config = config || {};
+    config.dependencies = config.dependencies || []; // systems that should run before this one
+    config.component = config.component || function() { return {}; }; // new component generator for this system
 
-  comp.registerSystem(type, config);
+    // The heart of the system where entities are proccessed.
+    // whilte loop that loops througe all components of entities
+    // -----------------------------------------
+    if(typeof(config.proccess) != 'function') throw 'proccess function is mandatory'; 
 
-  return {
-    // declare logic system
-    Logic: (function(config) { return new this(0, config); })(),
-    
-    // declare input/output system
-    IO: (function(config) { return new this(1, config); })()
+    comp.registerSystem(type, config);
   };
+
+  return constructor;
+})();
+
+comp.System.Logic = (function(config) {
+  return function(config) { return new comp.System(0, config); };
+})();
+
+comp.System.IO = (function(config) {
+  return function(config) { return new comp.System(1, config); };
 })();
