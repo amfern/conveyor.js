@@ -10,6 +10,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
+   // grunt.loadNpmTasks('grunt-jasmine-runner');
 
   grunt.initConfig({
 
@@ -39,6 +40,7 @@ module.exports = function(grunt) {
      "\n",
 
     pkgFullName: "<%= pkg.name %>-v<%= pkg.version%>",
+    pkgCoreFiles: ['src/core/core.js', 'src/core/system.js', 'src/core/entity.js'],
 
     // Minify and Concat archives
     uglify: {
@@ -70,10 +72,7 @@ module.exports = function(grunt) {
         src: [           
             // engine core
             // --------------------------------------------
-            'src/core/core.js',
-            'src/core/system.js',
-            'src/core/entity.js',
-            'src/core/interval.js', // interval between last loop(logic systems goes here): performance.now()
+            "<%= pkgCoreFiles %>",
 
             // engine output/input core systems
             // --------------------------------------------
@@ -110,9 +109,9 @@ module.exports = function(grunt) {
 
     // Observe changes
     watch: {
-      scripts: {
-        files: ['src/**/*.js', 'lib/**/*.js'],
-        tasks: ['compile'],
+      debug: {
+        files: ['src/**/*.js', 'lib/**/*.js', 'spec/**/*.js'],
+        tasks: ['compile', 'jasmine'],
         options: {
           interrupt: true,
           nospawn: true
@@ -138,15 +137,16 @@ module.exports = function(grunt) {
     },
 
     jasmine: {
-      src: '<%= dirs.build %>/<%= pkg.name %>-latest.js',
+      src: ["<%= pkgCoreFiles %>"],
       options: {
         specs: 'spec/**/*.js',
         vendor: [
           "lib/performance/index.js",
           "lib/rAF/index.js",
           "lib/threejs/build/three.js",
-          "dist/lodash/dist/lodash.js"
-        ]
+          "lib/lodash/dist/lodash.js"
+        ],
+        keepRunner: true
       }
     }
   });
@@ -156,7 +156,6 @@ module.exports = function(grunt) {
 
   // concatenate, minify and validate files
   grunt.registerTask( "compile", [ "jshint", "concat", "copy" ]);
-  grunt.registerTask( "debug", [ "clean:debug", "bower:install", "compile", "connect", "watch" ]);
-  grunt.registerTask( "test", [ "bower:install", "compile", "jasmine" ]);
+  grunt.registerTask( "debug", [ "clean:debug", "bower:install", "connect", "watch:debug" ]);
   grunt.registerTask( "build", [ "clean:build", "bower:install", "compile", "uglify" ]);
 };
