@@ -1,27 +1,25 @@
-comp.System = (function(type, config) {
-  var constructor;
-
-  constructor = function() {
+comp._System = (function() {
+  function constructor(config) {
     // set defaults
     config = config || {};
     config.dependencies = config.dependencies || []; // systems that should run before this one
     config.component = config.component || function() { return {}; }; // new component generator for this system
 
     // The heart of the system where entities are proccessed.
-    // whilte loop that loops througe all components of entities
+    // while loop that loops througe all components of entities
     // -----------------------------------------
-    if(typeof(config.proccess) != 'function') throw 'proccess function is mandatory'; 
+    if(typeof(config.proccess) != 'function') throw new Error('proccess function is mandatory');
 
-    comp.registerSystem(type, config);
-  };
+    return config;
+  }
 
   return constructor;
 })();
 
-comp.System.Logic = (function(config) {
-  return function(config) { return new comp.System(0, config); };
+comp.LogicSystem = (function() {
+  return function(config) { return comp._registerLogicSystem( new comp._System(config) ); };
 })();
 
-comp.System.IO = (function(config) {
-  return function(config) { return new comp.System(1, config); };
+comp.IOSystem = (function() {
+  return function(config) { return comp._registerIOSystem( new comp._System(config) ); };
 })();

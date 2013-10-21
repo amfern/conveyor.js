@@ -1,84 +1,142 @@
 window.comp = (function() {
-  var TICKS_PER_SECOND = 25,
+  var     logicSystems,
+             IOSystems,
+      TICKS_PER_SECOND = 25,
             SKIP_TICKS = 1000 / TICKS_PER_SECOND,
          MAX_FRAMESKIP = 5,
-          logicSystems = [],
-             IOSystems = [],
+      tempLogicSystems = [],
+         tempIOSystems = [],
               entities = [];
 
   // Private
   // --------------------------
-  systemIndex = function(systems, systemName) {
-    return _.findIndex(systems, function(system) { return system.name == systemName; });
-  };
+  function registerSystem(systemCollection, system) {
+    if(systemIndex(systemCollection, system.name) != -1) throw new Error('system under name "' + system.name + '" already exists');
 
-  systemLastDependancyPosition = function(systemsCollection, system) {
-    var sysIndex = 0;
-
-    _.each(system.dependencies, function(dependencySystem) {
-      depSysIndex = systemIndex(systemsCollection, dependencySystem.name);
-      deepDepSysIndex = systemLastDependancyPosition(dependencySystem);
-      deepDepSysIndex = deepDepSysIndex > depSysIndex ? deepDepSysIndex : depSysIndex;
-      sysIndex = deepDepSysIndex > sysIndex ? deepDepSysIndex : sysIndex;
+    _.each(system.dependencies, function(depName) {
+      if(depName == system.name) throw new Error('system cannot depend on it self');
     });
 
+    systemCollection.push(system);
+    return system;
+  }
+
+  function systemIndex(systems, systemName) {
+    return _.findIndex(systems, function(system) { return system.name == systemName; });
+  }
+
+  // adds system and it dependancies in order
+  // returns system index
+  function addSystem(tempSystemCollection, systemCollection, tempSys) {
+    var sysIndex = systemIndex(systemCollection, tempSys.name);
+
+    if( sysIndex != -1 ) return sysIndex; // do nothing if system already exists
+
+    // add dependancies
+    _.each(tempSys.dependencies, function(depSysName) {
+      var depSys = _.find(tempSystemCollection, function(s) { return s.name == depSysName; }); // resolve depndancy
+      if(!depSys) return; // continue loop if depandancy system doesn't exists
+      var tempSysIndex = addSystem(tempSystemCollection, systemCollection, depSys); // add system
+      sysIndex = sysIndex > tempSysIndex ? sysIndex : tempSysIndex; // set the highest depandancy
+    });
+
+    // TODO: rise event system finish loading(tempSys);
+    sysIndex++;
+    systemCollection.splice(sysIndex, 0, tempSys); // add system it self
+
     return sysIndex;
-  };
+  }
+
+  function prepareSystem(tempSystemCollection) {
+    var systemCollection = [];
+
+    _.each(tempSystemCollection, function(tempSys) {
+      addSystem(tempSystemCollection, systemCollection, tempSys);
+    });
+
+    return systemCollection;
+  }
+
+  function prepareLogicSystem() {
+    return prepareSystem(tempLogicSystems);
+  }
+
+  function prepareIOSystem() {
+    return prepareSystem(tempIOSystems);
+  }
 
   // cycling over all logic systems and proccesing them
-  proccessLogic = function() {
+  function proccessLogic() {
     _.each(logicSystems, function(system) {
       system.proccess(entities);
     });
-  };
+  }
 
   // cycling over all input/output systems and proccesing them passing interpolation to each
-  proccessIO = function(interpolation) {
+  function proccessIO(interpolation) {
     _.each(IOSystems, function(system) {
       system.proccess(entities, interpolation);
     });
-  };
+  }
 
   // Public
   // --------------------------
 
-  // pushes system to (logicSystem: 0; IOSystem: 1) array in the correct spot according to dependencies
-  registerSystem = function(type, system) {
-    var systemsCollection = type ? logicSystem : IOSystems,
-              systemIndex = systemLastDependancyPosition(systemsCollection, system);
+  // returns logic systems
+  function getLogicSystems() {
+    return logicSystems;
+  }
 
-    systemsCollection.splice(systemIndex, 0, system);
-  };
+  // returns InputOutput systems
+  function getIOSystems() {
+    return IOSystem;
+  }
+
+  // returns entities
+  function getEnteties() {
+    return entities;
+  }
+
+  // pushes system to (logicSystem: 0; IOSystem: 1) array in the correct spot according to dependencies
+  function registerLogicSystem(system) {
+    return registerSystem(tempLogicSystems, system);
+  }
+
+  function registerIOSystem(system) {
+    return registerSystem(tempIOSystems, system);
+  }
 
   // add new entity
-  registerEntity = function(entity) {
+  function registerEntity(entity) {
     entities.push(entity);
-  };
+  }
+  
+  function mainLoop() {
+    var interpolation,
+                loops,
+         nextGameTick = window.performance.now();
 
-  // get better main loop
-  mainLoop = function() {
-    var nextGameTick = window.performance(),
-        interpolation,
-        loops;
+    logicSystems = prepareLogicSystem();
+    IOSystems = prepareIOSystem();
 
-    cycle = function() {
+    function cycle() {
       loops = 0;
-      while(window.performance() > nextGameTick && loops < MAX_FRAMESKIP) {
+      while(window.performance.now() > nextGameTick && loops < MAX_FRAMESKIP) {
         proccessLogic();
         nextGameTick += SKIP_TICKS;
         loops++;
       }
 
-      interpolation = (window.performance() + SKIP_TICKS - nextGameTick) / SKIP_TICKS;
+      interpolation = (window.performance.now() + SKIP_TICKS - nextGameTick) / SKIP_TICKS;
       proccessIO(interpolation);
 
-      window.requestAnimationFrame(mainLoop);
-    };
+      window.requestAnimationFrame(cycle);
+    }
 
-    window.requestAnimationFrame(mainLoop);
-  };
-
-  mainLoop.registerSystem = registerSystem;
-  mainLoop.registerEntity = registerEntity;
+    window.requestAnimationFrame(cycle);
+  }
+  
+  mainLoop._registerLogicSystem = registerLogicSystem;
+  mainLoop._registerIOSystem = registerIOSystem;
   return mainLoop;
 })();

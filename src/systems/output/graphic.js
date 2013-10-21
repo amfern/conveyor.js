@@ -1,6 +1,6 @@
-// // Wraps THREE.js as graphic output
-// // -----------------------------------------
-// new comp.System.IO({
+// Wraps THREE.js as graphic output
+// -----------------------------------------
+// new comp.IOSystem({
 //   name: 'Graphic',
 //   dependencies: [], // systems that should run before this one
 
