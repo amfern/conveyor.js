@@ -1,21 +1,21 @@
 // 3D translate system
 // -----------------------------------------
 new comp.LogicSystem({
-  name: '3DTranslate',
+  name: '3DRotate',
   
-  dependencies: ['3DPosition'],
+  dependencies: ['3DObject'],
 
   component: function() {
     return {
-      prevPosition: new THREE.Vector3(0,0,0),
-             speed: 0
+       axis: new THREE.Vector3(0,1,0),
+      speed: 0.1
     };
   },
 
   proccess: function(entities) {
     _.each(entities, function(e) {
-      e['3DTranslate'].prevPosition = e['3Dposition'].clone();
-      e['3Dposition'].multiplyScalar(speed);
+      var rotateComponent = e['3DRotate'];
+      e['3DObject'].rotateOnAxis(rotateComponent.axis, rotateComponent.speed);
     });
   }
 });
