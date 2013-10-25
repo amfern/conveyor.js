@@ -1,10 +1,9 @@
 // 3D position system
 // -----------------------------------------
 new comp.LogicSystem({
-  name: '3DPosition',
-  
-  component: function() {
-    return new THREE.Vector3( 0, 0, 0 );
+  name: '3DObjectBefore',
+
+  component: function() { 
   },
 
   proccess: function(entities) {
