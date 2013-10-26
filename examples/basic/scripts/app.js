@@ -1,6 +1,6 @@
-new comp.Entity({
+new COMP.Entity({
   name: "entity1",
-  components: ['3DObject', '3DRotate', '3DCubeRender'], // components composing this entity
+  components: ['3DObjectAfter', '3DRotate', '3DCubeRender'], // components composing this entity
 });
 
-comp();
+COMP();

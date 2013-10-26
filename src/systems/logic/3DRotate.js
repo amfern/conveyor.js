@@ -1,6 +1,6 @@
 // 3D translate system
 // -----------------------------------------
-new comp.LogicSystem({
+new COMP.System.Logic({
   name: '3DRotate',
   
   dependencies: ['3DObject'],

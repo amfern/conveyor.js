@@ -12,7 +12,7 @@ describe("core", function() {
     it("should add system", function () {
       // Logic systems
       // -------------------------------------
-      systemLogic1 = new comp.LogicSystem({
+      systemLogic1 = new COMP.System.Logic({
         name: 'EpicSystemLogic1',
         dependencies: ['EpicSystemLogic3', 'EpicSystemLogic2'], 
         component: function() { return 'L1c'; }, 
@@ -22,7 +22,7 @@ describe("core", function() {
         }
       });
 
-      systemLogic2 = new comp.LogicSystem({
+      systemLogic2 = new COMP.System.Logic({
         name: 'EpicSystemLogic2',
         dependencies: [], 
         component: function() { return 'L2c'; }, 
@@ -32,7 +32,7 @@ describe("core", function() {
         }
       });
 
-      systemLogic3 = new comp.LogicSystem({
+      systemLogic3 = new COMP.System.Logic({
         name: 'EpicSystemLogic3',
         dependencies: [], 
         component: function() { return 'L3c'; }, 
@@ -42,7 +42,7 @@ describe("core", function() {
         }
       });
 
-      systemLogic4 = new comp.LogicSystem({
+      systemLogic4 = new COMP.System.Logic({
         name: 'EpicSystemLogic4',
         dependencies: [], 
         component: function() { return 'L4c'; }, 
@@ -52,7 +52,7 @@ describe("core", function() {
         }
       });
 
-      systemLogic5 = new comp.LogicSystem({
+      systemLogic5 = new COMP.System.Logic({
         name: 'EpicSystemLogic5',
         dependencies: ['EpicSystemLogic1'], 
         component: function() { return 'L5c'; }, 
@@ -62,7 +62,7 @@ describe("core", function() {
         }
       });
 
-      systemLogic6 = new comp.LogicSystem({
+      systemLogic6 = new COMP.System.Logic({
         name: 'EpicSystemLogic6',
         dependencies: ['NonExistandSystem1', 'NonExistandSystem2'], 
         component: function() { return 'L6c'; }, 
@@ -72,7 +72,7 @@ describe("core", function() {
         }
       });
 
-      systemLogic7 = new comp.LogicSystem({
+      systemLogic7 = new COMP.System.Logic({
         name: 'EpicSystemLogic7',
         dependencies: ['EpicSystemLogic8', 'EpicSystemLogic1'], 
         component: function() { return 'L7c'; }, 
@@ -82,7 +82,7 @@ describe("core", function() {
         }
       });
 
-      systemLogic8 = new comp.LogicSystem({
+      systemLogic8 = new COMP.System.Logic({
         name: 'EpicSystemLogic8',
         dependencies: [], 
         component: function() { return 'L8c'; }, 
@@ -97,7 +97,7 @@ describe("core", function() {
 
       // IO systems
       // -------------------------------------
-      systemIO1 = new comp.IOSystem({
+      systemIO1 = new COMP.System.IO({
         name: 'EpicSystemIO1',
         dependencies: ['EpicSystemIO3', 'EpicSystemIO2'], 
         component: function() { return 'IO1c'; }, 
@@ -107,7 +107,7 @@ describe("core", function() {
         }
       });
 
-      systemIO2 = new comp.IOSystem({
+      systemIO2 = new COMP.System.IO({
         name: 'EpicSystemIO2',
         dependencies: [], 
         component: function() { return 'IO2c'; }, 
@@ -117,7 +117,7 @@ describe("core", function() {
         }
       });
 
-      systemIO3 = new comp.IOSystem({
+      systemIO3 = new COMP.System.IO({
         name: 'EpicSystemIO3',
         dependencies: [], 
         component: function() { return 'IO3c'; }, 
@@ -127,7 +127,7 @@ describe("core", function() {
         }
       });
 
-      systemIO4 = new comp.IOSystem({
+      systemIO4 = new COMP.System.IO({
         name: 'EpicSystemIO4',
         dependencies: [], 
         component: function() { return 'IO4c'; }, 
@@ -137,7 +137,7 @@ describe("core", function() {
         }
       });
 
-      systemIO5 = new comp.IOSystem({
+      systemIO5 = new COMP.System.IO({
         name: 'EpicSystemIO5',
         dependencies: ['EpicSystemIO1'], 
         component: function() { return 'IO5c'; }, 
@@ -147,7 +147,7 @@ describe("core", function() {
         }
       });
 
-      systemIO6 = new comp.IOSystem({
+      systemIO6 = new COMP.System.IO({
         name: 'EpicSystemIO6',
         dependencies: ['NonExistandSystem1', 'NonExistandSystem2'], 
         component: function() { return 'IO6c'; }, 
@@ -157,7 +157,7 @@ describe("core", function() {
         }
       });
 
-      systemIO7 = new comp.IOSystem({
+      systemIO7 = new COMP.System.IO({
         name: 'EpicSystemIO7',
         dependencies: ['EpicSystemIO8', 'EpicSystemIO1'], 
         component: function() { return 'IO7c'; }, 
@@ -167,7 +167,7 @@ describe("core", function() {
         }
       });
 
-      systemIO8 = new comp.IOSystem({
+      systemIO8 = new COMP.System.IO({
         name: 'EpicSystemIO8',
         dependencies: [], 
         component: function() { return 'IO8c'; }, 
@@ -180,32 +180,32 @@ describe("core", function() {
     });
 
     it("should add entity", function () {
-      new comp.Entity({
+      new COMP.Entity({
         name: "entity1",
         components: ['EpicSystemLogic1']
       });
 
-      new comp.Entity({
+      new COMP.Entity({
         name: "entity2",
         components: ['EpicSystemLogic8']
       });
 
-      new comp.Entity({
+      new COMP.Entity({
         name: "entity3",
         components: ['EpicSystemLogic2']
       });
 
-      new comp.Entity({
+      new COMP.Entity({
         name: "entity4",
         components: ['EpicSystemLogic6', 'EpicSystemLogic5', 'EpicSystemLogic3', 'EpicSystemLogic4']
       });
 
-      new comp.Entity({
+      new COMP.Entity({
         name: "entity5",
         components: ['EpicSystemLogic6', 'EpicSystemLogic5', 'EpicSystemIO5', 'EpicSystemIO7']
       });
 
-      new comp.Entity({
+      new COMP.Entity({
         name: "entity6",
         components: ['EpicSystemIO1', 'EpicSystemLogic2', 'EpicSystemLogic7']
       });
@@ -213,14 +213,14 @@ describe("core", function() {
     });
 
     it("should throw exception for existance system name", function () {
-      expect(comp.LogicSystem.bind( null, {
+      expect(COMP.System.Logic.bind( null, {
         name: 'EpicSystemLogic1',
         dependencies: [], 
         component: function() { }, 
         proccess: function(entities) { }
       } )).toThrow('system under name "EpicSystemLogic1" already exists');
       
-      expect(comp.IOSystem.bind( null, {
+      expect(COMP.System.IO.bind( null, {
         name: 'EpicSystemIO1',
         dependencies: [], 
         component: function() { }, 
@@ -229,14 +229,14 @@ describe("core", function() {
     });
 
     it("should throw exception for dependency containg system name", function () {
-      expect(comp.LogicSystem.bind( null, {
+      expect(COMP.System.Logic.bind( null, {
         name: 'SameEpicSystemLogic',
         dependencies: ['SameEpicSystemLogic'], 
         component: function() { }, 
         proccess: function(entities) { }
       } )).toThrow('system cannot depend on it self');
 
-      expect(comp.IOSystem.bind( null, {
+      expect(COMP.System.IO.bind( null, {
         name: 'SameEpicSystemIO',
         dependencies: ['SameEpicSystemIO'], 
         component: function() { }, 
@@ -299,7 +299,7 @@ describe("core", function() {
         return 0;
       }
 
-      comp();
+      COMP();
     });
 
   });
