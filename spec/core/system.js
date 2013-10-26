@@ -1,11 +1,9 @@
-describe('_System', function() {
+describe('System', function() {
   var genericSystem, config;
 
   beforeEach(function() {
-    spyOn(comp, '_registerLogicSystem');
-    spyOn(comp, '_registerIOSystem');
-
-    spyOn(comp, '_System').andCallThrough();
+    spyOn(COMP, '_registerLogicSystem');
+    spyOn(COMP, '_registerIOSystem');
   });
 
   it('should register logic system with core', function () {
@@ -16,8 +14,8 @@ describe('_System', function() {
       proccess: function(entities) { }
     };
 
-    genericSystem = new comp.LogicSystem(config);
-    expect(comp._registerLogicSystem).toHaveBeenCalledWith({
+    genericSystem = new COMP.System.Logic(config);
+    expect(COMP._registerLogicSystem).toHaveBeenCalledWith({
       name: 'EpicLogicSystem',
       dependencies: [], 
       component: config.component, 
@@ -34,8 +32,8 @@ describe('_System', function() {
       proccess: function(entities) { }
     };
 
-    genericSystem = new comp.IOSystem(config);
-    expect(comp._registerIOSystem).toHaveBeenCalledWith({
+    genericSystem = new COMP.System.IO(config);
+    expect(COMP._registerIOSystem).toHaveBeenCalledWith({
       name: 'EpicIOSystem',
       dependencies: [], 
       component: config.component, 
@@ -45,11 +43,11 @@ describe('_System', function() {
   });
 
   it('should raise exception for missing proccess function', function () {
-    expect( comp._System.bind(null, { name: "epicName" }) ).toThrow('proccess function is mandatory');
+    expect( COMP.System.bind(null, { name: "epicName" }) ).toThrow('proccess function is mandatory');
   });
 
   it('should raise exception for missing name', function () {
-    expect( comp._System.bind(null, { proccess: function() {} }) ).toThrow('empty system name is not allowed');
+    expect( COMP.System.bind(null, { proccess: function() {} }) ).toThrow('empty system name is not allowed');
   });
 
   describe('new system', function() {
@@ -59,7 +57,7 @@ describe('_System', function() {
         proccess: function(entities) { }
       };
 
-      genericSystem = new comp._System(config);
+      genericSystem = new COMP.System(config);
     });
 
     it('should fill default dependencies', function () {

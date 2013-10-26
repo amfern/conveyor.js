@@ -1,6 +1,6 @@
 // 3D position system
 // -----------------------------------------
-new comp.LogicSystem({
+new COMP.System.Logic({
   name: '3DObject',
   
   dependencies: ['3DObjectBefore'],
