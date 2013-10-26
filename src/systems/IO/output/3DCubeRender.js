@@ -27,7 +27,7 @@
 
   init();
 
-  new comp.IOSystem({
+  new COMP.System.IO({
     name: '3DCubeRender',
     dependencies: [],
 
@@ -35,20 +35,16 @@
       return {};
     }, 
 
-    proccess: function(entities, interpolation) {
+    proccess: function(entities) {
       renderer.clear();
-      console.log(interpolation);
 
       _.each(entities, function(e) {
-        var object3D = e['3DObject'];
+        var object3D = e['3DObjectAfter'];
         
         mesh.position    = object3D.position;
         mesh.rotation    = object3D.rotation;
-        mesh.quaternion  = object3D.quaternion;
         mesh.scale       = object3D.scale;
-        mesh.matrix      = object3D.matrix;
-        mesh.matrixWorld = object3D.matrixWorld;
-        mesh.matrix      = object3D.matrix;
+        mesh.quaternion  = object3D.quaternion;
 
         renderer.render( scene, camera );
       });

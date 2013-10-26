@@ -1,34 +1,35 @@
-comp._System = (function() {
-  function constructor(config) {
-    // set defaults
-    config = config || {};
-    config.dependencies = config.dependencies || []; // systems that should run before this one
-    config.component = config.component || function() { return {}; }; // new component generator for this system
+COMP.System = function(config) {
+  // set defaults
+  config = config || {};
+  config.dependencies = config.dependencies || []; // systems that should run before this one
+  config.component = config.component || function() { return {}; }; // new component generator for this system
 
-    if(_.isEmpty(config.name)) throw new Error('empty system name is not allowed');
-    if(typeof(config.name) == 'name') throw new Error('"name" is saved system name');
+  if(_.isEmpty(config.name)) throw new Error('empty system name is not allowed');
+  if(typeof(config.name) == 'name') throw new Error('"name" is saved system name');
 
-    // The heart of the system where entities are proccessed.
-    // while loop that loops througe all components of entities
-    // -----------------------------------------
-    if(typeof(config.proccess) != 'function') throw new Error('proccess function is mandatory');
+  // The heart of the system where entities are proccessed.
+  // while loop that loops througe all components of entities
+  // -----------------------------------------
+  if(typeof(config.proccess) != 'function') throw new Error('proccess function is mandatory');
 
-    return {
-      name: config.name,
-      dependencies: config.dependencies,
-      component: config.component,
-      entities: [],
-      proccess: config.proccess
-    };
-  }
+  this.name         = config.name;
+  this.dependencies = config.dependencies;
+  this.entities     = [];
+  this.component    = config.component;
+  this.proccess     = config.proccess;
+};
 
-  return constructor;
-})();
+COMP.System.Logic = function(config) {
+  COMP.System.call(this, config);
+  COMP._registerLogicSystem(this);
+};
 
-comp.LogicSystem = (function() {
-  return function(config) { return comp._registerLogicSystem( new comp._System(config) ); };
-})();
+COMP.System.Interpolate = function(config) {
+  COMP.System.call(this, config);
+  COMP._registerInterpolateSystem(this);
+};
 
-comp.IOSystem = (function() {
-  return function(config) { return comp._registerIOSystem( new comp._System(config) ); };
-})();
+COMP.System.IO = function(config) {
+  COMP.System.call(this, config);
+  COMP._registerIOSystem(this);
+};

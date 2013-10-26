@@ -1,12 +1,14 @@
-window.comp = (function() {
-  var TICKS_PER_SECOND = 25,
-            SKIP_TICKS = 1000 / TICKS_PER_SECOND,
-         MAX_FRAMESKIP = 5,
-      tempLogicSystems = [],
-         tempIOSystems = [],
-         systemsByName = {},
-          logicSystems,
-             IOSystems;
+window.COMP = (function() {
+var       TICKS_PER_SECOND = 25,
+                SKIP_TICKS = 1000 / TICKS_PER_SECOND,
+             MAX_FRAMESKIP = 5,
+          tempLogicSystems = [],
+  tempInterpolationSystems = [],
+             tempIOSystems = [],
+             systemsByName = {},
+              logicSystems,
+      interpolationSystems,
+                 IOSystems;
 
   // Private
   // --------------------------
@@ -60,14 +62,6 @@ window.comp = (function() {
     return systemCollection;
   }
 
-  function prepareLogicSystem() {
-    return prepareSystem(tempLogicSystems);
-  }
-
-  function prepareIOSystem() {
-    return prepareSystem(tempIOSystems);
-  }
-
   // adds system and it dependancies in order
   // returns system index
   function addEntityComponents(entity, componentNames) {
@@ -92,10 +86,17 @@ window.comp = (function() {
     });
   }
 
-  // cycling over all input/output systems and proccesing them passing interpolation to each
-  function proccessIO(interpolation) {
-    _.each(IOSystems, function(system) {
+  // cycling over all interpolation systems and proccesing them passing interpolation to each
+  function proccessInterpolation(interpolation) {
+    _.each(interpolationSystems, function(system) {
       system.proccess(system.entities, interpolation);
+    });
+  }
+
+  // cycling over all input/output systems
+  function proccessIO() {
+    _.each(IOSystems, function(system) {
+      system.proccess(system.entities);
     });
   }
 
@@ -107,13 +108,17 @@ window.comp = (function() {
     return registerSystem(tempLogicSystems, system);
   }
 
+  function registerInterpolateSystem(system) {
+    return registerSystem(tempInterpolationSystems, system);
+  }
+
   function registerIOSystem(system) {
     return registerSystem(tempIOSystems, system);
   }
 
   // add new entity
   function registerEntity(entity) {
-    addEntityComponents({ name: entity.name }, entity.components);
+    addEntityComponents(entity, entity.components);
   }
   
   function mainLoop() {
@@ -121,8 +126,9 @@ window.comp = (function() {
                 loops,
          nextGameTick = window.performance.now();
 
-    logicSystems = prepareLogicSystem();
-    IOSystems = prepareIOSystem();
+    logicSystems         = prepareSystem(tempLogicSystems);
+    interpolationSystems = prepareSystem(tempInterpolationSystems);
+    IOSystems            = prepareSystem(tempIOSystems);
 
     function cycle() {
       loops = 0;
@@ -133,7 +139,9 @@ window.comp = (function() {
       }
 
       interpolation = (window.performance.now() + SKIP_TICKS - nextGameTick) / SKIP_TICKS;
-      proccessIO(interpolation);
+      
+      proccessInterpolation(interpolation);
+      proccessIO();
 
       window.requestAnimationFrame(cycle);
     }
@@ -143,6 +151,7 @@ window.comp = (function() {
   
   mainLoop._registerLogicSystem = registerLogicSystem;
   mainLoop._registerIOSystem = registerIOSystem;
+  mainLoop._registerInterpolateSystem = registerInterpolateSystem;
   mainLoop._registerEntity = registerEntity;
   return mainLoop;
 })();
