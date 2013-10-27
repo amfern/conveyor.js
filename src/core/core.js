@@ -132,7 +132,7 @@ var       TICKS_PER_SECOND = 25,
 
     function cycle() {
       loops = 0;
-      while(window.performance.now() > nextGameTick && loops < MAX_FRAMESKIP) {
+      while(window.performance.now() >= nextGameTick && loops < MAX_FRAMESKIP) {
         proccessLogic();
         nextGameTick += SKIP_TICKS;
         loops++;

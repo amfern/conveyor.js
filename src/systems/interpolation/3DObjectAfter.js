@@ -6,18 +6,19 @@ new COMP.System.Interpolate({
   dependencies: ['3DObject'],
 
   component: function() {
-    return {};
   },
 
   proccess: function(entities, interpolation) {
-    _.each(entities, function(e) {
-      var          before = e['3DObjectBefore'],
-                  current = e['3DObject'],
-                    after = e['3DObjectAfter'] = current.clone(),
+    var before, current, after, deltaPosition, deltaQuaternion, deltaScale;
 
-            deltaPosition = before.position.clone().sub(current.position),
-          deltaQuaternion = before.quaternion.clone(),
-               deltaScale = before.scale.clone().sub(current.scale);
+    _.each(entities, function(e) {
+      before  = e['3DObjectBefore'];
+      current = e['3DObject'];
+      after   = e['3DObjectAfter'] = current.clone();
+
+      deltaPosition   = before.position.clone().sub(current.position);
+      deltaQuaternion = before.quaternion.clone();
+      deltaScale      = before.scale.clone().sub(current.scale);
 
       after.position.add( deltaPosition.multiplyScalar(interpolation) );
       after.quaternion.copy( deltaQuaternion.slerp(current.quaternion, 1 + interpolation) );
