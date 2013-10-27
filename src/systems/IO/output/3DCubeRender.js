@@ -29,7 +29,7 @@
 
   new COMP.System.IO({
     name: '3DCubeRender',
-    dependencies: [],
+    dependencies: ['3DObjectAfter'],
 
     component: function() {
       return {};
