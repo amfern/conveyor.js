@@ -1,4 +1,4 @@
-yourLibrary
+Comp js
 ===
 
 A JavaScript Library
@@ -25,12 +25,19 @@ Open `SpecRunner.html` in your browser and test with jasmine
 
 
 ```javascript
-//Get Version
-yourLibrary.version;
-
-//say Hello World
-yourLibrary.hello();
+cooode 
+code 
+more code
 ```
+
+### TODO
+allow to register systems during runtime
+make a tests for IO system using logic system
+deal some how with round dependancies - or just leave stack overflow exception
+add removeEntity() method
+add tests for interpolation
+
+### Notes/gotcha
 
 ### License
 
