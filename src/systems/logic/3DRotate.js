@@ -17,7 +17,5 @@ new COMP.System.Logic({
       var rotateComponent = e['3DRotate'];
       e['3DObject'].rotateOnAxis(rotateComponent.axis, rotateComponent.speed);
     });
-
-    this.yield();
   }
 });
