@@ -13,5 +13,7 @@ new COMP.System.Logic({
     _.each(entities, function(e) {
       e['3DObjectBefore'] = e['3DObject'].clone();
     });
+
+    this.yield();
   }
 });

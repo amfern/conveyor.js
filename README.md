@@ -36,6 +36,9 @@ make a tests for IO system using logic system
 deal some how with round dependancies - or just leave stack overflow exception
 add removeEntity() method
 add tests for interpolation
+use promises to advance systems
+exploit workers in the main loop for undependant systems be able to proccess concurrently
+allow systems to invoke their own workers
 
 ### Notes/gotcha
 
