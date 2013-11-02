@@ -1,17 +1,17 @@
 window.COMP = (function() {
-  var       TICKS_PER_SECOND = 25,
-                  SKIP_TICKS = 1000 / TICKS_PER_SECOND,
-               MAX_FRAMESKIP = 5,
-            tempLogicSystems = [],
-    tempInterpolationSystems = [],
-               tempIOSystems = [],
-               systemsByName = {},
-                logicSystems,
-        interpolationSystems,
-                   IOSystems,
-               interpolation,
-                       loops = 0,
-                nextGameTick;
+  var         TICKS_PER_SECOND = 25,
+                    SKIP_TICKS = 1000 / TICKS_PER_SECOND,
+                 MAX_FRAMESKIP = 5,
+              tempLogicSystems = [],
+      tempInterpolationSystems = [],
+                 tempIOSystems = [],
+                 systemsByName = {},
+            firstLogicCallback,
+    firstInterpolationCallback,
+               firstIOCallback,
+                 interpolation,
+                         loops = 0,
+                  nextGameTick;
 
   // Private
   // --------------------------
@@ -57,25 +57,27 @@ window.COMP = (function() {
 
   function prepareSystem(tempSystemCollection, lastYield) {
     if(!tempSystemCollection.length)
-      return [{ proccess: function() {lastSystem.yield = lastYield;} }];
+      return lastYield;
 
     var systemCollection = [];
 
+    // add systems in the correct order for dependancies
     _.each(tempSystemCollection, function(tempSys) {
       addSystem(tempSystemCollection, systemCollection, tempSys);
     });
 
-    // construct yield 
-    _.sortBy(systemCollection, function(sys, i) {
-      sys.yield = function() {
-        nextSys = systemCollection[i + 1];
-        nextSys.proccess(nextSys.entities, interpolation);
+    constructCallbacks = function(sys, i) {
+      if(!sys) return lastYield;
+
+      i++;
+      var nextCallback = constructCallbacks(systemCollection[i], i);
+      return function() {
+        sys.proccess(sys.entities, interpolation, nextCallback);
+        if(true) nextCallback(); // TODO: if last system spawned new thread don't execute this callback
       };
-    });
+    };
 
-    _.last(systemCollection).yield = lastYield;
-
-    return systemCollection;
+    return constructCallbacks(_.first(systemCollection), 0);
   }
 
   // adds system and it dependancies in order
@@ -100,8 +102,7 @@ window.COMP = (function() {
     if(window.performance.now() >= nextGameTick && loops < MAX_FRAMESKIP) {
       nextGameTick += SKIP_TICKS;
       loops++;
-      firstSys = _.first(logicSystems);
-      firstSys.proccess(firstSys.entities);
+      firstLogicCallback();
       return;
     }
 
@@ -111,16 +112,14 @@ window.COMP = (function() {
   }
 
   // cycling over all interpolation systems and proccesing them passing interpolation to each
-  function proccessInterpolation(interpolation) {
+  function proccessInterpolation() {
     interpolation = (window.performance.now() + SKIP_TICKS - nextGameTick) / SKIP_TICKS;
-    firstSys = _.first(interpolationSystems);
-    firstSys.proccess(firstSys.entities, interpolation);
+    firstInterpolationCallback();
   }
 
   // cycling over all input/output systems
   function proccessIO() {
-    firstSys = _.first(IOSystems);
-    firstSys.proccess(firstSys.entities);
+    firstIOCallback();
   }
 
   function proccessNextFrame() {
@@ -151,9 +150,9 @@ window.COMP = (function() {
   function mainLoop() {
     nextGameTick = window.performance.now();
 
-    logicSystems         = prepareSystem(tempLogicSystems, proccessLogic);
-    interpolationSystems = prepareSystem(tempInterpolationSystems, proccessIO);
-    IOSystems            = prepareSystem(tempIOSystems, proccessNextFrame);
+    firstLogicCallback         = prepareSystem(tempLogicSystems, proccessLogic);
+    firstInterpolationCallback = prepareSystem(tempInterpolationSystems, proccessIO);
+    firstIOCallback            = prepareSystem(tempIOSystems, proccessNextFrame);
 
     proccessNextFrame();
   }

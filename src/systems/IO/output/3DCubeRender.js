@@ -48,8 +48,6 @@
 
         renderer.render( scene, camera );
       });
-
-      this.yield();
     }
   });
 })();
