@@ -25,5 +25,7 @@ new COMP.System.Interpolate({
       deltaQuaternion = before.quaternion.clone();
       after.quaternion.copy( deltaQuaternion.slerp(current.quaternion, 1 + interpolation) );
     });
+
+    this.yield();
   },
 });

@@ -42,6 +42,30 @@ describe('System', function() {
     });
   });
 
+  it('should raise exception for system name == "name"', function () {
+    expect( COMP.System.bind(null, { name: "name" }) ).toThrow('"name" is saved system name');
+  });
+
+  it('should raise exception for system name == "dependencies"', function () {
+    expect( COMP.System.bind(null, { name: "dependencies" }) ).toThrow('"dependencies" is saved system name');
+  });
+
+  it('should raise exception for system name == "entities"', function () {
+    expect( COMP.System.bind(null, { name: "entities" }) ).toThrow('"entities" is saved system name');
+  });
+
+  it('should raise exception for system name == "component"', function () {
+    expect( COMP.System.bind(null, { name: "component" }) ).toThrow('"component" is saved system name');
+  });
+
+  it('should raise exception for system name == "proccess"', function () {
+    expect( COMP.System.bind(null, { name: "proccess" }) ).toThrow('"proccess" is saved system name');
+  });
+
+  it('should raise exception for system name == "yield"', function () {
+    expect( COMP.System.bind(null, { name: "yield" }) ).toThrow('"yield" is saved system name');
+  });
+
   it('should raise exception for missing proccess function', function () {
     expect( COMP.System.bind(null, { name: "epicName" }) ).toThrow('proccess function is mandatory');
   });

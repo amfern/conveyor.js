@@ -7,5 +7,6 @@ new COMP.System.Logic({
   },
 
   proccess: function(entities) {
+    this.yield();
   }
 });
