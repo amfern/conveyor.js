@@ -5,7 +5,12 @@ COMP.System = function(config) {
   config.component = config.component || function() { return {}; }; // new component generator for this system
 
   if(_.isEmpty(config.name)) throw new Error('empty system name is not allowed');
-  if(typeof(config.name) == 'name') throw new Error('"name" is saved system name');
+  if(config.name == 'name') throw new Error('"name" is saved system name');
+  if(config.name == 'dependencies') throw new Error('"dependencies" is saved system name');
+  if(config.name == 'entities') throw new Error('"entities" is saved system name');
+  if(config.name == 'component') throw new Error('"component" is saved system name');
+  if(config.name == 'proccess') throw new Error('"proccess" is saved system name');
+  if(config.name == 'yield') throw new Error('"yield" is saved system name');
 
   // The heart of the system where entities are proccessed.
   // while loop that loops througe all components of entities

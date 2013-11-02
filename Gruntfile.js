@@ -74,11 +74,11 @@ module.exports = function(grunt) {
             // --------------------------------------------
             "<%= pkgCoreFiles %>",
 
-            // engine output/input core systems
+            // engine output/input/interpolation core systems
             // --------------------------------------------
             'src/systems/**/*.js',
 
-            // basic output/input systems
+            // basic entities
             // --------------------------------------------
             'src/entities/**/*.js' // engine entities
           ],

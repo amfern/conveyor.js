@@ -1,14 +1,17 @@
 window.COMP = (function() {
-var       TICKS_PER_SECOND = 25,
-                SKIP_TICKS = 1000 / TICKS_PER_SECOND,
-             MAX_FRAMESKIP = 5,
-          tempLogicSystems = [],
-  tempInterpolationSystems = [],
-             tempIOSystems = [],
-             systemsByName = {},
-              logicSystems,
-      interpolationSystems,
-                 IOSystems;
+  var       TICKS_PER_SECOND = 25,
+                  SKIP_TICKS = 1000 / TICKS_PER_SECOND,
+               MAX_FRAMESKIP = 5,
+            tempLogicSystems = [],
+    tempInterpolationSystems = [],
+               tempIOSystems = [],
+               systemsByName = {},
+                logicSystems,
+        interpolationSystems,
+                   IOSystems,
+               interpolation,
+                       loops = 0,
+                nextGameTick;
 
   // Private
   // --------------------------
@@ -52,12 +55,25 @@ var       TICKS_PER_SECOND = 25,
     return sysIndex;
   }
 
-  function prepareSystem(tempSystemCollection) {
+  function prepareSystem(tempSystemCollection, lastYield) {
+    if(!tempSystemCollection.length)
+      return [{ proccess: function() {lastSystem.yield = lastYield;} }];
+
     var systemCollection = [];
 
     _.each(tempSystemCollection, function(tempSys) {
       addSystem(tempSystemCollection, systemCollection, tempSys);
     });
+
+    // construct yield 
+    _.sortBy(systemCollection, function(sys, i) {
+      sys.yield = function() {
+        nextSys = systemCollection[i + 1];
+        nextSys.proccess(nextSys.entities, interpolation);
+      };
+    });
+
+    _.last(systemCollection).yield = lastYield;
 
     return systemCollection;
   }
@@ -81,23 +97,34 @@ var       TICKS_PER_SECOND = 25,
 
   // cycling over all logic systems and proccesing them
   function proccessLogic() {
-    _.each(logicSystems, function(system) {
-      system.proccess(system.entities);
-    });
+    if(window.performance.now() >= nextGameTick && loops < MAX_FRAMESKIP) {
+      nextGameTick += SKIP_TICKS;
+      loops++;
+      firstSys = _.first(logicSystems);
+      firstSys.proccess(firstSys.entities);
+      return;
+    }
+
+    loops = 0;
+    
+    proccessInterpolation();
   }
 
   // cycling over all interpolation systems and proccesing them passing interpolation to each
   function proccessInterpolation(interpolation) {
-    _.each(interpolationSystems, function(system) {
-      system.proccess(system.entities, interpolation);
-    });
+    interpolation = (window.performance.now() + SKIP_TICKS - nextGameTick) / SKIP_TICKS;
+    firstSys = _.first(interpolationSystems);
+    firstSys.proccess(firstSys.entities, interpolation);
   }
 
   // cycling over all input/output systems
   function proccessIO() {
-    _.each(IOSystems, function(system) {
-      system.proccess(system.entities);
-    });
+    firstSys = _.first(IOSystems);
+    firstSys.proccess(firstSys.entities);
+  }
+
+  function proccessNextFrame() {
+    window.requestAnimationFrame(proccessLogic);
   }
 
   // Public
@@ -122,31 +149,13 @@ var       TICKS_PER_SECOND = 25,
   }
   
   function mainLoop() {
-    var interpolation,
-                loops,
-         nextGameTick = window.performance.now();
+    nextGameTick = window.performance.now();
 
-    logicSystems         = prepareSystem(tempLogicSystems);
-    interpolationSystems = prepareSystem(tempInterpolationSystems);
-    IOSystems            = prepareSystem(tempIOSystems);
+    logicSystems         = prepareSystem(tempLogicSystems, proccessLogic);
+    interpolationSystems = prepareSystem(tempInterpolationSystems, proccessIO);
+    IOSystems            = prepareSystem(tempIOSystems, proccessNextFrame);
 
-    function cycle() {
-      loops = 0;
-      while(window.performance.now() >= nextGameTick && loops < MAX_FRAMESKIP) {
-        proccessLogic();
-        nextGameTick += SKIP_TICKS;
-        loops++;
-      }
-
-      interpolation = (window.performance.now() + SKIP_TICKS - nextGameTick) / SKIP_TICKS;
-      
-      proccessInterpolation(interpolation);
-      proccessIO();
-
-      window.requestAnimationFrame(cycle);
-    }
-
-    window.requestAnimationFrame(cycle);
+    proccessNextFrame();
   }
   
   mainLoop._registerLogicSystem = registerLogicSystem;
