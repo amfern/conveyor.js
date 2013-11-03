@@ -10,6 +10,7 @@ describe('System', function() {
     config = {
       name: 'EpicLogicSystem',
       dependencies: [], 
+      thread: true,
       component: function() { }, 
       proccess: function(entities) { }
     };
@@ -20,6 +21,7 @@ describe('System', function() {
       dependencies: [], 
       component: config.component, 
       entities: [],
+      thread: true,
       proccess: config.proccess
     });
   });
@@ -38,6 +40,7 @@ describe('System', function() {
       dependencies: [], 
       component: config.component, 
       entities: [],
+      thread: false,
       proccess: config.proccess
     });
   });

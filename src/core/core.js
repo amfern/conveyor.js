@@ -71,9 +71,10 @@ window.COMP = (function() {
 
       i++;
       var nextCallback = constructCallbacks(systemCollection[i], i);
+      sys.yield = nextCallback;
       return function() {
-        sys.proccess(sys.entities, interpolation, nextCallback);
-        if(true) nextCallback(); // TODO: if last system spawned new thread don't execute this callback
+        sys.proccess(sys.entities, interpolation);
+        if(!sys.thread) nextCallback();
       };
     };
 
