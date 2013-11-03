@@ -3,14 +3,14 @@ COMP.System = function(config) {
   config = config || {};
   config.dependencies = config.dependencies || []; // systems that should run before this one
   config.component = config.component || function() { return {}; }; // new component generator for this system
+  config.thread = config.thread || false; // if proccess function spawnes using thread inside its up to the developer to call yield when done processing
 
   if(_.isEmpty(config.name)) throw new Error('empty system name is not allowed');
-  if(config.name == 'name') throw new Error('"name" is saved system name');
-  if(config.name == 'dependencies') throw new Error('"dependencies" is saved system name');
-  if(config.name == 'entities') throw new Error('"entities" is saved system name');
-  if(config.name == 'component') throw new Error('"component" is saved system name');
-  if(config.name == 'proccess') throw new Error('"proccess" is saved system name');
-  if(config.name == 'yield') throw new Error('"yield" is saved system name');
+
+  // invalid system names
+  _.each(['name', 'dependencies', 'entities', 'component', 'proccess', 'yield'], function(name) {
+    if(config.name == name) throw new Error('"' + name + '" is saved system name');  
+  });
 
   // The heart of the system where entities are proccessed.
   // while loop that loops througe all components of entities
@@ -21,6 +21,7 @@ COMP.System = function(config) {
   this.dependencies = config.dependencies;
   this.entities     = [];
   this.component    = config.component;
+  this.thread       = config.thread;
   this.proccess     = config.proccess;
 };
 
