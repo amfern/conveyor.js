@@ -72,10 +72,16 @@ window.COMP = (function() {
       i++;
       var nextCallback = constructCallbacks(systemCollection[i], i);
       sys.yield = nextCallback;
-      return function() {
-        sys.proccess(sys.entities, interpolation);
-        if(!sys.thread) nextCallback();
-      };
+
+      if(sys.thread)
+        return function() {
+          sys.proccess(sys.entities, interpolation);
+        };
+      else
+        return function() {
+          sys.proccess(sys.entities, interpolation);
+          sys.yield();
+        };
     };
 
     return constructCallbacks(_.first(systemCollection), 0);
