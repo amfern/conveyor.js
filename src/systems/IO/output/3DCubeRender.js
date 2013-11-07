@@ -36,8 +36,6 @@
     }, 
 
     proccess: function(entities) {
-      renderer.clear();
-
       _.each(entities, function(e) {
         var object3D = e['3DObjectAfter'];
         
