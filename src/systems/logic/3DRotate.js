@@ -7,7 +7,7 @@ new COMP.System.Logic({
 
   component: function() {
     return {
-       axis: new THREE.Vector3(0,1,0),
+      axis: new THREE.Vector3(0,1,0),
       speed: 0.1
     };
   },
