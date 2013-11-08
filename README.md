@@ -36,7 +36,8 @@ make a tests for IO system using logic system
 deal some how with round dependancies - or just leave stack overflow exception
 add removeEntity() method
 add tests for interpolation
-allow systems to invoke their own workers
+add tests for yield()
+add represintation of dependancies
 
 ### Notes/gotcha
 
