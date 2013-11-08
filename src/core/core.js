@@ -77,11 +77,11 @@ window.COMP = (function() {
         return function() {
           sys.proccess(sys.entities, interpolation);
         };
-      else
-        return function() {
-          sys.proccess(sys.entities, interpolation);
-          sys.yield();
-        };
+
+      return function() {
+        sys.proccess(sys.entities, interpolation);
+        sys.yield();
+      };
     };
 
     return constructCallbacks(_.first(systemCollection), 0);
@@ -136,7 +136,7 @@ window.COMP = (function() {
   // Public
   // --------------------------
 
-  // pushes system to (logicSystem: 0; IOSystem: 1) array in the correct spot according to dependencies
+  // pushes system to array in the correct spot according to dependencies
   function registerLogicSystem(system) {
     return registerSystem(tempLogicSystems, system);
   }
@@ -164,9 +164,9 @@ window.COMP = (function() {
     proccessNextFrame();
   }
   
-  mainLoop._registerLogicSystem = registerLogicSystem;
-  mainLoop._registerIOSystem = registerIOSystem;
+  mainLoop._registerLogicSystem       = registerLogicSystem;
+  mainLoop._registerIOSystem          = registerIOSystem;
   mainLoop._registerInterpolateSystem = registerInterpolateSystem;
-  mainLoop._registerEntity = registerEntity;
+  mainLoop._registerEntity            = registerEntity;
   return mainLoop;
 })();
