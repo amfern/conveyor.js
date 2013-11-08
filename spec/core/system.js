@@ -3,6 +3,7 @@ describe('System', function() {
 
   beforeEach(function() {
     spyOn(COMP, '_registerLogicSystem');
+    spyOn(COMP, '_registerInterpolateSystem');
     spyOn(COMP, '_registerIOSystem');
   });
 
@@ -22,6 +23,25 @@ describe('System', function() {
       component: config.component, 
       entities: [],
       thread: true,
+      proccess: config.proccess
+    });
+  });
+
+  it('should register Interpolate system with core', function () {
+    config = {
+      name: 'EpicInterplateSystem',
+      dependencies: [], 
+      component: function() { }, 
+      proccess: function(entities) { debugger }
+    };
+
+    genericSystem = new COMP.System.Interpolate(config);
+    expect(COMP._registerInterpolateSystem).toHaveBeenCalledWith({
+      name: 'EpicInterplateSystem',
+      dependencies: [], 
+      component: config.component, 
+      entities: [],
+      thread: false,
       proccess: config.proccess
     });
   });
