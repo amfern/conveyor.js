@@ -1,28 +1,10 @@
 Comp js
 ===
 
-A JavaScript Library
+Game engine implementing ECM(EntitySystemComponents) paradigm.
 
-### Maintainer
-
-[Christopher EnyTC](https://github.com/chrisenytc)
-
-### Get Started
-
-Install dependencies
-
-`sudo npm install && bower install`
-
-Build Project
-
-`grunt`
-
-Run Tests
-
-Open `SpecRunner.html` in your browser and test with jasmine
 
 ### How to use
-
 
 ```javascript
 cooode 
@@ -30,16 +12,39 @@ code
 more code
 ```
 
+### Notes/gotcha
+
+
+### Maintainer
+
+[Ilia guterman](https://github.com/amfern)
+
+### Developers
+
+Install dependencies
+
+`sudo npm install`
+
+Build Project
+
+`grunt build`
+
+Run Tests
+
+`grunt debug`
+or open `_SpecRunner.html` in your browser
+
+Browse examples
+
+`http://<localhost>:9001/<basic|logic|interpolation|IO>/<example name>.html`
+`basic example: http://10.0.0.45:9001/basic/index.html`
+
 ### TODO
 allow to register systems during runtime
-make a tests for IO system using logic system
 deal some how with round dependancies - or just leave stack overflow exception
 add removeEntity() method
-add tests for interpolation
 add tests for yield()
-add represintation of dependancies
-
-### Notes/gotcha
+allow user to extract visual represintation of dependancies from engine
 
 ### License
 
