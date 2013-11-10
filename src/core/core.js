@@ -9,8 +9,8 @@ window.COMP = (function() {
             firstLogicCallback,
     firstInterpolationCallback,
                firstIOCallback,
-                 interpolation,
                          loops = 0,
+                 interpolation,
                   nextGameTick;
 
   // Private
@@ -73,14 +73,9 @@ window.COMP = (function() {
       var nextCallback = constructCallbacks(systemCollection[i], i);
       sys.yield = nextCallback;
 
-      if(sys.thread)
-        return function() {
-          sys.proccess(sys.entities, interpolation);
-        };
-
       return function() {
-        sys.proccess(sys.entities, interpolation);
-        sys.yield();
+        sys.proccess(sys.entities, interpolation); // proccess system
+        if(!sys.thread) sys.yield(); // yield if not threaded system
       };
     };
 
@@ -104,8 +99,45 @@ window.COMP = (function() {
     });
   }
 
+  // adds system and it dependancies in order
+  // returns system index
+  function updateEntityComponents(oldEntity, newEntity, componentNames) {
+    _.each(componentNames, function(componentName) {
+      var system = systemsByName[componentName];
+      
+      if(!system) return; // dependancy not found
+
+      // if oldEntity already have that components, use it instead of creating new one
+      var oldEntityComponent = oldEntity[componentName];
+      if(oldEntityComponent) {
+        newEntity[componentName] = oldEntityComponent;
+        delete oldEntity[componentName]; // delete component from old entity
+        system.entities.splice(system.entities.indexOf(oldEntity), 1, newEntity); // replace old entity with new one
+        updateEntityComponents(oldEntity, newEntity, system.dependencies);
+      } else {
+        addEntityComponents(newEntity, system.dependencies);
+      }
+    });
+  }
+
+  // removes systems
+  function removeEntityComponents(entity, componentNames) {
+    _.each(componentNames, function(componentName) {
+      var system = systemsByName[componentName];
+
+      if(!system) return; // dependancy not found
+
+      delete entity[componentName]; // remove componenet from entity
+      system.entities.splice(system.entities.indexOf(entity), 1); // remove entity from system
+
+      removeEntityComponents(entity, system.dependencies);
+    });
+  }
+
   // cycling over all logic systems and proccesing them
   function proccessLogic() {
+    interpolation = null;
+
     if(window.performance.now() >= nextGameTick && loops < MAX_FRAMESKIP) {
       nextGameTick += SKIP_TICKS;
       loops++;
@@ -153,6 +185,17 @@ window.COMP = (function() {
   function registerEntity(entity) {
     addEntityComponents(entity, entity.components);
   }
+
+  function unregisterEntity(entity) {
+    removeEntityComponents(entity, entity.components);
+  }
+
+  function updateEntity(entity) {
+    var newEntity = new COMP.Entity({name: entity.name});
+    newEntity.components = entity.components;
+    updateEntityComponents(entity, newEntity, newEntity.components);
+    removeEntityComponents( entity, _.keys(entity) ); // remove other components
+  }
   
   function mainLoop() {
     nextGameTick = window.performance.now();
@@ -168,5 +211,7 @@ window.COMP = (function() {
   mainLoop._registerIOSystem          = registerIOSystem;
   mainLoop._registerInterpolateSystem = registerInterpolateSystem;
   mainLoop._registerEntity            = registerEntity;
+  mainLoop._unregisterEntity          = unregisterEntity;
+  mainLoop._updateEntity              = updateEntity;
   return mainLoop;
 })();
