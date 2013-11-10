@@ -3,7 +3,7 @@ describe("core", function() {
     var systemLogic1, systemLogic2, systemLogic3, systemLogic4, systemLogic5, systemLogic6, systemLogic7, systemLogic8,
         systemIO1, systemIO2, systemIO3, systemIO4, systemIO5, systemIO6, systemIO7, systemIO8,
         systemInterpolation1, systemInterpolation2, systemInterpolation3, systemInterpolation4, systemInterpolation5, systemInterpolation6, systemInterpolation7, systemInterpolation8,
-        entity1,
+        entity1, entity2, entity3, entity4, entity5, entity6,
         systemExecutionPattern = [];
         componentExecutionPattern = [];
 
@@ -65,11 +65,13 @@ describe("core", function() {
 
       systemLogic6 = new COMP.System.Logic({
         name: 'EpicSystemLogic6',
+        thread: true,
         dependencies: ['NonExistandSystem1', 'NonExistandSystem2'], 
         component: function() { return 'L6c'; }, 
         proccess: function(entities) { 
           systemExecutionPattern.push('L6');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemLogic6'] + '-' + e.name); });
+          this.yield();
         }
       });
 
@@ -154,12 +156,14 @@ describe("core", function() {
 
       systemInterpolation6 = new COMP.System.Interpolate({
         name: 'EpicSystemInterpolate6',
+        thread: true,
         dependencies: ['NonExistandSystem1', 'NonExistandSystem2'], 
         component: function() { return 'I6c'; }, 
         proccess: function(entities, interpolation) { 
           expect(interpolation).toBeDefined();
           systemExecutionPattern.push('I6');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemInterpolate6'] + '-' + e.name); });
+          this.yield();
         }
       });
 
@@ -239,11 +243,13 @@ describe("core", function() {
 
       systemIO6 = new COMP.System.IO({
         name: 'EpicSystemIO6',
+        thread: true,
         dependencies: ['NonExistandSystem1', 'NonExistandSystem2'], 
         component: function() { return 'IO6c'; }, 
         proccess: function(entities) { 
           systemExecutionPattern.push('IO6');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemIO6'] + '-' + e.name); });
+          this.yield();
         }
       });
 
@@ -270,32 +276,32 @@ describe("core", function() {
     });
 
     it("should add entity", function () {
-      new COMP.Entity({
+      entity1 = new COMP.Entity({
         name: "entity1",
         components: ['EpicSystemLogic1']
       });
 
-      new COMP.Entity({
+      entity2 = new COMP.Entity({
         name: "entity2",
         components: ['EpicSystemLogic8']
       });
 
-      new COMP.Entity({
+      entity3 = new COMP.Entity({
         name: "entity3",
         components: ['EpicSystemLogic2']
       });
 
-      new COMP.Entity({
+      entity4 = new COMP.Entity({
         name: "entity4",
         components: ['EpicSystemLogic6', 'EpicSystemLogic5', 'EpicSystemLogic3', 'EpicSystemLogic4']
       });
 
-      new COMP.Entity({
+      entity5 = new COMP.Entity({
         name: "entity5",
         components: ['EpicSystemLogic6', 'EpicSystemLogic5', 'EpicSystemIO5', 'EpicSystemIO7', 'EpicSystemInterpolate6']
       });
 
-      new COMP.Entity({
+      entity6 = new COMP.Entity({
         name: "entity6",
         components: ['EpicSystemIO1', 'EpicSystemLogic2', 'EpicSystemLogic7', 'EpicSystemInterpolate2']
       });
@@ -334,12 +340,10 @@ describe("core", function() {
       } )).toThrow('system cannot depend on it self');
     });
 
-    it("should proccess Logic and IO systems in correct order", function () {
+    it("should proccess Logic, Interpolate and IO systems in correct order", function () {
       window.requestAnimationFrame = _.once(function(callback) {
         // make logicSystems will be called max times
-        window.performance.now = function() {
-          return 30; // miliseconds
-        }
+        window.performance.now = function() { return 30; } // miliseconds
         callback.call();
 
         // should execute logic and IO systems in order
@@ -366,9 +370,7 @@ describe("core", function() {
 
         systemExecutionPattern = [];
         componentExecutionPattern = [];
-        window.performance.now = function() {
-          return Number.MAX_VALUE; // miliseconds
-        }
+        window.performance.now = function() { return Number.MAX_VALUE; } // miliseconds
         callback.call();
 
         // should execute logic systems maximum times to avoid spiral of death
@@ -392,6 +394,62 @@ describe("core", function() {
       window.performance.now = function() {
         return 0;
       }
+
+      COMP();
+    });
+
+    it("should remove entities and proccess systems in correct order", function () {    
+      componentExecutionPattern = [];
+
+      window.requestAnimationFrame = _.once(function(callback) {
+        entity1.remove();
+        entity2.remove();
+        entity3.remove();
+        entity4.remove();
+        entity5.remove();
+
+        // make logicSystems will be called max times
+        window.performance.now = function() { return 30; } // miliseconds
+        callback.call();
+
+        // should execute components in order
+        expect(componentExecutionPattern).toEqual([ 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6', 'I2c-entity6' ]);
+
+        componentExecutionPattern = [];
+        window.performance.now = function() { return Number.MAX_VALUE; } // miliseconds
+        callback.call();
+
+        expect(componentExecutionPattern).toEqual([ 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6', 'I2c-entity6' ]);
+      });
+
+      window.performance.now = function() { return 0; }
+
+      COMP();
+
+    });
+
+    it("should update entity1 and proccess systems in correct order", function () {
+      componentExecutionPattern = [];
+
+      window.requestAnimationFrame = _.once(function(callback) {
+        entity6.components = ['EpicSystemIO1', 'EpicSystemLogic7', 'EpicSystemInterpolate2', 'EpicSystemLogic3', 'EpicSystemInterpolate7'];
+        entity6.update();
+
+        // make logicSystems will be called max times
+        window.performance.now = function() { return 30; } // miliseconds
+        callback.call();
+
+        // should execute components in order
+        expect(componentExecutionPattern).toEqual([ 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6', 'IO2c-entity6', 'IO3c-entity6', 'IO1c-entity6' ]);
+
+        componentExecutionPattern = [];
+        window.performance.now = function() { return Number.MAX_VALUE; } // miliseconds
+        callback.call();
+
+        expect(componentExecutionPattern).toEqual([ 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6', 'IO2c-entity6', 'IO3c-entity6', 'IO1c-entity6' ]);
+      });
+
+      window.performance.now = function() { return 0; }
 
       COMP();
     });
