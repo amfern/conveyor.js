@@ -40,17 +40,15 @@ Browse examples
 `basic example: http://10.0.0.45:9001/basic/index.html`
 
 ### TODO
-allow to register systems during runtime
 deal some how with round dependancies - or just leave stack overflow exception
-add removeEntity() method
-add tests for yield()
 allow user to extract visual represintation of dependancies from engine
+git doesn't save softlinks???
 
 ### License
 
 The MIT License (MIT)
 
-Copyright (c) 2013 VaiPra.La
+Copyright (c) 2013 amfern
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

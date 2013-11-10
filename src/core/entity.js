@@ -9,3 +9,15 @@ COMP.Entity = function(config) {
 
   COMP._registerEntity(this);
 };
+
+COMP.Entity.prototype = {
+  constructor: COMP.Entity,
+
+  remove: function() {
+    COMP._unregisterEntity(this);
+  },
+
+  update: function() {
+    COMP._updateEntity(this);
+  }
+};

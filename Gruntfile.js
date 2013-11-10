@@ -110,7 +110,7 @@ module.exports = function(grunt) {
     // Observe changes
     watch: {
       debug: {
-        files: ['src/**/*.js', 'lib/**/*.js', 'spec/**/*.js'],
+        files: ['src/**/*.js', 'spec/**/*.js'],
         tasks: ['compile', 'jasmine'],
         options: {
           interrupt: true,
