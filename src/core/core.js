@@ -1,4 +1,7 @@
-window.COMP = (function() {
+// Core of the engine, responsble for game loop and proccessing system entitites
+// element(optional) - DOM element onto which keyboar and mouse event bound and rendering happens
+// -----------------------------------------
+window.COMP = (function(element) {
   var         TICKS_PER_SECOND = 25,
                     SKIP_TICKS = 1000 / TICKS_PER_SECOND,
                  MAX_FRAMESKIP = 5,
@@ -11,7 +14,9 @@ window.COMP = (function() {
                firstIOCallback,
                          loops = 0,
                  interpolation,
-                  nextGameTick;
+                  nextGameTick,
+                  staticEntity,
+                    domElement;
 
   // Private
   // --------------------------
@@ -48,7 +53,7 @@ window.COMP = (function() {
       sysIndex = sysIndex > tempSysIndex ? sysIndex : tempSysIndex; // set the highest depandancy
     });
 
-    // TODO: rise event system finish loading(tempSys);
+    // TODO: rise event telling that "system finish loading(tempSys)";
     sysIndex++;
     systemCollection.splice(sysIndex, 0, tempSys); // add system it self
 
@@ -74,7 +79,7 @@ window.COMP = (function() {
       sys.yield = nextCallback;
 
       return function() {
-        sys.proccess(sys.entities, interpolation); // proccess system
+        sys.isStatic ? sys.proccess(staticEntity, interpolation) : sys.proccess(sys.entities, interpolation); // proccess system, if static pass only the static entity else pass all entities
         if(!sys.thread) sys.yield(); // yield if not threaded system
       };
     };
@@ -161,8 +166,21 @@ window.COMP = (function() {
     firstIOCallback();
   }
 
+  // start proccesing chain from proccessLogic callback
   function proccessNextFrame() {
     window.requestAnimationFrame(proccessLogic);
+  }
+
+  // constructs entity only for static systems to use
+  function constructStaticEntity() {
+    var staticSystems = _.filter(systemsByName, function(sys) { return sys.isStatic; }); // filter only static systems
+    staticSystems = _.map(staticSystems, function(sys) { return sys.name });// collect only static system names
+
+    // create new entity coposing only of static systems
+    return new COMP.Entity({
+      name: "staticEntity",
+      components: staticSystems,
+    });
   }
 
   // Public
@@ -196,13 +214,20 @@ window.COMP = (function() {
     updateEntityComponents(entity, newEntity, newEntity.components);
     removeEntityComponents( entity, _.keys(entity) ); // remove other components
   }
+
+  function getDOMElement() {
+    return domElement;
+  }
   
   function mainLoop() {
+    domElement = element || document.createElement('div');
     nextGameTick = window.performance.now();
 
     firstLogicCallback         = prepareSystem(tempLogicSystems, proccessLogic);
     firstInterpolationCallback = prepareSystem(tempInterpolationSystems, proccessIO);
     firstIOCallback            = prepareSystem(tempIOSystems, proccessNextFrame);
+
+    staticEntity = constructStaticEntity();
 
     proccessNextFrame();
   }
@@ -213,5 +238,6 @@ window.COMP = (function() {
   mainLoop._registerEntity            = registerEntity;
   mainLoop._unregisterEntity          = unregisterEntity;
   mainLoop._updateEntity              = updateEntity;
+  mainLoop.getDOMElement = getDOMElement;
   return mainLoop;
 })();

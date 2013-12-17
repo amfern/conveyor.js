@@ -43,6 +43,10 @@ Browse examples
 deal some how with round dependancies - or just leave stack overflow exception
 allow user to extract visual represintation of dependancies from engine
 git doesn't save softlinks???
+allow users to register and unregister systems during runtime
+
+### Target
+build a fast passed game targeting gameplay, tactics, inviting the player to expolit it vast new laws of phisics to achieve an epic battles and moves.
 
 ### License
 

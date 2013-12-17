@@ -1,6 +1,7 @@
 COMP.System = function(config) {
   // set defaults
   config = config || {};
+  config.isStatic = config.isStatic || false; // systems that should run before this one
   config.dependencies = config.dependencies || []; // systems that should run before this one
   config.component = config.component || function() { return {}; }; // new component generator for this system
   config.thread = config.thread || false; // if proccess function spawnes using thread inside its up to the developer to call yield when done processing
