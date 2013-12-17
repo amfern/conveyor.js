@@ -3,8 +3,8 @@
 (function() {
   var state = {};
 
-  function combineStates(keyboardState, mouseState, joystickState, 3DMouseState) {
-    return _.extend({}, _.prefixKeys(keyboardState, 'k'), _.prefixKeys(mouseState, 'm'), _.prefixKeys(joystickState, 'j'), _.prefixKeys(3DMouseState, '3dm'));
+  function combineStates(keyboardState, mouseState, joystickState, Mouse3DState) {
+    return _.extend({}, _.prefixKeys(keyboardState, 'k'), _.prefixKeys(mouseState, 'm'), _.prefixKeys(joystickState, 'j'), _.prefixKeys(Mouse3DState, 'm3d'));
   }
 
   new COMP.System.IO({
@@ -18,9 +18,7 @@
 
     proccess: function(staticEntity) {
       _.clearAll(state);  // clear state
-
-      _.extend(state, combineStates(staticEntity['KeyboardState']), {}, {}, {}, {}); //, staticEntity['MouseState'],  staticEntity['JoystickState'], staticEntity['3DMouseState']));
-
+      _.extend(state, combineStates(staticEntity.KeyboardState), {}, {}, {}, {}); //, staticEntity['MouseState'],  staticEntity['JoystickState'], staticEntity['Mouse3DState']));
       bufferState = {}; // reset 
     }
   });

@@ -78,8 +78,11 @@ window.COMP = (function(element) {
       var nextCallback = constructCallbacks(systemCollection[i], i);
       sys.yield = nextCallback;
 
+      // if system static pass only the static entity else pass all entities
+      var processEntities = sys.isStatic ? staticEntity : sys.entities;
+
       return function() {
-        sys.isStatic ? sys.proccess(staticEntity, interpolation) : sys.proccess(sys.entities, interpolation); // proccess system, if static pass only the static entity else pass all entities
+        sys.proccess(processEntities, interpolation); // proccess system
         if(!sys.thread) sys.yield(); // yield if not threaded system
       };
     };
@@ -174,7 +177,7 @@ window.COMP = (function(element) {
   // constructs entity only for static systems to use
   function constructStaticEntity() {
     var staticSystems = _.filter(systemsByName, function(sys) { return sys.isStatic; }); // filter only static systems
-    staticSystems = _.map(staticSystems, function(sys) { return sys.name });// collect only static system names
+    staticSystems = _.map(staticSystems, function(sys) { return sys.name; });// collect only static system names
 
     // create new entity coposing only of static systems
     return new COMP.Entity({

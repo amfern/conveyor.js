@@ -30,7 +30,7 @@
   // }
   // 
   // returns handler to use with isTriggered()
-  register: function(args) {
+  function register(args) {
     if(_.isEmpty(args.keys)) throw new Error('empty keys combination');
 
     var combo = {
@@ -64,7 +64,7 @@
       var comboIndex = combo.children.indexOf(handler);
       if(comboIndex) combo.children.splice(comboIndex, 1); 
     });
-    combos = _.reject(combos, function(combo) { return combo.handler == handler }); // removes combo
+    combos = _.reject(combos, function(combo) { return combo.handler == handler; }); // removes combo
   }
 
   // checks if a certain combo is triggered
@@ -82,7 +82,7 @@
   }
 
   function isKeysDontExists(keys, HIDState) {
-    return _.intersection(keys, HIDState).length == 0;
+    return _.intersection(keys, HIDState).length === 0;
   }
 
   function addComboToParentCombos(combo, combos) {
@@ -126,7 +126,7 @@
     });
 
     // remove solitary combos if triggered combos are bigger then 1
-    if(triggeredCombos.length > 1) return _.reject(function(triggeredCombos, function(combo) { return combo.isSolitary; }));
+    if(triggeredCombos.length > 1) return _.reject(triggeredCombos, function(combo) { return combo.isSolitary; });
 
     return triggeredCombos;
   }
@@ -140,7 +140,7 @@
     },
 
     proccess: function(staticEntity) {
-      var pastTriggeredCombos = triggeredCombos, HIDState = _.keys(staticEntity['KeyboardState']);
+      var pastTriggeredCombos = triggeredCombos, HIDState = _.keys(staticEntity.KeyboardState);
 
       triggeredCombos = getTriggeredCombos(combos, pastTriggeredCombos, HIDState);
 
