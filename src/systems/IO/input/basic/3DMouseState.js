@@ -3,7 +3,7 @@
 // -----------------------------------------
 (function() {
   new COMP.System.IO({
-    name: '3DMouseState',
+    name: 'Mouse3DState',
     dependencies: [],
 
     component: function() {
