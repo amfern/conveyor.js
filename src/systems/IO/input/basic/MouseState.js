@@ -1,47 +1,57 @@
-// Collects Mouse inputs state, analog states will be passed as {mouseMoved: true, mouseMovedUp: true, mouseMoveY: -0.73}
+// Collects Mouse inputs state, collection of keycodes that currently pressed, if its not true then it false and its up
+// Analog states will be passed as {mouseMoved: true, mouseMovedUp: true, mouseMoveY: -0.73}
 // -----------------------------------------
-// (function() {
-//   var component = { mousedowns: [], mouseups: [], mousemove: [] },
-//       mousedowns, mouseups, mousemove;
+(function() {
+  var state = {}, bufferState;
 
-//   function init() {
-//     var element = COMP.getDOMElement();
+  function init() {
+    var element = COMP.getDOMElement();
+    resetBuffer(); // reset buffer
 
-//     element.addEventListener('mousedown', function(e) {
-//       mousedowns.push(e);
-//     }, false);
-//     element.addEventListener('mouseup', function(e) {
-//       mouseups.push(e);
-//     }, false);
-//     element.addEventListener('mousemove', function(e) {
-//       mousemove.push(e);
-//     }, false);
-//   };
+    element.addEventListener('mousemove', function(e) {
+      bufferState.movementX += e.movementX;
+      bufferState.movementY += e.movementY;
 
-//   function reset() {
-//     mousedowns.length = 0;
-//     mouseups.length = 0;
-//     mousemove.length = 0;
-//   };
+      bufferState[mouseMovedUp]    = bufferState.movementY > 0;
+      bufferState[mouseMovedDown]  = bufferState.movementY < 0;
+      bufferState[mouseMovedRight] = bufferState.movementX > 0;
+      bufferState[mouseMovedLeft]  = bufferState.movementX < 0;
 
-//   function copy() {
-//     component.mousedowns = mousedowns;
-//     component.mouseups = mouseups;
-//     component.mousemove = mousemove;
-//   }
+      bufferState.clientX += e.clientX;
+      bufferState.clientY += e.clientY;
+      bufferState.screenX += e.screenX;
+      bufferState.screenY += e.screenY;
 
-//   init();
-//   new COMP.System.IO({
-//     name: 'MouseState',
-//     dependencies: [],
+      bufferState.mouseMoved = !bufferState.movementX && !bufferState.movementY ? false : true;
 
-//     component: function() {
-//       return component;
-//     },
+      e.preventDefault();
+    }, false);
 
-//     proccess: function(entities) {
-//       copy();
-//       reset();
-//     }
-//   });
-// })();
+    element.addEventListener('mousedown', function(e) {
+      bufferState[e.button] = true;
+      e.preventDefault();
+    }, false);
+  }
+
+  function resetBuffer() {
+    bufferState = {clientX: 0,clientY: 0, screenX: 0, screenY: 0};
+  }
+
+  init();
+
+  new COMP.System.IO({
+    name: 'MouseState',
+    isStatic: true,
+    dependencies: [],
+
+    component: function() {
+      return state;
+    },
+
+    proccess: function(staticEntity) {
+      _.clearAll(state);  // clear state
+      _.extend(state, bufferState); // copy bufferState to state
+      resetBuffer(); // reset 
+    }
+  });
+})();
