@@ -19,6 +19,7 @@ describe('System', function() {
     genericSystem = new COMP.System.Logic(config);
     expect(COMP._registerLogicSystem).toHaveBeenCalledWith({
       name: 'EpicLogicSystem',
+      isStatic: false,
       dependencies: [], 
       component: config.component, 
       entities: [],
@@ -32,12 +33,13 @@ describe('System', function() {
       name: 'EpicInterplateSystem',
       dependencies: [], 
       component: function() { }, 
-      process: function(entities) { debugger }
+      process: function(entities) { }
     };
 
     genericSystem = new COMP.System.Interpolate(config);
     expect(COMP._registerInterpolateSystem).toHaveBeenCalledWith({
       name: 'EpicInterplateSystem',
+      isStatic: false,
       dependencies: [], 
       component: config.component, 
       entities: [],
@@ -57,6 +59,7 @@ describe('System', function() {
     genericSystem = new COMP.System.IO(config);
     expect(COMP._registerIOSystem).toHaveBeenCalledWith({
       name: 'EpicIOSystem',
+      isStatic: false,
       dependencies: [], 
       component: config.component, 
       entities: [],

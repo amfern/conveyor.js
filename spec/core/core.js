@@ -55,7 +55,7 @@ describe("core", function() {
 
       systemLogic5 = new COMP.System.Logic({
         name: 'EpicSystemLogic5',
-        dependencies: ['EpicSystemLogic1'], 
+        dependencies: ['EpicSystemLogic1', 'EpicSystemIO8'], 
         component: function() { return 'L5c'; }, 
         process: function(entities) {
           systemExecutionPattern.push('L5');
@@ -94,6 +94,28 @@ describe("core", function() {
           _.each(entities, function(e) {
             componentExecutionPattern.push(e['EpicSystemLogic8'] + '-' + e.name);
           });
+        }
+      });
+
+      systemSL1 = new COMP.System.Logic({
+        name: 'EpicSystemSL1',
+        isStatic: true,
+        dependencies: [],
+        component: function() { return 'SL1c'; }, 
+        process: function(staticEntity) {
+          systemExecutionPattern.push('SL1c');
+          componentExecutionPattern.push(staticEntity['EpicSystemSL1'] + '-' + staticEntity.name)
+        }
+      });
+
+      systemSL2 = new COMP.System.Logic({
+        name: 'EpicSystemSL2',
+        isStatic: true,
+        dependencies: ['EpicSystemSL1', 'systemIO8', 'systemLogic7'],
+        component: function() { return 'SL2c'; },
+        process: function(staticEntity) {
+          systemExecutionPattern.push('SL2c');
+          componentExecutionPattern.push(staticEntity['EpicSystemSL2'] + '-' + staticEntity.name)
         }
       });
 
@@ -233,8 +255,8 @@ describe("core", function() {
 
       systemIO5 = new COMP.System.IO({
         name: 'EpicSystemIO5',
-        dependencies: ['EpicSystemIO1'], 
-        component: function() { return 'IO5c'; }, 
+        dependencies: ['EpicSystemIO1'],
+        component: function() { return 'IO5c'; },
         process: function(entities) {
           systemExecutionPattern.push('IO5');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemIO5'] + '-' + e.name); });
@@ -244,9 +266,9 @@ describe("core", function() {
       systemIO6 = new COMP.System.IO({
         name: 'EpicSystemIO6',
         thread: true,
-        dependencies: ['NonExistandSystem1', 'NonExistandSystem2'], 
-        component: function() { return 'IO6c'; }, 
-        process: function(entities) { 
+        dependencies: ['NonExistandSystem1', 'NonExistandSystem2'],
+        component: function() { return 'IO6c'; },
+        process: function(entities) {
           systemExecutionPattern.push('IO6');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemIO6'] + '-' + e.name); });
           this.yield();
@@ -255,8 +277,8 @@ describe("core", function() {
 
       systemIO7 = new COMP.System.IO({
         name: 'EpicSystemIO7',
-        dependencies: ['EpicSystemIO8', 'EpicSystemIO1'], 
-        component: function() { return 'IO7c'; }, 
+        dependencies: ['EpicSystemIO8', 'EpicSystemIO1'],
+        component: function() { return 'IO7c'; },
         process: function(entities) { 
           systemExecutionPattern.push('IO7');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemIO7'] + '-' + e.name); });
@@ -265,14 +287,35 @@ describe("core", function() {
 
       systemIO8 = new COMP.System.IO({
         name: 'EpicSystemIO8',
-        dependencies: [], 
-        component: function() { return 'IO8c'; }, 
-        process: function(entities) { 
+        dependencies: [],
+        component: function() { return 'IO8c'; },
+        process: function(entities) {
           systemExecutionPattern.push('IO8');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemIO8'] + '-' + e.name); });
         }
       });
 
+      systemSIO1 = new COMP.System.IO({
+        name: 'EpicSystemSIO1',
+        isStatic: true,
+        dependencies: [],
+        component: function() { return 'SIO1c'; },
+        process: function(staticEntity) {
+          systemExecutionPattern.push('SIO1c');
+          componentExecutionPattern.push(staticEntity['EpicSystemSIO1'] + '-' + staticEntity.name)
+        }
+      });
+
+      systemSIO2 = new COMP.System.IO({
+        name: 'EpicSystemSIO2',
+        isStatic: true,
+        dependencies: ['EpicSystemSIO1', 'systemIO8', 'systemLogic7'],
+        component: function() { return 'SIO2c'; },
+        process: function(staticEntity) {
+          systemExecutionPattern.push('SIO2c');
+          componentExecutionPattern.push(staticEntity['EpicSystemSIO2'] + '-' + staticEntity.name)
+        }
+      });
 
     });
 
@@ -328,14 +371,14 @@ describe("core", function() {
     it("should throw exception for dependency containg system name", function () {
       expect(COMP.System.Logic.bind( null, {
         name: 'SameEpicSystemLogic',
-        dependencies: ['SameEpicSystemLogic'], 
-        component: function() { }, 
+        dependencies: ['SameEpicSystemLogic'],
+        component: function() { },
         process: function(entities) { }
       } )).toThrow('system cannot depend on it self');
 
       expect(COMP.System.IO.bind( null, {
         name: 'SameEpicSystemIO',
-        dependencies: ['SameEpicSystemIO'], 
+        dependencies: ['SameEpicSystemIO'],
         component: function() { }, 
         process: function(entities) { }
       } )).toThrow('system cannot depend on it self');
@@ -348,12 +391,15 @@ describe("core", function() {
         callback.call();
 
         // should execute logic and IO systems in order
-        expect(systemExecutionPattern).toEqual([ 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5', 
+        expect(systemExecutionPattern).toEqual([ 'SL1c', 'SL2c',
+                                                 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5', 
                                                  'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+                                                 'SIO1c','SIO2c',
                                                  'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5' ]);
 
         // should execute components in order
-        expect(componentExecutionPattern).toEqual([ 'L8c-entity2', 'L8c-entity6',
+        expect(componentExecutionPattern).toEqual([ 'SL1c-staticEntity', 'SL2c-staticEntity',
+                                                    'L8c-entity2', 'L8c-entity6',
                                                     'L6c-entity4', 'L6c-entity5',
                                                     'L4c-entity4',
                                                     'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6',
@@ -362,6 +408,9 @@ describe("core", function() {
                                                     'L7c-entity6',
                                                     'L5c-entity4', 'L5c-entity5',
                                                     'I6c-entity5', 'I2c-entity6',
+                                                    'SIO1c-staticEntity',
+                                                    'SIO2c-staticEntity',
+                                                    'IO8c-entity4',
                                                     'IO8c-entity5',
                                                     'IO2c-entity5', 'IO2c-entity6',
                                                     'IO3c-entity5', 'IO3c-entity6',
@@ -375,21 +424,23 @@ describe("core", function() {
         callback.call();
 
         // should execute logic systems maximum times to avoid spiral of death
-        expect(systemExecutionPattern).toEqual([ 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
-                                                 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
-                                                 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
-                                                 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
-                                                 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+        expect(systemExecutionPattern).toEqual([ 'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+                                                 'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+                                                 'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+                                                 'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+                                                 'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
                                                  'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+                                                 'SIO1c', 'SIO2c',
                                                  'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5' ]);
 
-        expect(componentExecutionPattern).toEqual([ 'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
-                                                    'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
-                                                    'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
-                                                    'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
-                                                    'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
+        expect(componentExecutionPattern).toEqual([ 'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
+                                                    'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
+                                                    'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
+                                                    'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
+                                                    'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
                                                     'I6c-entity5', 'I2c-entity6',
-                                                    'IO8c-entity5', 'IO2c-entity5', 'IO2c-entity6', 'IO3c-entity5', 'IO3c-entity6', 'IO1c-entity5', 'IO1c-entity6', 'IO7c-entity5', 'IO5c-entity5'] );
+                                                    'SIO1c-staticEntity', 'SIO2c-staticEntity',
+                                                    'IO8c-entity4','IO8c-entity5', 'IO2c-entity5', 'IO2c-entity6', 'IO3c-entity5', 'IO3c-entity6', 'IO1c-entity5', 'IO1c-entity6', 'IO7c-entity5', 'IO5c-entity5'] );
       });
 
       window.performance.now = function() {
@@ -414,13 +465,22 @@ describe("core", function() {
         callback.call();
 
         // should execute components in order
-        expect(componentExecutionPattern).toEqual([ 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6', 'I2c-entity6' ]);
+        expect(componentExecutionPattern).toEqual([ 'SL1c-staticEntity', 'SL2c-staticEntity', 
+                                                    'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6',
+                                                    'I2c-entity6',
+                                                    'SIO1c-staticEntity', 'SIO2c-staticEntity' ]);
 
         componentExecutionPattern = [];
         window.performance.now = function() { return Number.MAX_VALUE; } // miliseconds
         callback.call();
 
-        expect(componentExecutionPattern).toEqual([ 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6', 'I2c-entity6' ]);
+        expect(componentExecutionPattern).toEqual([ 'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6',
+                                                    'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6',
+                                                    'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6',
+                                                    'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6',
+                                                    'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6',
+                                                    'I2c-entity6',
+                                                    'SIO1c-staticEntity', 'SIO2c-staticEntity']);
       });
 
       window.performance.now = function() { return 0; }
@@ -441,13 +501,21 @@ describe("core", function() {
         callback.call();
 
         // should execute components in order
-        expect(componentExecutionPattern).toEqual([ 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6', 'IO2c-entity6', 'IO3c-entity6', 'IO1c-entity6' ]);
+        expect(componentExecutionPattern).toEqual([ 'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6', 'SIO1c-staticEntity', 'SIO2c-staticEntity', 'IO2c-entity6', 'IO3c-entity6', 'IO1c-entity6']);
 
         componentExecutionPattern = [];
         window.performance.now = function() { return Number.MAX_VALUE; } // miliseconds
         callback.call();
 
-        expect(componentExecutionPattern).toEqual([ 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6', 'IO2c-entity6', 'IO3c-entity6', 'IO1c-entity6' ]);
+        expect(componentExecutionPattern).toEqual([ 'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6',
+                                                    'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 
+                                                    'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 
+                                                    'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 
+                                                    'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 
+                                                    'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6', 
+                                                    'SIO1c-staticEntity', 'SIO2c-staticEntity', 
+                                                    'IO2c-entity6', 
+                                                    'IO3c-entity6', 'IO1c-entity6' ]);
       });
 
       window.performance.now = function() { return 0; }
