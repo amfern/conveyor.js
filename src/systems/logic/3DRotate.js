@@ -12,7 +12,7 @@ new COMP.System.Logic({
     };
   },
 
-  proccess: function(entities) {
+  process: function(entities) {
     _.each(entities, function(e) {
       var rotateComponent = e['3DRotate'];
       e['3DObject'].rotateOnAxis(rotateComponent.axis, rotateComponent.speed);

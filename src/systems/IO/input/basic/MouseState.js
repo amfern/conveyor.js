@@ -48,7 +48,7 @@
       return state;
     },
 
-    proccess: function(staticEntity) {
+    process: function(staticEntity) {
       _.clearAll(state);  // clear state
       _.extend(state, bufferState); // copy bufferState to state
       resetBuffer(); // reset 

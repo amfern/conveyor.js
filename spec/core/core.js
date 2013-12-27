@@ -17,7 +17,7 @@ describe("core", function() {
         name: 'EpicSystemLogic1',
         dependencies: ['EpicSystemLogic3', 'EpicSystemLogic2'], 
         component: function() { return 'L1c'; }, 
-        proccess: function(entities) {
+        process: function(entities) {
           systemExecutionPattern.push('L1');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemLogic1'] + '-' + e.name); });
         }
@@ -27,7 +27,7 @@ describe("core", function() {
         name: 'EpicSystemLogic2',
         dependencies: [], 
         component: function() { return 'L2c'; }, 
-        proccess: function(entities) {
+        process: function(entities) {
           systemExecutionPattern.push('L2');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemLogic2'] + '-' + e.name); });
         }
@@ -37,7 +37,7 @@ describe("core", function() {
         name: 'EpicSystemLogic3',
         dependencies: [], 
         component: function() { return 'L3c'; }, 
-        proccess: function(entities) {
+        process: function(entities) {
           systemExecutionPattern.push('L3');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemLogic3'] + '-' + e.name); });
         }
@@ -47,7 +47,7 @@ describe("core", function() {
         name: 'EpicSystemLogic4',
         dependencies: [], 
         component: function() { return 'L4c'; }, 
-        proccess: function(entities) {
+        process: function(entities) {
           systemExecutionPattern.push('L4');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemLogic4'] + '-' + e.name); });
         }
@@ -57,7 +57,7 @@ describe("core", function() {
         name: 'EpicSystemLogic5',
         dependencies: ['EpicSystemLogic1'], 
         component: function() { return 'L5c'; }, 
-        proccess: function(entities) {
+        process: function(entities) {
           systemExecutionPattern.push('L5');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemLogic5'] + '-' + e.name); });
         }
@@ -68,7 +68,7 @@ describe("core", function() {
         thread: true,
         dependencies: ['NonExistandSystem1', 'NonExistandSystem2'], 
         component: function() { return 'L6c'; }, 
-        proccess: function(entities) { 
+        process: function(entities) { 
           systemExecutionPattern.push('L6');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemLogic6'] + '-' + e.name); });
           this.yield();
@@ -79,7 +79,7 @@ describe("core", function() {
         name: 'EpicSystemLogic7',
         dependencies: ['EpicSystemLogic8', 'EpicSystemLogic1'], 
         component: function() { return 'L7c'; }, 
-        proccess: function(entities) { 
+        process: function(entities) { 
           systemExecutionPattern.push('L7');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemLogic7'] + '-' + e.name); });
         }
@@ -89,7 +89,7 @@ describe("core", function() {
         name: 'EpicSystemLogic8',
         dependencies: [], 
         component: function() { return 'L8c'; }, 
-        proccess: function(entities) { 
+        process: function(entities) { 
           systemExecutionPattern.push('L8');
           _.each(entities, function(e) {
             componentExecutionPattern.push(e['EpicSystemLogic8'] + '-' + e.name);
@@ -103,7 +103,7 @@ describe("core", function() {
         name: 'EpicSystemInterpolate1',
         dependencies: ['EpicSystemInterpolate3', 'EpicSystemInterpolate2'], 
         component: function() { return 'I1c'; }, 
-        proccess: function(entities, interpolation) {
+        process: function(entities, interpolation) {
           expect(interpolation).toBeDefined();
           systemExecutionPattern.push('I1');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemInterpolate1'] + '-' + e.name); });
@@ -114,7 +114,7 @@ describe("core", function() {
         name: 'EpicSystemInterpolate2',
         dependencies: [], 
         component: function() { return 'I2c'; }, 
-        proccess: function(entities, interpolation) {
+        process: function(entities, interpolation) {
           systemExecutionPattern.push('I2');
           expect(interpolation).toBeDefined();
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemInterpolate2'] + '-' + e.name); });
@@ -125,7 +125,7 @@ describe("core", function() {
         name: 'EpicSystemInterpolate3',
         dependencies: [], 
         component: function() { return 'I3c'; }, 
-        proccess: function(entities, interpolation) {
+        process: function(entities, interpolation) {
           expect(interpolation).toBeDefined();
           systemExecutionPattern.push('I3');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemInterpolate3'] + '-' + e.name); });
@@ -136,7 +136,7 @@ describe("core", function() {
         name: 'EpicSystemInterpolate4',
         dependencies: [], 
         component: function() { return 'I4c'; }, 
-        proccess: function(entities, interpolation) {
+        process: function(entities, interpolation) {
           expect(interpolation).toBeDefined();
           systemExecutionPattern.push('I4');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemInterpolate4'] + '-' + e.name); });
@@ -147,7 +147,7 @@ describe("core", function() {
         name: 'EpicSystemInterpolate5',
         dependencies: ['EpicSystemInterpolate1'], 
         component: function() { return 'I5c'; }, 
-        proccess: function(entities, interpolation) {
+        process: function(entities, interpolation) {
           expect(interpolation).toBeDefined();
           systemExecutionPattern.push('I5');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemInterpolate5'] + '-' + e.name); });
@@ -159,7 +159,7 @@ describe("core", function() {
         thread: true,
         dependencies: ['NonExistandSystem1', 'NonExistandSystem2'], 
         component: function() { return 'I6c'; }, 
-        proccess: function(entities, interpolation) { 
+        process: function(entities, interpolation) { 
           expect(interpolation).toBeDefined();
           systemExecutionPattern.push('I6');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemInterpolate6'] + '-' + e.name); });
@@ -171,7 +171,7 @@ describe("core", function() {
         name: 'EpicSystemInterpolate7',
         dependencies: ['EpicSystemInterpolate8', 'EpicSystemInterpolate1'], 
         component: function() { return 'I7c'; }, 
-        proccess: function(entities, interpolation) { 
+        process: function(entities, interpolation) { 
           expect(interpolation).toBeDefined();
           systemExecutionPattern.push('I7');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemInterpolate7'] + '-' + e.name); });
@@ -182,7 +182,7 @@ describe("core", function() {
         name: 'EpicSystemInterpolate8',
         dependencies: [], 
         component: function() { return 'I8c'; }, 
-        proccess: function(entities, interpolation) { 
+        process: function(entities, interpolation) { 
           expect(interpolation).toBeDefined();
           systemExecutionPattern.push('I8');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemInterpolate8'] + '-' + e.name); });
@@ -195,7 +195,7 @@ describe("core", function() {
         name: 'EpicSystemIO1',
         dependencies: ['EpicSystemIO3', 'EpicSystemIO2'], 
         component: function() { return 'IO1c'; }, 
-        proccess: function(entities) {
+        process: function(entities) {
           systemExecutionPattern.push('IO1');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemIO1'] + '-' + e.name); });
         }
@@ -205,7 +205,7 @@ describe("core", function() {
         name: 'EpicSystemIO2',
         dependencies: [], 
         component: function() { return 'IO2c'; }, 
-        proccess: function(entities) {
+        process: function(entities) {
           systemExecutionPattern.push('IO2');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemIO2'] + '-' + e.name); });
         }
@@ -215,7 +215,7 @@ describe("core", function() {
         name: 'EpicSystemIO3',
         dependencies: [], 
         component: function() { return 'IO3c'; }, 
-        proccess: function(entities) {
+        process: function(entities) {
           systemExecutionPattern.push('IO3');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemIO3'] + '-' + e.name); });
         }
@@ -225,7 +225,7 @@ describe("core", function() {
         name: 'EpicSystemIO4',
         dependencies: [], 
         component: function() { return 'IO4c'; }, 
-        proccess: function(entities) {
+        process: function(entities) {
           systemExecutionPattern.push('IO4');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemIO4'] + '-' + e.name); });
         }
@@ -235,7 +235,7 @@ describe("core", function() {
         name: 'EpicSystemIO5',
         dependencies: ['EpicSystemIO1'], 
         component: function() { return 'IO5c'; }, 
-        proccess: function(entities) {
+        process: function(entities) {
           systemExecutionPattern.push('IO5');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemIO5'] + '-' + e.name); });
         }
@@ -246,7 +246,7 @@ describe("core", function() {
         thread: true,
         dependencies: ['NonExistandSystem1', 'NonExistandSystem2'], 
         component: function() { return 'IO6c'; }, 
-        proccess: function(entities) { 
+        process: function(entities) { 
           systemExecutionPattern.push('IO6');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemIO6'] + '-' + e.name); });
           this.yield();
@@ -257,7 +257,7 @@ describe("core", function() {
         name: 'EpicSystemIO7',
         dependencies: ['EpicSystemIO8', 'EpicSystemIO1'], 
         component: function() { return 'IO7c'; }, 
-        proccess: function(entities) { 
+        process: function(entities) { 
           systemExecutionPattern.push('IO7');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemIO7'] + '-' + e.name); });
         }
@@ -267,11 +267,12 @@ describe("core", function() {
         name: 'EpicSystemIO8',
         dependencies: [], 
         component: function() { return 'IO8c'; }, 
-        proccess: function(entities) { 
+        process: function(entities) { 
           systemExecutionPattern.push('IO8');
           _.each(entities, function(e) { componentExecutionPattern.push(e['EpicSystemIO8'] + '-' + e.name); });
         }
       });
+
 
     });
 
@@ -313,14 +314,14 @@ describe("core", function() {
         name: 'EpicSystemLogic1',
         dependencies: [], 
         component: function() { }, 
-        proccess: function(entities) { }
+        process: function(entities) { }
       } )).toThrow('system under name "EpicSystemLogic1" already exists');
       
       expect(COMP.System.IO.bind( null, {
         name: 'EpicSystemIO1',
         dependencies: [], 
         component: function() { }, 
-        proccess: function(entities) { }
+        process: function(entities) { }
       } )).toThrow('system under name "EpicSystemIO1" already exists');
     });
 
@@ -329,18 +330,18 @@ describe("core", function() {
         name: 'SameEpicSystemLogic',
         dependencies: ['SameEpicSystemLogic'], 
         component: function() { }, 
-        proccess: function(entities) { }
+        process: function(entities) { }
       } )).toThrow('system cannot depend on it self');
 
       expect(COMP.System.IO.bind( null, {
         name: 'SameEpicSystemIO',
         dependencies: ['SameEpicSystemIO'], 
         component: function() { }, 
-        proccess: function(entities) { }
+        process: function(entities) { }
       } )).toThrow('system cannot depend on it self');
     });
 
-    it("should proccess Logic, Interpolate and IO systems in correct order", function () {
+    it("should process Logic, Interpolate and IO systems in correct order", function () {
       window.requestAnimationFrame = _.once(function(callback) {
         // make logicSystems will be called max times
         window.performance.now = function() { return 30; } // miliseconds
@@ -398,7 +399,7 @@ describe("core", function() {
       COMP();
     });
 
-    it("should remove entities and proccess systems in correct order", function () {    
+    it("should remove entities and process systems in correct order", function () {    
       componentExecutionPattern = [];
 
       window.requestAnimationFrame = _.once(function(callback) {
@@ -428,7 +429,7 @@ describe("core", function() {
 
     });
 
-    it("should update entity1 and proccess systems in correct order", function () {
+    it("should update entity1 and process systems in correct order", function () {
       componentExecutionPattern = [];
 
       window.requestAnimationFrame = _.once(function(callback) {

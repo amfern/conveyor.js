@@ -16,7 +16,7 @@
       return state;
     },
 
-    proccess: function(staticEntity) {
+    process: function(staticEntity) {
       _.clearAll(state);  // clear state
       _.extend(state, combineStates(staticEntity.KeyboardState), {}, {}, {}, {}); //, staticEntity['MouseState'],  staticEntity['JoystickState'], staticEntity['Mouse3DState']));
       bufferState = {}; // reset 

@@ -9,7 +9,7 @@
       return {};
     }, 
 
-    proccess: function(entities) {
+    process: function(entities) {
       
     }
   });

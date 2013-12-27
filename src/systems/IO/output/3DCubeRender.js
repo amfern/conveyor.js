@@ -35,7 +35,7 @@
       return {};
     }, 
 
-    proccess: function(entities) {
+    process: function(entities) {
       _.each(entities, function(e) {
         var object3D = e['3DObjectAfter'];
         
