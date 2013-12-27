@@ -8,7 +8,7 @@ new COMP.System.Interpolate({
   component: function() {
   },
 
-  proccess: function(entities, interpolation) {
+  process: function(entities, interpolation) {
     var before, current, after, deltaPosition, deltaQuaternion, deltaScale;
 
     _.each(entities, function(e) {

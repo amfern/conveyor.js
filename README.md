@@ -40,10 +40,11 @@ Browse examples
 `basic example: http://10.0.0.45:9001/basic/index.html`
 
 ### TODO
-deal some how with round dependancies - or just leave stack overflow exception
-allow user to extract visual represintation of dependancies from engine
+deal some how with round dependencies - or just leave stack overflow exception
+allow user to extract visual represintation of dependencies from engine
 git doesn't save softlinks???
 allow users to register and unregister systems during runtime
+jasmine test are linear, it doesn't reset the window every test - fix it asap
 
 ### Target
 build a fast passed game targeting gameplay, tactics, inviting the player to expolit it vast new laws of phisics to achieve an epic battles and moves.

@@ -9,7 +9,7 @@ new COMP.System.Logic({
     return new THREE.Object3D();
   },
 
-  proccess: function(entities) {
+  process: function(entities) {
     _.each(entities, function(e) {
       e['3DObjectBefore'] = e['3DObject'].clone();
     });

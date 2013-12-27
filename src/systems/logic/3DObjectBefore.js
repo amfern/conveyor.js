@@ -6,6 +6,6 @@ new COMP.System.Logic({
   component: function() { 
   },
 
-  proccess: function(entities) {
+  process: function(entities) {
   }
 });
