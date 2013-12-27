@@ -13,7 +13,7 @@ describe('System', function() {
       dependencies: [], 
       thread: true,
       component: function() { }, 
-      proccess: function(entities) { }
+      process: function(entities) { }
     };
 
     genericSystem = new COMP.System.Logic(config);
@@ -23,7 +23,7 @@ describe('System', function() {
       component: config.component, 
       entities: [],
       thread: true,
-      proccess: config.proccess
+      process: config.process
     });
   });
 
@@ -32,7 +32,7 @@ describe('System', function() {
       name: 'EpicInterplateSystem',
       dependencies: [], 
       component: function() { }, 
-      proccess: function(entities) { debugger }
+      process: function(entities) { debugger }
     };
 
     genericSystem = new COMP.System.Interpolate(config);
@@ -42,7 +42,7 @@ describe('System', function() {
       component: config.component, 
       entities: [],
       thread: false,
-      proccess: config.proccess
+      process: config.process
     });
   });
 
@@ -51,7 +51,7 @@ describe('System', function() {
       name: 'EpicIOSystem',
       dependencies: [], 
       component: function() { }, 
-      proccess: function(entities) { }
+      process: function(entities) { }
     };
 
     genericSystem = new COMP.System.IO(config);
@@ -61,7 +61,7 @@ describe('System', function() {
       component: config.component, 
       entities: [],
       thread: false,
-      proccess: config.proccess
+      process: config.process
     });
   });
 
@@ -81,27 +81,27 @@ describe('System', function() {
     expect( COMP.System.bind(null, { name: "component" }) ).toThrow('"component" is saved system name');
   });
 
-  it('should raise exception for system name == "proccess"', function () {
-    expect( COMP.System.bind(null, { name: "proccess" }) ).toThrow('"proccess" is saved system name');
+  it('should raise exception for system name == "process"', function () {
+    expect( COMP.System.bind(null, { name: "process" }) ).toThrow('"process" is saved system name');
   });
 
   it('should raise exception for system name == "yield"', function () {
     expect( COMP.System.bind(null, { name: "yield" }) ).toThrow('"yield" is saved system name');
   });
 
-  it('should raise exception for missing proccess function', function () {
-    expect( COMP.System.bind(null, { name: "epicName" }) ).toThrow('proccess function is mandatory');
+  it('should raise exception for missing process function', function () {
+    expect( COMP.System.bind(null, { name: "epicName" }) ).toThrow('process function is mandatory');
   });
 
   it('should raise exception for missing name', function () {
-    expect( COMP.System.bind(null, { proccess: function() {} }) ).toThrow('empty system name is not allowed');
+    expect( COMP.System.bind(null, { process: function() {} }) ).toThrow('empty system name is not allowed');
   });
 
   describe('new system', function() {
     beforeEach(function() {
       config = {
         name: 'epicGenericName',
-        proccess: function(entities) { }
+        process: function(entities) { }
       };
 
       genericSystem = new COMP.System(config);

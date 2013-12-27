@@ -1,9 +1,9 @@
 // API for register combos combination from keyboard, mouse, touch, joystick and 3Dmouse.
-// when the combo pressed api will set appropriate flag to true.
+// when the combo pressed API will set appropriate flag to true.
 // passing additional values will effect the behavior of the key
 // -----------------------------------------
 (function() {
-  var combos = [], // ordrered array of combos from the longest sequence of keys to the shortest
+  var combos = [], // ordered array of combos from the longest sequence of keys to the shortest
       triggeredCombos = [],
       handlerIndex = -1,
       component = {
@@ -20,7 +20,7 @@
   //                                   down    - combo trigger on all of the keys down
   //                                   up      - combo trigger on all of the keys up
   //                                   release - combo trigger on one of the keys up
-  //   "isOnce"            : false,  - Normally while holding the keys combo will be awlways triggered, setting this to true will trigger and wait for release before triggering again
+  //   "isOnce"            : false,  - Normally while holding the keys combo will be always triggered, setting this to true will trigger and wait for release before triggering again
   //   "isOrdered"         : false,  - will trigger only if clicked in the correct order
   //   "isExclusive"       : false,  - Normally when pressing a key, any and all combos that match will have their callbacks called. 
   //                                   For instance, pressing 'shift' and then 's' would activate the following combos if they existed: "shift", "shift s" and "s". 
@@ -57,7 +57,7 @@
   }
 
   // removes combo
-  // handler - (interger) a handler to a combo
+  // handler - (integer) a handler to a combo
   function unregister(handler) {
     // remove combo from all parent combos
     _.each(combos, function(combo) {
@@ -68,7 +68,7 @@
   }
 
   // checks if a certain combo is triggered
-  // handler - (interger) a handler to a combo
+  // handler - (integer) a handler to a combo
   function isTriggered(handler) {
     return component.state[handler] || false; // even if undefined will return false
   }
@@ -101,7 +101,7 @@
   function isComboValid(combo, pastTriggeredCombos, HIDState) {
     if(combo.trigger == 'down') // if all keys are pressed
       return combo.isOrdered ? isKeysExistsInOrder(combo.keys, HIDState) : isKeysExists(combo.keys, HIDState);
-    else if(combo.trigger == 'up') // if atleast on key is up combo is triggered
+    else if(combo.trigger == 'up') // if at least on key is up combo is triggered
       return combo.isOrdered ? !isKeysExistsInOrder(combo.keys, HIDState) : !isKeysExists(combo.keys, HIDState);
     else if(combo.trigger == 'release') // if combo triggered in the past now none of it keys are present
       return isKeysDontExists(combo.keys, HIDState) && pastTriggeredCombos[combo.handler];
@@ -133,13 +133,14 @@
 
   new COMP.System.IO({
     name: 'HIDComboState',
+    isStatic: true,
     dependencies: ['HIDState'],
 
     component: function() {
       return combos;
     },
 
-    proccess: function(staticEntity) {
+    process: function(staticEntity) {
       var pastTriggeredCombos = triggeredCombos, HIDState = _.keys(staticEntity.KeyboardState);
 
       triggeredCombos = getTriggeredCombos(combos, pastTriggeredCombos, HIDState);

@@ -1,5 +1,5 @@
-// Core of the engine, responsble for game loop and proccessing system entitites
-// element(optional) - DOM element onto which keyboar and mouse event bound and rendering happens
+// Core of the engine, responsible for game loop and processing system entities
+// element(optional) - DOM element onto which keyboard and mouse event bound and rendering happens
 // -----------------------------------------
 window.COMP = (function(element) {
   var         TICKS_PER_SECOND = 25,
@@ -37,20 +37,20 @@ window.COMP = (function(element) {
     return system;
   }
 
-  // adds system and it dependancies in order
+  // adds system and it dependencies in order
   // returns system index
   function addSystem(tempSystemCollection, systemCollection, tempSys) {
     var sysIndex = systemIndex(systemCollection, tempSys.name);
 
     if( sysIndex != -1 ) return sysIndex; // do nothing if system already exists
 
-    // add dependancies
+    // add dependencies
     _.each(tempSys.dependencies, function(depSysName) {
-      var depSys = _.find(tempSystemCollection, function(s) { return s.name == depSysName; }); // resolve depndancy
-      if(!depSys) return; // continue loop if depandancy system doesn't exists
+      var depSys = _.find(tempSystemCollection, function(s) { return s.name == depSysName; }); // resolve dependency
+      if(!depSys) return; // continue loop if dependency system doesn't exists
       var tempSysIndex = addSystem(tempSystemCollection, systemCollection, depSys); // add system
       sysIndex++;
-      sysIndex = sysIndex > tempSysIndex ? sysIndex : tempSysIndex; // set the highest depandancy
+      sysIndex = sysIndex > tempSysIndex ? sysIndex : tempSysIndex; // set the highest dependency
     });
 
     // TODO: rise event telling that "system finish loading(tempSys)";
@@ -66,7 +66,7 @@ window.COMP = (function(element) {
 
     var systemCollection = [];
 
-    // add systems in the correct order for dependancies
+    // add systems in the correct order for dependencies
     _.each(tempSystemCollection, function(tempSys) {
       addSystem(tempSystemCollection, systemCollection, tempSys);
     });
@@ -82,7 +82,7 @@ window.COMP = (function(element) {
       var processEntities = sys.isStatic ? staticEntity : sys.entities;
 
       return function() {
-        sys.proccess(processEntities, interpolation); // proccess system
+        sys.process(processEntities, interpolation); // process system
         if(!sys.thread) sys.yield(); // yield if not threaded system
       };
     };
@@ -90,7 +90,7 @@ window.COMP = (function(element) {
     return constructCallbacks(_.first(systemCollection), 0);
   }
 
-  // adds system and it dependancies in order
+  // adds system and it dependencies in order
   // returns system index
   function addEntityComponents(entity, componentNames) {
     _.each(componentNames, function(componentName) {
@@ -98,7 +98,7 @@ window.COMP = (function(element) {
       
       var system = systemsByName[componentName];
 
-      if(!system) return; // dependancy not found
+      if(!system) return; // dependency not found
 
       system.entities.push(entity);
       entity[system.name] = system.component();
@@ -107,13 +107,13 @@ window.COMP = (function(element) {
     });
   }
 
-  // adds system and it dependancies in order
+  // adds system and it dependencies in order
   // returns system index
   function updateEntityComponents(oldEntity, newEntity, componentNames) {
     _.each(componentNames, function(componentName) {
       var system = systemsByName[componentName];
       
-      if(!system) return; // dependancy not found
+      if(!system) return; // dependency not found
 
       // if oldEntity already have that components, use it instead of creating new one
       var oldEntityComponent = oldEntity[componentName];
@@ -133,17 +133,17 @@ window.COMP = (function(element) {
     _.each(componentNames, function(componentName) {
       var system = systemsByName[componentName];
 
-      if(!system) return; // dependancy not found
+      if(!system) return; // dependency not found
 
-      delete entity[componentName]; // remove componenet from entity
+      delete entity[componentName]; // remove component from entity
       system.entities.splice(system.entities.indexOf(entity), 1); // remove entity from system
 
       removeEntityComponents(entity, system.dependencies);
     });
   }
 
-  // cycling over all logic systems and proccesing them
-  function proccessLogic() {
+  // cycling over all logic systems and processing them
+  function processLogic() {
     interpolation = null;
 
     if(window.performance.now() >= nextGameTick && loops < MAX_FRAMESKIP) {
@@ -155,23 +155,23 @@ window.COMP = (function(element) {
 
     loops = 0;
     
-    proccessInterpolation();
+    processInterpolation();
   }
 
-  // cycling over all interpolation systems and proccesing them passing interpolation to each
-  function proccessInterpolation() {
+  // cycling over all interpolation systems and processing them passing interpolation to each
+  function processInterpolation() {
     interpolation = (window.performance.now() + SKIP_TICKS - nextGameTick) / SKIP_TICKS;
     firstInterpolationCallback();
   }
 
   // cycling over all input/output systems
-  function proccessIO() {
+  function processIO() {
     firstIOCallback();
   }
 
-  // start proccesing chain from proccessLogic callback
-  function proccessNextFrame() {
-    window.requestAnimationFrame(proccessLogic);
+  // start processing chain from processLogic callback
+  function processNextFrame() {
+    window.requestAnimationFrame(processLogic);
   }
 
   // constructs entity only for static systems to use
@@ -179,7 +179,7 @@ window.COMP = (function(element) {
     var staticSystems = _.filter(systemsByName, function(sys) { return sys.isStatic; }); // filter only static systems
     staticSystems = _.map(staticSystems, function(sys) { return sys.name; });// collect only static system names
 
-    // create new entity coposing only of static systems
+    // create new entity composing only of static systems
     return new COMP.Entity({
       name: "staticEntity",
       components: staticSystems,
@@ -226,13 +226,13 @@ window.COMP = (function(element) {
     domElement = element || document.createElement('div');
     nextGameTick = window.performance.now();
 
-    firstLogicCallback         = prepareSystem(tempLogicSystems, proccessLogic);
-    firstInterpolationCallback = prepareSystem(tempInterpolationSystems, proccessIO);
-    firstIOCallback            = prepareSystem(tempIOSystems, proccessNextFrame);
+    firstLogicCallback         = prepareSystem(tempLogicSystems, processLogic);
+    firstInterpolationCallback = prepareSystem(tempInterpolationSystems, processIO);
+    firstIOCallback            = prepareSystem(tempIOSystems, processNextFrame);
 
     staticEntity = constructStaticEntity();
 
-    proccessNextFrame();
+    processNextFrame();
   }
   
   mainLoop._registerLogicSystem       = registerLogicSystem;
