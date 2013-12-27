@@ -99,9 +99,9 @@ window.COMP = (function(element) {
       var system = systemsByName[componentName];
 
       if(!system) return; // dependency not found
-
-      system.entities.push(entity);
       entity[system.name] = system.component();
+
+      if(!system.isStatic) system.entities.push(entity); // static systems depend only on other static systems
 
       addEntityComponents(entity, system.dependencies);
     });
@@ -180,10 +180,12 @@ window.COMP = (function(element) {
     staticSystems = _.map(staticSystems, function(sys) { return sys.name; });// collect only static system names
 
     // create new entity composing only of static systems
-    return new COMP.Entity({
+    var staticEntity = new COMP.StaticEntity({
       name: "staticEntity",
       components: staticSystems,
     });
+
+    return staticEntity;
   }
 
   // Public
@@ -226,11 +228,11 @@ window.COMP = (function(element) {
     domElement = element || document.createElement('div');
     nextGameTick = window.performance.now();
 
+    staticEntity = constructStaticEntity();
+
     firstLogicCallback         = prepareSystem(tempLogicSystems, processLogic);
     firstInterpolationCallback = prepareSystem(tempInterpolationSystems, processIO);
     firstIOCallback            = prepareSystem(tempIOSystems, processNextFrame);
-
-    staticEntity = constructStaticEntity();
 
     processNextFrame();
   }
