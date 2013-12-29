@@ -14,17 +14,21 @@ beforeEach(function() {
     cycle(specCallback, ++COMP.TICKS_PER_SECOND);
   };
   
-  // full engine cycle is when engine avoiding spiral of death doing the maximum allowed cycles
+  // cycle half
+  COMP.cycleHalf = function(specCallback) {
+    cycle(specCallback, COMP.TICKS_PER_SECOND/2);
+  };
+
+  // spiral engine cycle is when engine avoiding spiral of death doing the maximum allowed cycles
   COMP.spiralCycle = function(specCallback) {
     cycle(specCallback, Number.MAX_VALUE);
   };
-
+  
+  // cycleMany
+  COMP.cycleMany = function(specCallback, cycleTimes) {
+    cycle(specCallback, Number.MAX_VALUE * cycleTimes);
+  };
 });
-
-
-// half full engine cycle
-
-// half full engine cycle
 
 beforeEach(function() {
   // remove all systems and entities
