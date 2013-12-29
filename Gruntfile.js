@@ -41,6 +41,7 @@ module.exports = function(grunt) {
 
     pkgFullName: "<%= pkg.name %>-v<%= pkg.version%>",
     pkgCoreFiles: ['src/core/core.js', 'src/core/system.js', 'src/core/entity.js'],
+    pkgSystemFiles: ['src/systems/**/*.js'],
 
     // Minify and Concat archives
     uglify: {
@@ -76,7 +77,7 @@ module.exports = function(grunt) {
 
             // engine output/input/interpolation core systems
             // --------------------------------------------
-            'src/systems/**/*.js',
+            '<%= pkgSystemFiles %>',
 
             // basic entities
             // --------------------------------------------
@@ -137,9 +138,10 @@ module.exports = function(grunt) {
     },
 
     jasmine: {
-      src: ["<%= pkgCoreFiles %>"],
+      src: ["src/util/**/*.js", "<%= pkgCoreFiles %>", "<%= pkgSystemFiles %>"],
       options: {
-        specs: 'spec/**/*.js',
+        specs: ['spec/core/**/*.js', 'spec/systems/**/*.js'],
+        helpers: 'spec/helpers/**/*.js',
         vendor: [
           "lib/performance/index.js",
           "lib/rAF/index.js",
