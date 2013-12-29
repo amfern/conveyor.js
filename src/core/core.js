@@ -15,8 +15,7 @@ window.COMP = (function(element) {
                          loops = 0,
                  interpolation,
                   nextGameTick,
-                  staticEntity,
-                    domElement;
+                  staticEntity;
 
   // Private
   // --------------------------
@@ -220,12 +219,8 @@ window.COMP = (function(element) {
     removeEntityComponents( entity, _.keys(entity) ); // remove other components
   }
 
-  function getDOMElement() {
-    return domElement;
-  }
   
   function mainLoop() {
-    domElement = element || document.createElement('div');
     nextGameTick = window.performance.now();
 
     staticEntity = constructStaticEntity();
@@ -243,6 +238,8 @@ window.COMP = (function(element) {
   mainLoop._registerEntity            = registerEntity;
   mainLoop._unregisterEntity          = unregisterEntity;
   mainLoop._updateEntity              = updateEntity;
-  mainLoop.getDOMElement = getDOMElement;
+  mainLoop.TICKS_PER_SECOND           = TICKS_PER_SECOND;
+  mainLoop.SKIP_TICKS                 = SKIP_TICKS;
+  mainLoop.MAX_FRAMESKIP              = MAX_FRAMESKIP;
   return mainLoop;
 })();
