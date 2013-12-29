@@ -211,28 +211,27 @@ describe("core", function() {
         }
       });
 
-      // you forgot static interpolation systems
-      // systemSIO1 = new COMP.System.IO({
-      //   name: 'EpicSystemSIO1',
-      //   isStatic: true,
-      //   dependencies: [],
-      //   component: function() { return 'SIO1c'; },
-      //   process: function(staticEntity) {
-      //     systemExecutionPattern.push('SIO1c');
-      //     componentExecutionPattern.push(staticEntity['EpicSystemSIO1'] + '-' + staticEntity.name)
-      //   }
-      // });
+      systemSI1 = new COMP.System.Interpolate({
+        name: 'EpicSystemSI1',
+        isStatic: true,
+        dependencies: [],
+        component: function() { return 'SI1c'; },
+        process: function(staticEntity) {
+          systemExecutionPattern.push('SI1c');
+          componentExecutionPattern.push(staticEntity['EpicSystemSI1'] + '-' + staticEntity.name)
+        }
+      });
 
-      // systemSIO2 = new COMP.System.IO({
-      //   name: 'EpicSystemSIO2',
-      //   isStatic: true,
-      //   dependencies: ['EpicSystemSIO1', 'systemIO8', 'systemLogic7'],
-      //   component: function() { return 'SIO2c'; },
-      //   process: function(staticEntity) {
-      //     systemExecutionPattern.push('SIO2c');
-      //     componentExecutionPattern.push(staticEntity['EpicSystemSIO2'] + '-' + staticEntity.name)
-      //   }
-      // });
+      systemSI2 = new COMP.System.Interpolate({
+        name: 'EpicSystemSI2',
+        isStatic: true,
+        dependencies: ['EpicSystemSI1', 'systemIO8', 'systemLogic7'],
+        component: function() { return 'SI2c'; },
+        process: function(staticEntity) {
+          systemExecutionPattern.push('SI2c');
+          componentExecutionPattern.push(staticEntity['EpicSystemSI2'] + '-' + staticEntity.name)
+        }
+      });
 
       // IO systems
       // -------------------------------------
@@ -411,6 +410,7 @@ describe("core", function() {
         expect(systemExecutionPattern).toEqual([ 
           'SL1c', 'SL2c',
           'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SI1c', 'SI2c',
           'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
           'SIO1c','SIO2c',
           'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5'
@@ -428,6 +428,7 @@ describe("core", function() {
           'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
           'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
           'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SI1c', 'SI2c',
           'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
           'SIO1c', 'SIO2c',
           'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5'
@@ -451,9 +452,9 @@ describe("core", function() {
           'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6',
           'L7c-entity6',
           'L5c-entity4', 'L5c-entity5',
+          'SI1c-staticEntity', 'SI2c-staticEntity',
           'I6c-entity5', 'I2c-entity6',
-          'SIO1c-staticEntity',
-          'SIO2c-staticEntity',
+          'SIO1c-staticEntity', 'SIO2c-staticEntity',
           'IO8c-entity4',
           'IO8c-entity5',
           'IO2c-entity5', 'IO2c-entity6',
@@ -475,8 +476,7 @@ describe("core", function() {
           'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
           'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
           'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
-          'I6c-entity5', 'I2c-entity6',
-          'SIO1c-staticEntity', 'SIO2c-staticEntity',
+          'SI1c-staticEntity', 'SI2c-staticEntity', 'I6c-entity5', 'I2c-entity6', 'SIO1c-staticEntity', 'SIO2c-staticEntity',
           'IO8c-entity4','IO8c-entity5', 'IO2c-entity5', 'IO2c-entity6', 'IO3c-entity5', 'IO3c-entity6', 'IO1c-entity5', 'IO1c-entity6', 'IO7c-entity5', 'IO5c-entity5'
         ]);
 
@@ -497,7 +497,7 @@ describe("core", function() {
         expect(componentExecutionPattern).toEqual([
           'SL1c-staticEntity', 'SL2c-staticEntity',
           'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6',
-          'I2c-entity6',
+          'SI1c-staticEntity', 'SI2c-staticEntity', 'I2c-entity6',
           'SIO1c-staticEntity', 'SIO2c-staticEntity'
         ]);
 
@@ -512,7 +512,7 @@ describe("core", function() {
           'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6',
           'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6',
           'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L1c-entity6', 'L7c-entity6',
-          'I2c-entity6',
+          'SI1c-staticEntity', 'SI2c-staticEntity', 'I2c-entity6',
           'SIO1c-staticEntity', 'SIO2c-staticEntity'
         ]);
 
@@ -529,7 +529,9 @@ describe("core", function() {
       COMP.cycleOnce(function(){
         // should execute components in order
         expect(componentExecutionPattern).toEqual([ 
-          'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6', 'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6', 'SIO1c-staticEntity', 'SIO2c-staticEntity', 'IO2c-entity6', 'IO3c-entity6', 'IO1c-entity6'
+          'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6',
+          'SI1c-staticEntity', 'SI2c-staticEntity', 'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6',
+          'SIO1c-staticEntity', 'SIO2c-staticEntity', 'IO2c-entity6', 'IO3c-entity6', 'IO1c-entity6'
         ]);
 
         systemExecutionPattern = [];
@@ -543,7 +545,7 @@ describe("core", function() {
           'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6',
           'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6',
           'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L1c-entity6', 'L7c-entity6',
-          'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6',
+          'SI1c-staticEntity', 'SI2c-staticEntity', 'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6',
           'SIO1c-staticEntity', 'SIO2c-staticEntity',
           'IO2c-entity6',
           'IO3c-entity6', 'IO1c-entity6'
