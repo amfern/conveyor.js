@@ -469,7 +469,6 @@ describe("core", function() {
       });
 
       COMP.spiralCycle(function() {
-
         expect(componentExecutionPattern).toEqual([ 
           'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
           'SL1c-staticEntity', 'SL2c-staticEntity', 'L8c-entity2', 'L8c-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L7c-entity6', 'L5c-entity4', 'L5c-entity5',
@@ -522,7 +521,6 @@ describe("core", function() {
     });
 
     it("should update entity1 and process systems in correct order", function () {
-
       entity6.components = ['EpicSystemIO1', 'EpicSystemLogic7', 'EpicSystemInterpolate2', 'EpicSystemLogic3', 'EpicSystemInterpolate7'];
       entity6.update();
       
@@ -549,6 +547,109 @@ describe("core", function() {
           'SIO1c-staticEntity', 'SIO2c-staticEntity',
           'IO2c-entity6',
           'IO3c-entity6', 'IO1c-entity6'
+        ]);
+
+        systemExecutionPattern = [];
+        componentExecutionPattern = [];
+      });      
+    });
+
+    it("should run cycles 5 times", function () {
+      COMP.cycleMany(5, function() {
+        expect(systemExecutionPattern).toEqual([
+          'SL1c', 'SL2c',
+          'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SI1c', 'SI2c',
+          'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+          'SIO1c','SIO2c',
+          'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+
+          'SL1c', 'SL2c',
+          'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SI1c', 'SI2c',
+          'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+          'SIO1c','SIO2c',
+          'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+
+          'SL1c', 'SL2c',
+          'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SI1c', 'SI2c',
+          'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+          'SIO1c','SIO2c',
+          'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+
+          'SL1c', 'SL2c',
+          'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SI1c', 'SI2c',
+          'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+          'SIO1c','SIO2c',
+          'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+
+          'SL1c', 'SL2c',
+          'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SI1c', 'SI2c',
+          'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+          'SIO1c','SIO2c',
+          'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+        ]);
+
+        systemExecutionPattern = [];
+        componentExecutionPattern = [];
+      });      
+    });
+
+    it("should run spiral cycles 5 times", function () {
+      COMP.spiralCycleMany(5, function() {
+        expect(systemExecutionPattern).toEqual([
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SI1c', 'SI2c',
+          'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+          'SIO1c', 'SIO2c',
+          'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SI1c', 'SI2c',
+          'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+          'SIO1c', 'SIO2c',
+          'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SI1c', 'SI2c',
+          'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+          'SIO1c', 'SIO2c',
+          'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SI1c', 'SI2c',
+          'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+          'SIO1c', 'SIO2c',
+          'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SL1c', 'SL2c', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L5',
+          'SI1c', 'SI2c',
+          'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+          'SIO1c', 'SIO2c',
+          'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
         ]);
 
         systemExecutionPattern = [];
