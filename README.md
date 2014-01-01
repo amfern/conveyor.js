@@ -5,6 +5,14 @@ Game engine implementing ECM(EntitySystemComponents) paradigm.
 
 
 ### How to use
+You need to:
+* define all systems `new COMP.System.IO|Interpolation|Logic`
+* define all entities `new COMP.Entity`
+* start the engine `COMP()`
+* define all entities `new COMP.Entity`
+
+note: doing it in other order will not work
+
 
 ```javascript
 cooode 
@@ -34,6 +42,8 @@ Run Tests
 `grunt debug`
 or open `_SpecRunner.html` in your browser
 
+note: running `grunt debug` or `grunt build` will install bower packages
+
 Browse examples
 
 `http://<localhost>:9001/<basic|logic|interpolation|IO>/<example name>.html`
@@ -44,7 +54,11 @@ deal some how with round dependencies - or just leave stack overflow exception
 allow user to extract visual represintation of dependencies from engine
 git doesn't save softlinks???
 allow users to register and unregister systems during runtime
-jasmine test are linear, it doesn't reset the window every test - fix it asap
+jasmine test are linear, it doesn't reset the window every test - fix it asap - unregistering systems will fix it
+do a helper for running code in engine cycle
+systems needs initialize function for engine to call upon start
+allow to change engine SKIP_TICK and other const variables
+
 
 ### Target
 build a fast passed game targeting gameplay, tactics, inviting the player to expolit it vast new laws of phisics to achieve an epic battles and moves.

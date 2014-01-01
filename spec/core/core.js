@@ -1,8 +1,10 @@
 describe("core", function() {
   describe("register systems", function() {
     var systemLogic1, systemLogic2, systemLogic3, systemLogic4, systemLogic5, systemLogic6, systemLogic7, systemLogic8,
-        systemIO1, systemIO2, systemIO3, systemIO4, systemIO5, systemIO6, systemIO7, systemIO8,
+        systemStaticLogic1, systemStaticLogic2,
         systemInterpolation1, systemInterpolation2, systemInterpolation3, systemInterpolation4, systemInterpolation5, systemInterpolation6, systemInterpolation7, systemInterpolation8,
+        systemIO1, systemIO2, systemIO3, systemIO4, systemIO5, systemIO6, systemIO7, systemIO8,
+        systemStaticIO1, systemStaticIO2,
         entity1, entity2, entity3, entity4, entity5, entity6,
         systemExecutionPattern = [];
         componentExecutionPattern = [];
@@ -77,7 +79,7 @@ describe("core", function() {
 
       systemLogic7 = new COMP.System.Logic({
         name: 'EpicSystemLogic7',
-        dependencies: ['EpicSystemLogic8', 'EpicSystemLogic1'],
+        dependencies: ['EpicSystemLogic8', 'EpicSystemLogic1', 'EpicSystemSL1'],
         component: function() { return 'L7c'; },
         process: function(entities) {
           systemExecutionPattern.push('L7');
@@ -97,7 +99,7 @@ describe("core", function() {
         }
       });
 
-      systemSL1 = new COMP.System.Logic({
+      systemStaticLogic1 = new COMP.System.Logic({
         name: 'EpicSystemSL1',
         isStatic: true,
         dependencies: [],
@@ -108,7 +110,7 @@ describe("core", function() {
         }
       });
 
-      systemSL2 = new COMP.System.Logic({
+      systemStaticLogic2 = new COMP.System.Logic({
         name: 'EpicSystemSL2',
         isStatic: true,
         dependencies: ['EpicSystemSL1', 'systemIO8', 'systemLogic7'],
@@ -317,7 +319,7 @@ describe("core", function() {
         }
       });
 
-      systemSIO1 = new COMP.System.IO({
+      systemStaticIO1 = new COMP.System.IO({
         name: 'EpicSystemSIO1',
         isStatic: true,
         dependencies: [],
@@ -328,7 +330,7 @@ describe("core", function() {
         }
       });
 
-      systemSIO2 = new COMP.System.IO({
+      systemStaticIO2 = new COMP.System.IO({
         name: 'EpicSystemSIO2',
         isStatic: true,
         dependencies: ['EpicSystemSIO1', 'systemIO8', 'systemLogic7'],
@@ -348,12 +350,12 @@ describe("core", function() {
 
       entity2 = new COMP.Entity({
         name: "entity2",
-        components: ['EpicSystemLogic8']
+        components: ['EpicSystemLogic8', 'EpicSystemSIO1']
       });
 
       entity3 = new COMP.Entity({
         name: "entity3",
-        components: ['EpicSystemLogic2']
+        components: ['EpicSystemLogic2', 'EpicSystemSL1']
       });
 
       entity4 = new COMP.Entity({
@@ -373,14 +375,14 @@ describe("core", function() {
     });
 
     it("should throw exception for existance system name", function () {
-      expect(COMP.System.Logic.bind( null, {
+      expect(COMP.System.Logic.bind(null, {
         name: 'EpicSystemLogic1',
         dependencies: [],
         component: function() { },
         process: function(entities) { }
       } )).toThrow('system under name "EpicSystemLogic1" already exists');
       
-      expect(COMP.System.IO.bind( null, {
+      expect(COMP.System.IO.bind(null, {
         name: 'EpicSystemIO1',
         dependencies: [],
         component: function() { }, 
@@ -657,6 +659,57 @@ describe("core", function() {
       });      
     });
 
+    it("should throw exception when removing system with entities", function () {
+      expect(systemLogic8.remove.bind(systemLogic8, {})).toThrow('entities still using this system, please remove dependent entities before removing the system');
+    });
+
+    it("should remove system", function () {
+      systemLogic5.remove();
+
+      COMP.cycleOnce(function(){
+        expect(systemExecutionPattern).toEqual([ 
+          'SL1c', 'SL2c',
+          'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7',
+          'SI1c', 'SI2c',
+          'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+          'SIO1c','SIO2c',
+          'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5'
+        ]);
+
+        systemExecutionPattern = [];
+        componentExecutionPattern = [];
+      });
+    });
+
+    it("should throw exception when removing static system with entities", function () {
+      expect(systemStaticLogic1.remove.bind(systemStaticLogic1, {})).toThrow('entities still using this system, please remove dependent entities before removing the system');
+    });
+
+    it("should remove static system", function () {
+      systemStaticLogic2.remove();
+
+      COMP.cycleOnce(function(){
+        expect(systemExecutionPattern).toEqual([ 
+          'SL1c',
+          'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7',
+          'SI1c', 'SI2c',
+          'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+          'SIO1c','SIO2c',
+          'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5'
+        ]);
+
+        systemExecutionPattern = [];
+        componentExecutionPattern = [];
+      });
+    });
+
   });
   
 });
+
+
+// remove all entities using system1
+// remove system1
+// add entity which dependency system using system1
+// get undefined exceptions during run time cus entity doesn't have system1s' component
+// solution throw exception when adding entity and there is a missing dependency
