@@ -21,17 +21,47 @@ COMP.System = function(config) {
   this.entities     = [];
 };
 
+// Logic
+// --------------------------
+
 COMP.System.Logic = function(config) {
   COMP.System.call(this, config);
   COMP._registerLogicSystem(this);
 };
+
+COMP.System.Logic.prototype = {
+  constructor: COMP.System.Logic,
+  remove: function() {
+    COMP._unregisterLogicSystem(this);
+  }
+};
+
+// Interpolate
+// --------------------------
 
 COMP.System.Interpolate = function(config) {
   COMP.System.call(this, config);
   COMP._registerInterpolateSystem(this);
 };
 
+COMP.System.Interpolate.prototype = {
+  constructor: COMP.System.Interpolate,
+  remove: function() {
+    COMP._unregisterInterpolateSystem(this); 
+  }
+};
+
+// IO
+// --------------------------
+
 COMP.System.IO = function(config) {
   COMP.System.call(this, config);
   COMP._registerIOSystem(this);
+};
+
+COMP.System.IO.prototype = {
+  constructor: COMP.System.IO,
+  remove: function() {
+    COMP._unregisterIOSystem(this);
+  }
 };

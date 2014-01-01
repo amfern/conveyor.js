@@ -1,7 +1,6 @@
 // Core of the engine, responsible for game loop and processing system entities
-// element(optional) - DOM element onto which keyboard and mouse event bound and rendering happens
 // -----------------------------------------
-window.COMP = (function(element) {
+window.COMP = (function() {
   var         TICKS_PER_SECOND = 25,
                     SKIP_TICKS = 1000 / TICKS_PER_SECOND,
                  MAX_FRAMESKIP = 5,
@@ -34,6 +33,13 @@ window.COMP = (function(element) {
     systemsByName[system.name] = system;
     
     return system;
+  }
+
+  function unregisterSystem(systemCollection, system) {
+    if(system.entities.length) throw new Error('entities still using this system, please remove dependent entities before removing the system');
+
+    delete systemsByName[system.name]; // remove system
+    systemCollection.splice(systemCollection.indexOf(system), 1); // remove system
   }
 
   // adds system and it dependencies in order
@@ -195,12 +201,24 @@ window.COMP = (function(element) {
     return registerSystem(tempLogicSystems, system);
   }
 
+  function unregisterLogicSystem(system) {
+    return unregisterSystem(tempLogicSystems, system);
+  }
+
   function registerInterpolateSystem(system) {
     return registerSystem(tempInterpolationSystems, system);
   }
 
+  function unregisterInterpolateSystem(system) {
+    return unregisterSystem(tempInterpolationSystems, system);
+  }
+
   function registerIOSystem(system) {
     return registerSystem(tempIOSystems, system);
+  }
+
+  function unregisterIOSystem(system) {
+    return unregisterSystem(tempIOSystems, system);
   }
 
   // add new entity
@@ -232,14 +250,17 @@ window.COMP = (function(element) {
     processNextFrame();
   }
   
-  mainLoop._registerLogicSystem       = registerLogicSystem;
-  mainLoop._registerIOSystem          = registerIOSystem;
-  mainLoop._registerInterpolateSystem = registerInterpolateSystem;
-  mainLoop._registerEntity            = registerEntity;
-  mainLoop._unregisterEntity          = unregisterEntity;
-  mainLoop._updateEntity              = updateEntity;
-  mainLoop.TICKS_PER_SECOND           = TICKS_PER_SECOND;
-  mainLoop.SKIP_TICKS                 = SKIP_TICKS;
-  mainLoop.MAX_FRAMESKIP              = MAX_FRAMESKIP;
+  mainLoop._registerLogicSystem         = registerLogicSystem;
+  mainLoop._unregisterLogicSystem       = unregisterLogicSystem;
+  mainLoop._registerIOSystem            = registerIOSystem;
+  mainLoop._unregisterIOSystem          = unregisterIOSystem;
+  mainLoop._registerInterpolateSystem   = registerInterpolateSystem;
+  mainLoop._unregisterInterpolateSystem = unregisterInterpolateSystem;
+  mainLoop._registerEntity              = registerEntity;
+  mainLoop._unregisterEntity            = unregisterEntity;
+  mainLoop._updateEntity                = updateEntity;
+  mainLoop.TICKS_PER_SECOND             = TICKS_PER_SECOND;
+  mainLoop.SKIP_TICKS                   = SKIP_TICKS;
+  mainLoop.MAX_FRAMESKIP                = MAX_FRAMESKIP;
   return mainLoop;
 })();
