@@ -3,8 +3,11 @@ describe('System', function() {
 
   beforeEach(function() {
     spyOn(COMP, '_registerLogicSystem');
+    spyOn(COMP, '_unregisterLogicSystem');
     spyOn(COMP, '_registerInterpolateSystem');
+    spyOn(COMP, '_unregisterInterpolateSystem');
     spyOn(COMP, '_registerIOSystem');
+    spyOn(COMP, '_unregisterIOSystem');
   });
 
   it('should register logic system with core', function () {
@@ -17,14 +20,14 @@ describe('System', function() {
     };
 
     genericSystem = new COMP.System.Logic(config);
-    expect(COMP._registerLogicSystem).toHaveBeenCalledWith({
+    expect(COMP._registerLogicSystem.mostRecentCall.args[0]).toMatch({
       name: 'EpicLogicSystem',
       isStatic: false,
       dependencies: [], 
       component: config.component, 
-      entities: [],
       thread: true,
-      process: config.process
+      process: config.process,
+      entities: []
     });
   });
 
@@ -37,14 +40,14 @@ describe('System', function() {
     };
 
     genericSystem = new COMP.System.Interpolate(config);
-    expect(COMP._registerInterpolateSystem).toHaveBeenCalledWith({
+    expect(COMP._registerInterpolateSystem.mostRecentCall.args[0]).toMatch({
       name: 'EpicInterplateSystem',
       isStatic: false,
       dependencies: [], 
       component: config.component, 
-      entities: [],
       thread: false,
-      process: config.process
+      process: config.process,
+      entities: []
     });
   });
 
@@ -57,14 +60,14 @@ describe('System', function() {
     };
 
     genericSystem = new COMP.System.IO(config);
-    expect(COMP._registerIOSystem).toHaveBeenCalledWith({
+    expect(COMP._registerIOSystem.mostRecentCall.args[0]).toMatch({
       name: 'EpicIOSystem',
       isStatic: false,
       dependencies: [], 
       component: config.component, 
-      entities: [],
       thread: false,
-      process: config.process
+      process: config.process,
+      entities: []
     });
   });
 
@@ -118,5 +121,47 @@ describe('System', function() {
       expect(typeof(genericSystem.component)).toEqual('function');
     });
   
+  });
+
+  it('should unregister logic system with core', function () {
+    config = {
+      name: 'UnregisterEpicLogicSystem',
+      dependencies: [], 
+      thread: true,
+      component: function() { }, 
+      process: function(entities) { }
+    };
+
+    genericSystem = new COMP.System.Logic(config);
+    genericSystem.remove();
+    expect(COMP._unregisterLogicSystem).toHaveBeenCalledWith(genericSystem);
+  });
+
+  it('should unregister Interpolate system with core', function () {
+    config = {
+      name: 'UnregisterEpicInterpolateSystem',
+      dependencies: [], 
+      thread: true,
+      component: function() { }, 
+      process: function(entities) { }
+    };
+
+    genericSystem = new COMP.System.Interpolate(config);
+    genericSystem.remove();
+    expect(COMP._unregisterInterpolateSystem).toHaveBeenCalledWith(genericSystem);
+  });
+
+  it('should unregister IO system with core', function () {
+    config = {
+      name: 'UnregisterEpicIOSystem',
+      dependencies: [], 
+      thread: true,
+      component: function() { }, 
+      process: function(entities) { }
+    };
+
+    genericSystem = new COMP.System.IO(config);
+    genericSystem.remove();
+    expect(COMP._unregisterIOSystem).toHaveBeenCalledWith(genericSystem);
   });
 });
