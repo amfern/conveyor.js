@@ -51,8 +51,12 @@ window.COMP = (function() {
 
     // add dependencies
     _.each(tempSys.dependencies, function(depSysName) {
-      var depSys = _.find(tempSystemCollection, function(s) { return s.name == depSysName; }); // resolve dependency
-      if(!depSys) return; // continue loop if dependency system doesn't exists
+      var depSys = systemsByName[depSysName]; // resolve dependency
+
+      if(!depSys) throw new Error('Dependency system not found'); // throw exception if dependency system doesn't exists
+      if(tempSys.isStatic && !depSys.isStatic) throw new Error('Static system can\'t have non-static system as dependency'); // throw exception if static system has non-static system as dependency
+      if(depSys && !_.find(tempSystemCollection, function(s) { return s.name == depSysName; })) return; // continue loop if dependency system not found but exists in the engine
+
       var tempSysIndex = addSystem(tempSystemCollection, systemCollection, depSys); // add system
       sysIndex++;
       sysIndex = sysIndex > tempSysIndex ? sysIndex : tempSysIndex; // set the highest dependency
@@ -95,8 +99,7 @@ window.COMP = (function() {
     return constructCallbacks(_.first(systemCollection), 0);
   }
 
-  // adds system and it dependencies in order
-  // returns system index
+  // adds entity and it dependencies in order
   function addEntityComponents(entity, componentNames) {
     _.each(componentNames, function(componentName) {
       if(entity[componentName]) return; // do nothing if component already exists
@@ -112,8 +115,7 @@ window.COMP = (function() {
     });
   }
 
-  // adds system and it dependencies in order
-  // returns system index
+  // updates entity and it components
   function updateEntityComponents(oldEntity, newEntity, componentNames) {
     _.each(componentNames, function(componentName) {
       var system = systemsByName[componentName];
