@@ -38,8 +38,11 @@ window.COMP = (function() {
   function unregisterSystem(systemCollection, system) {
     if(system.entities.length) throw new Error('entities still using this system, please remove dependent entities before removing the system');
 
-    delete systemsByName[system.name]; // remove system
-    systemCollection.splice(systemCollection.indexOf(system), 1); // remove system
+    var sys = systemsByName[system.name];
+    if(!sys) return;
+
+    delete systemsByName[system.name];
+    systemCollection.splice(systemCollection.indexOf(sys), 1); // remove system
   }
 
   // adds system and it dependencies in order
@@ -106,7 +109,7 @@ window.COMP = (function() {
       
       var system = systemsByName[componentName];
 
-      if(!system) return; // dependency not found
+      if(!system) throw new Error('System "' + componentName + '" not found'); // throw exception if dependency system doesn't
       entity[system.name] = system.component();
 
       if(!system.isStatic) system.entities.push(entity); // static systems depend only on other static systems
@@ -239,6 +242,21 @@ window.COMP = (function() {
     removeEntityComponents( entity, _.keys(entity) ); // remove other components
   }
 
+  // clear all entities of all systems
+  function clearEntities() {
+    _.each(systemsByName, function(sys) {
+      sys.entities = [];
+    });
+  }
+
+  // clear all systems(which clears entities also)
+  function clearSystems() {
+    tempLogicSystems = [];
+    tempInterpolationSystems = [];
+    tempIOSystems = [];
+    systemsByName = {};
+  }
+
   
   function mainLoop() {
     nextGameTick = window.performance.now();
@@ -261,6 +279,8 @@ window.COMP = (function() {
   mainLoop._registerEntity              = registerEntity;
   mainLoop._unregisterEntity            = unregisterEntity;
   mainLoop._updateEntity                = updateEntity;
+  mainLoop._clearEntities               = clearEntities;
+  mainLoop._clearSystems                = clearSystems;
   mainLoop.TICKS_PER_SECOND             = TICKS_PER_SECOND;
   mainLoop.SKIP_TICKS                   = SKIP_TICKS;
   mainLoop.MAX_FRAMESKIP                = MAX_FRAMESKIP;

@@ -54,10 +54,13 @@ deal some how with round dependencies - or just leave stack overflow exception
 allow user to extract visual represintation of dependencies from engine
 git doesn't save softlinks???
 allow users to register and unregister systems during runtime
-jasmine test are linear, it doesn't reset the window every test - fix it asap - unregistering systems will fix it
 do a helper for running code in engine cycle
 systems needs initialize function for engine to call upon start
 allow to change engine SKIP_TICK and other const variables
+jasmine test are linear, it doesn't reset the window every test - fix it asap - unregistering systems will fix it - use helpers to remove systems and entities after each cycle
+removing system but leaving other systems that depend on it may cause issues: (ie: start engine -> remove system -> restart engine -> system dependency system not found -> exception thrown)
+systems can remove/add other systems during runtime, but they can't restart the engine, as it may cause stack overflow, solution: engine will restart the by it self after each cycle if system is added or removed(when unregisterSystem/registerSystem called set a restart flag to true)
+add staticEntity as invalid entity names or give static entity special treatment
 
 
 ### Target
