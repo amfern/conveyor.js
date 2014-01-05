@@ -13,9 +13,9 @@ describe('System', function() {
   it('should register logic system with core', function () {
     config = {
       name: 'EpicLogicSystem',
-      dependencies: [], 
+      dependencies: [],
       thread: true,
-      component: function() { }, 
+      component: function() { },
       process: function(entities) { }
     };
 
@@ -23,8 +23,8 @@ describe('System', function() {
     expect(COMP._registerLogicSystem.mostRecentCall.args[0]).toMatch({
       name: 'EpicLogicSystem',
       isStatic: false,
-      dependencies: [], 
-      component: config.component, 
+      dependencies: [],
+      component: config.component,
       thread: true,
       process: config.process,
       entities: []
@@ -34,8 +34,8 @@ describe('System', function() {
   it('should register Interpolate system with core', function () {
     config = {
       name: 'EpicInterplateSystem',
-      dependencies: [], 
-      component: function() { }, 
+      dependencies: [],
+      component: function() { },
       process: function(entities) { }
     };
 
@@ -43,8 +43,8 @@ describe('System', function() {
     expect(COMP._registerInterpolateSystem.mostRecentCall.args[0]).toMatch({
       name: 'EpicInterplateSystem',
       isStatic: false,
-      dependencies: [], 
-      component: config.component, 
+      dependencies: [],
+      component: config.component,
       thread: false,
       process: config.process,
       entities: []
@@ -54,8 +54,8 @@ describe('System', function() {
   it('should register IO system with core', function () {
     config = {
       name: 'EpicIOSystem',
-      dependencies: [], 
-      component: function() { }, 
+      dependencies: [],
+      component: function() { },
       process: function(entities) { }
     };
 
@@ -63,8 +63,8 @@ describe('System', function() {
     expect(COMP._registerIOSystem.mostRecentCall.args[0]).toMatch({
       name: 'EpicIOSystem',
       isStatic: false,
-      dependencies: [], 
-      component: config.component, 
+      dependencies: [],
+      component: config.component,
       thread: false,
       process: config.process,
       entities: []
@@ -120,15 +120,14 @@ describe('System', function() {
     it('should fill default component function', function () {
       expect(typeof(genericSystem.component)).toEqual('function');
     });
-  
   });
 
   it('should unregister logic system with core', function () {
     config = {
       name: 'UnregisterEpicLogicSystem',
-      dependencies: [], 
+      dependencies: [],
       thread: true,
-      component: function() { }, 
+      component: function() { },
       process: function(entities) { }
     };
 
@@ -140,9 +139,9 @@ describe('System', function() {
   it('should unregister Interpolate system with core', function () {
     config = {
       name: 'UnregisterEpicInterpolateSystem',
-      dependencies: [], 
+      dependencies: [],
       thread: true,
-      component: function() { }, 
+      component: function() { },
       process: function(entities) { }
     };
 
@@ -154,9 +153,9 @@ describe('System', function() {
   it('should unregister IO system with core', function () {
     config = {
       name: 'UnregisterEpicIOSystem',
-      dependencies: [], 
+      dependencies: [],
       thread: true,
-      component: function() { }, 
+      component: function() { },
       process: function(entities) { }
     };
 

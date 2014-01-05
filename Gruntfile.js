@@ -40,8 +40,9 @@ module.exports = function(grunt) {
      "\n",
 
     pkgFullName: "<%= pkg.name %>-v<%= pkg.version%>",
-    pkgCoreFiles: ['src/core/core.js', 'src/core/system.js', 'src/core/entity.js'],
+    pkgCoreFiles: ['src/util/**/*.js', 'src/core/core.js', 'src/core/system.js', 'src/core/entity.js'],
     pkgSystemFiles: ['src/systems/**/*.js'],
+    pkgVendores: ["lib/performance/index.js", "lib/rAF/index.js", "lib/threejs/build/three.js", "lib/lodash/dist/lodash.js"],
 
     // Minify and Concat archives
     uglify: {
@@ -138,17 +139,22 @@ module.exports = function(grunt) {
     },
 
     jasmine: {
-      src: ["src/util/**/*.js", "<%= pkgCoreFiles %>", "<%= pkgSystemFiles %>"],
-      options: {
-        specs: ['spec/core/**/*.js', 'spec/systems/**/*.js'],
-        helpers: 'spec/helpers/**/*.js',
-        vendor: [
-          "lib/performance/index.js",
-          "lib/rAF/index.js",
-          "lib/threejs/build/three.js",
-          "lib/lodash/dist/lodash.js"
-        ],
-        keepRunner: true
+      core: {
+        src: ["<%= pkgCoreFiles %>", "spec/mocks/engineCycle.js"],
+        options: {
+          specs: ['spec/core/**/*.js'],
+          vendor: ["<%= pkgVendores %>"],
+          keepRunner: true
+        }
+      },
+      systems: {
+        src: ["<%= pkgCoreFiles %>", "<%= pkgSystemFiles %>", "spec/mocks/**/*.js"],
+        options: {
+          specs: ['spec/systems/**/*.js'],
+          helpers: 'spec/helpers/**/*.js',
+          vendor: ["<%= pkgVendores %>"],
+          keepRunner: true
+        }
       }
     }
   });
