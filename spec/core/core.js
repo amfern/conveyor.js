@@ -9,10 +9,14 @@ describe("core", function() {
         systemExecutionPattern = [];
         componentExecutionPattern = [];
 
+
+    // reset engine
     beforeEach(function() {
+      COMP._clearSystems();
     });
 
-    it("should add system", function () {
+    // add systems
+    beforeEach(function() {
       // Logic systems
       // -------------------------------------
       systemLogic1 = new COMP.System.Logic({
@@ -342,7 +346,8 @@ describe("core", function() {
       });
     });
 
-    it("should add entity", function () {
+    // add entities
+    beforeEach(function() {
       entity1 = new COMP.Entity({
         name: "entity1",
         components: ['EpicSystemLogic1']
@@ -404,6 +409,13 @@ describe("core", function() {
         component: function() { },
         process: function(entities) { }
       } )).toThrow('system cannot depend on it self');
+    });
+
+    it("should throw exception for component not found", function () {
+      expect(COMP.Entity.bind( null, {
+        name: "CrapEntity",
+        components: ['NonExistingEpicSystem']
+      } )).toThrow('System "NonExistingEpicSystem" not found');
     });
 
     it("should process Logic, Interpolation and IO systems in correct order", function () {
@@ -481,218 +493,230 @@ describe("core", function() {
       });
     });
 
-    it("should remove entities and process systems in correct order", function () {
-      entity1.remove();
-      entity2.remove();
-      entity3.remove();
-      entity4.remove();
-      entity5.remove();
-
-      COMP.cycleOnce(function() {
-        // should execute components in order
-        expect(componentExecutionPattern).toEqual([
-          'SL2c-staticEntity', 'SL1c-staticEntity',
-          'L8c-entity6', 'L2c-entity6', 'L7c-entity6', 'L1c-entity6',
-          'SI2c-staticEntity', 'SI1c-staticEntity', 'I2c-entity6',
-          'SIO2c-staticEntity', 'SIO1c-staticEntity'
-        ]);
-
-        systemExecutionPattern = [];
-        componentExecutionPattern = [];
+    describe("remove entities", function() {
+      beforeEach(function() {
+        entity1.remove();
+        entity2.remove();
+        entity3.remove();
+        entity4.remove();
+        entity5.remove();
       });
 
-      COMP.spiralCycle(function(){
-        expect(componentExecutionPattern).toEqual([ 
-          'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L7c-entity6', 'L1c-entity6',
-          'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L7c-entity6', 'L1c-entity6',
-          'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L7c-entity6', 'L1c-entity6',
-          'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L7c-entity6', 'L1c-entity6',
-          'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L7c-entity6', 'L1c-entity6',
-          'SI2c-staticEntity', 'SI1c-staticEntity', 'I2c-entity6',
-          'SIO2c-staticEntity', 'SIO1c-staticEntity'
-        ]);
+      it("should remove entities and process systems in correct order", function () {
+        COMP.cycleOnce(function() {
+          // should execute components in order
+          expect(componentExecutionPattern).toEqual([
+            'SL2c-staticEntity', 'SL1c-staticEntity',
+            'L8c-entity6', 'L2c-entity6', 'L7c-entity6', 'L1c-entity6',
+            'SI2c-staticEntity', 'SI1c-staticEntity', 'I2c-entity6',
+            'SIO2c-staticEntity', 'SIO1c-staticEntity'
+          ]);
 
-        systemExecutionPattern = [];
-        componentExecutionPattern = [];
-      });
-    });
+          systemExecutionPattern = [];
+          componentExecutionPattern = [];
+        });
 
-    it("should update entity1 and process systems in correct order", function () {
-      entity6.components = ['EpicSystemIO1', 'EpicSystemLogic7', 'EpicSystemInterpolate2', 'EpicSystemLogic3', 'EpicSystemInterpolate7'];
-      entity6.update();
-      
-      COMP.cycleOnce(function(){
-        // should execute components in order
-        expect(componentExecutionPattern).toEqual([ 
-          'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L7c-entity6', 'L1c-entity6',
-          'SI2c-staticEntity', 'SI1c-staticEntity', 'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6',
-          'SIO2c-staticEntity', 'SIO1c-staticEntity', 'IO2c-entity6', 'IO3c-entity6', 'IO1c-entity6'
-        ]);
+        COMP.spiralCycle(function(){
+          expect(componentExecutionPattern).toEqual([ 
+            'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L7c-entity6', 'L1c-entity6',
+            'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L7c-entity6', 'L1c-entity6',
+            'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L7c-entity6', 'L1c-entity6',
+            'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L7c-entity6', 'L1c-entity6',
+            'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L7c-entity6', 'L1c-entity6',
+            'SI2c-staticEntity', 'SI1c-staticEntity', 'I2c-entity6',
+            'SIO2c-staticEntity', 'SIO1c-staticEntity'
+          ]);
 
-        systemExecutionPattern = [];
-        componentExecutionPattern = [];
+          systemExecutionPattern = [];
+          componentExecutionPattern = [];
+        });
       });
 
-      COMP.spiralCycle(function() {
-        expect(componentExecutionPattern).toEqual([ 
-          'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L7c-entity6', 'L1c-entity6',
-          'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L7c-entity6', 'L1c-entity6',
-          'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L7c-entity6', 'L1c-entity6',
-          'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L7c-entity6', 'L1c-entity6',
-          'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L7c-entity6', 'L1c-entity6',
-          'SI2c-staticEntity', 'SI1c-staticEntity', 'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6',
-          'SIO2c-staticEntity', 'SIO1c-staticEntity',
-          'IO2c-entity6',
-          'IO3c-entity6', 'IO1c-entity6'
-        ]);
+      describe("update entity", function() {
+        beforeEach(function() {
+          entity6.components = ['EpicSystemIO1', 'EpicSystemLogic7', 'EpicSystemInterpolate2', 'EpicSystemLogic3', 'EpicSystemInterpolate7'];
+          entity6.update();
+        });
+        
+        it("should update entity1 and process systems in correct order", function () {
+          COMP.cycleOnce(function(){
+            // should execute components in order
+            expect(componentExecutionPattern).toEqual([ 
+              'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L7c-entity6', 'L1c-entity6',
+              'SI2c-staticEntity', 'SI1c-staticEntity', 'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6',
+              'SIO2c-staticEntity', 'SIO1c-staticEntity', 'IO2c-entity6', 'IO3c-entity6', 'IO1c-entity6'
+            ]);
 
-        systemExecutionPattern = [];
-        componentExecutionPattern = [];
-      });      
-    });
+            systemExecutionPattern = [];
+            componentExecutionPattern = [];
+          });
 
-    it("should run cycles 5 times", function () {
-      COMP.cycleMany(5, function() {
-        expect(systemExecutionPattern).toEqual([
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
-          'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+          COMP.spiralCycle(function() {
+            expect(componentExecutionPattern).toEqual([ 
+              'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L7c-entity6', 'L1c-entity6',
+              'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L7c-entity6', 'L1c-entity6',
+              'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L7c-entity6', 'L1c-entity6',
+              'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L7c-entity6', 'L1c-entity6',
+              'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity6', 'L2c-entity6', 'L3c-entity6', 'L7c-entity6', 'L1c-entity6',
+              'SI2c-staticEntity', 'SI1c-staticEntity', 'I8c-entity6', 'I2c-entity6', 'I3c-entity6', 'I1c-entity6',
+              'SIO2c-staticEntity', 'SIO1c-staticEntity',
+              'IO2c-entity6',
+              'IO3c-entity6', 'IO1c-entity6'
+            ]);
 
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
-          'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+            systemExecutionPattern = [];
+            componentExecutionPattern = [];
+          });      
+        });
 
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
-          'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+        it("should run cycles 5 times", function () {
+          COMP.cycleMany(5, function() {
+            expect(systemExecutionPattern).toEqual([
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+              'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
 
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
-          'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+              'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
 
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
-          'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5'
-        ]);
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+              'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
 
-        systemExecutionPattern = [];
-        componentExecutionPattern = [];
-      });      
-    });
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+              'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
 
-    it("should run spiral cycles 5 times", function () {
-      COMP.spiralCycleMany(5, function() {
-        expect(systemExecutionPattern).toEqual([
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
-          'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+              'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5'
+            ]);
 
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
-          'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+            systemExecutionPattern = [];
+            componentExecutionPattern = [];
+          });      
+        });
 
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
-          'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+        it("should run spiral cycles 5 times", function () {
+          COMP.spiralCycleMany(5, function() {
+            expect(systemExecutionPattern).toEqual([
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+              'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
 
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
-          'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+              'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
 
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
-          'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
-          'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
-        ]);
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+              'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
 
-        systemExecutionPattern = [];
-        componentExecutionPattern = [];
-      });      
-    });
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+              'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
 
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1', 'L5',
+              'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+              'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5',
+            ]);
 
-    it("should throw exception when removing system with entities", function () {
-      expect(systemLogic8.remove.bind(systemLogic8, {})).toThrow('entities still using this system, please remove dependent entities before removing the system');
-    });
+            systemExecutionPattern = [];
+            componentExecutionPattern = [];
+          });      
+        });
 
-    it("should remove system", function () {
-      systemLogic5.remove();
+        it("should throw exception when removing system with entities", function () {
+          expect(systemLogic8.remove.bind(systemLogic8, {})).toThrow('entities still using this system, please remove dependent entities before removing the system');
+        });
 
-      COMP.cycleOnce(function(){
-        expect(systemExecutionPattern).toEqual([
-          'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1',
-          'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5', 
-          'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5'
-        ]);
+        describe("remove system", function() {
+          beforeEach(function() {
+            systemLogic5.remove();
+          });
+          
+          it("should remove system", function () {
+            COMP.cycleOnce(function(){
+              expect(systemExecutionPattern).toEqual([
+                'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L7', 'L1',
+                'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5', 
+                'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5'
+              ]);
 
-        systemExecutionPattern = [];
-        componentExecutionPattern = [];
-      });
-    });
+              systemExecutionPattern = [];
+              componentExecutionPattern = [];
+            });
+          });
 
-    it("should throw exception when removing static system with entities", function () {
-      expect(systemStaticLogic1.remove.bind(systemStaticLogic1, {})).toThrow('entities still using this system, please remove dependent entities before removing the system');
-    });
+          it("should throw exception when removing static system with entities", function () {
+            expect(systemStaticLogic1.remove.bind(systemStaticLogic1, {})).toThrow('entities still using this system, please remove dependent entities before removing the system');
+          });
 
-    it("should remove static system", function () {
-      entity6.remove();
-      systemLogic7.remove();
-      systemStaticLogic1.remove();
+          it("should remove static system", function () {
+            entity6.remove();
+            systemLogic7.remove();
+            systemStaticLogic1.remove();
 
-      COMP.cycleOnce(function(){
-        expect(systemExecutionPattern).toEqual([
-          'SL2', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1',
-          'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
-          'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5'
-        ]);
+            COMP.cycleOnce(function(){
+              expect(systemExecutionPattern).toEqual([
+                'SL2', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1',
+                'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I7', 'I5',
+                'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO7', 'IO5'
+              ]);
 
-        systemExecutionPattern = [];
-        componentExecutionPattern = [];
-      });
-    });
+              systemExecutionPattern = [];
+              componentExecutionPattern = [];
+            });
+          });
 
-    it("should throw exception if system has missing dependency system", function () {
-      var missingDepSystem = new COMP.System.Logic({
-        name: 'MissungDepEpicSystem',
-        dependencies: ['EpicSystemIO1', 'MissingSystem'],
-        component: function() { },
-        process: function() {}
-      });
+          it("should throw exception if system has missing dependency system", function () {
+            var missingDepSystem = new COMP.System.Logic({
+              name: 'MissungDepEpicSystem',
+              dependencies: ['EpicSystemIO1', 'MissingSystem'],
+              component: function() { },
+              process: function() {}
+            });
 
-      expect(COMP).toThrow('Dependency system not found');
-      missingDepSystem.remove();
-    });
+            expect(COMP).toThrow('Dependency system not found');
+            missingDepSystem.remove();
+          });
 
-    it("should throw exception if static system has non-static system as dependency", function () {
-      var badStaticLogic = new COMP.System.Logic({
-        name: 'BadEpicSystemSL',
-        isStatic: true,
-        dependencies: ['EpicSystemIO1'],
-        component: function() { },
-        process: function(staticEntity) {}
-      });
+          it("should throw exception if static system has non-static system as dependency", function () {
+            var badStaticLogic = new COMP.System.Logic({
+              name: 'BadEpicSystemSL',
+              isStatic: true,
+              dependencies: ['EpicSystemIO1'],
+              component: function() { },
+              process: function(staticEntity) {}
+            });
 
-      expect(COMP).toThrow('Static system can\'t have non-static system as dependency');
-      badStaticLogic.remove();
+            expect(COMP).toThrow('Static system can\'t have non-static system as dependency');
+            badStaticLogic.remove();
+          });
+        });
+
+      });  
     });
 
   });

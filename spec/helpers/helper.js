@@ -1,52 +1,12 @@
+// reset engine
 beforeEach(function() {
-  function cycle(specCallback, cycleTime) {
-    window.performance.now = function() { return 0; }
-    window.requestAnimationFrame = _.once(function(callback) {
-      window.performance.now = function() { return cycleTime; } // milliseconds
-      callback.call();
-      specCallback.call();
-    });
-    COMP();
-  }
+  // set timer to 0
+  window.performance.now = function() { return 0; }
 
-  function cycleMany(cycleCallback, count, specCallback, index) {
-    cycleCallback(function() {
-      if(index == count-1) {specCallback.call(); return;}
-      cycleMany(cycleCallback, count, specCallback, (index || 0)+1);
-    });
-  };
+  // remove all entities
+  COMP._clearEntities();
 
-  // cycle once
-  COMP.cycleOnce = function(specCallback) {
-    cycle(specCallback, COMP.SKIP_TICKS -1);
-  };
-  
-  // cycle half
-  COMP.cycleHalf = function(specCallback) {
-    cycle(specCallback, COMP.SKIP_TICKS/2 -1);
-  };
-
-  // spiral engine cycle is when engine avoiding spiral of death doing the maximum allowed cycles
-  COMP.spiralCycle = function(specCallback) {
-    cycle(specCallback, COMP.SKIP_TICKS * COMP.MAX_FRAMESKIP+1);
-  };
-  
-  // cycleMany
-  COMP.cycleMany = function(count, specCallback) {
-    cycleMany(COMP.cycleOnce, count, specCallback);
-  };
-
-  // cycleMany
-  COMP.cycleMany = function(count, specCallback) {
-    cycleMany(COMP.cycleHalf, count, specCallback);
-  };
-
-  // spiralMany
-  COMP.spiralCycleMany = function(count, specCallback) {
-    cycleMany(COMP.spiralCycle, count, specCallback);
-  };
-});
-
-beforeEach(function() {
-  // remove all systems and entities
+  // remove all systems created during test
+  _.each(COMP.System.mockedSystems, function(mSys) { mSys.remove(); });
+  COMP.System.mockedSystems = [];
 });
