@@ -3,4 +3,5 @@ node_modules
 lib
 dist
 .grunt
-_SpecRunner.html
+_coreSpecs.html
+_systemsSpecs.html
