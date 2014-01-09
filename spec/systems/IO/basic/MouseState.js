@@ -57,11 +57,6 @@ describe("mouseState", function() {
     });
   });
 
-
-  it("should fill state correctly", function () {
-    // do just a normal event dispatch test with helpers and include clientX and clientY
-  });
-
   describe('mouse movement', function() {
     beforeEach(function() {
       mouseMoveEvent(10, 20);
@@ -177,7 +172,7 @@ describe("mouseState", function() {
       it("mouse click", function () {
         mouseClickEvent(2);
         mouseClickEvent(1);
-        
+
         COMP.cycleOnce(function() {
 
           expect(state).toEqual({
@@ -202,6 +197,28 @@ describe("mouseState", function() {
         COMP.cycleOnce(function() {
           expect(evt.defaultPrevented).toEqual(true);
         });
+      });
+
+      // do just a normal event dispatch test with helpers and include clientX and clientY
+      it("should fill state correctly", function () {
+        mouseEvent("mousemove", 1, 2, 3, 4, 0, 0);
+
+        COMP.cycleOnce(function() {
+          expect(state).toEqual({
+            mouseMoved: true,
+            mouseMovedUp: true,
+            mouseMovedDown: false,
+            mouseMovedRight: false,
+            mouseMovedLeft: true,
+            movementX: -14,
+            movementY: -3,
+            screenX: 1,
+            screenY: 2,
+            clientX: 3,
+            clientY: 4
+          });
+        });
+      
       });
 
     });
