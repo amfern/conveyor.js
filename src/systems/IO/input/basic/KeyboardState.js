@@ -4,10 +4,10 @@
   var state = {}, bufferState = {};
 
   function init() {
-    var element = COMP.getDOMElement();
+    var element = window.document;
 
     element.addEventListener('keydown', function(e) {
-      bufferState[e.key] = true;
+      bufferState[e.keyCode] = true;
       e.preventDefault();
     }, false);
   }
