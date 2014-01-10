@@ -1,42 +1,6 @@
 describe("mouseState", function() {
   var state, tempSystem, entity, evt;
 
-  function mouseEvent(type, screenX, screenY, clientX, clientY, button, clickCount) {
-    evt = document.createEvent("MouseEvent"); 
-          
-    evt.initMouseEvent(
-      type, // eventName
-      true, // bubbles 
-      true, // cancelable
-      window.document, // document.defaultView
-      clickCount, // click count (2 for double-click)
-      screenX, // screenX
-      screenY, // screenY
-      clientX, // clientX
-      clientY, // clientY
-      false, // ctrlKey
-      false, // altKey
-      false, // shiftKey
-      false, // metaKey
-      button, // button (0:left,1:Middle,2:right)
-      null // relatedTargetElement
-    );
-
-    window.document.dispatchEvent(evt);
-  }
-
-  function mouseMoveEvent(screenX, screenY) {
-    mouseEvent("mousemove", screenX, screenY, 0, 0, 0, 0);
-  }
-
-  function mouseClickEvent(button) {
-    mouseEvent("mousedown", 0, 0, 0, 0, button, 0);
-  }
-
-  function mouseDoubleClickEvent(button, clickCount) {
-    mouseEvent("dblclick", 0, 0, 0, 0, button, clickCount);
-  }
-
   // add reading system
   beforeEach(function() {
     tempSystem = new COMP.System.IO({
@@ -57,9 +21,14 @@ describe("mouseState", function() {
     });
   });
 
+  // reset mouse to 0,0 position after each test
+  afterEach(function() {
+    mouseEvent("mousemove", 0, 0, 0, 0, 0, 0);
+  });
+
   describe('mouse movement', function() {
     beforeEach(function() {
-      mouseMoveEvent(10, 20);
+      evt = mouseMoveEvent(10, 20);
     });
     
     it("should capture mouse move event", function () {
@@ -100,7 +69,7 @@ describe("mouseState", function() {
 
     describe('mouse click', function() {
       it("should capture mousedown button", function () {
-        mouseClickEvent(0);
+        evt = mouseClickEvent(0);
   
         COMP.cycleOnce(function() {
           expect(state).toEqual({
@@ -142,7 +111,7 @@ describe("mouseState", function() {
 
     describe('should capture fresh', function() {
       beforeEach(function() {
-        mouseMoveEvent(15, 5);
+        evt = mouseMoveEvent(15, 5);
       });
 
       it("movement", function () {
@@ -170,8 +139,8 @@ describe("mouseState", function() {
       });
 
       it("mouse click", function () {
-        mouseClickEvent(2);
-        mouseClickEvent(1);
+        evt = mouseClickEvent(2);
+        evt = mouseClickEvent(1);
 
         COMP.cycleOnce(function() {
 
@@ -201,7 +170,7 @@ describe("mouseState", function() {
 
       // do just a normal event dispatch test with helpers and include clientX and clientY
       it("should fill state correctly", function () {
-        mouseEvent("mousemove", 1, 2, 3, 4, 0, 0);
+        evt = mouseEvent("mousemove", 1, 2, 3, 4, 0, 0);
 
         COMP.cycleOnce(function() {
           expect(state).toEqual({
