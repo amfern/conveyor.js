@@ -25,7 +25,7 @@ _.mixin({
   },
   prefixKeys: function(obj, prefix) {
     var buffer = {};
-    _.each(obj, function(k,v) { buffer[prefix+k] = v; });
+    _.each(obj, function(v,k) { buffer[prefix+k] = v; });
     return buffer;
   }
 

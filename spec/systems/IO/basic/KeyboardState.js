@@ -1,5 +1,5 @@
 describe("keyboardState", function() {
-  var state, tempSystem, entity;
+  var state, tempSystem, entity, evt;
 
   // add reading system
   beforeEach(function() {
@@ -22,9 +22,7 @@ describe("keyboardState", function() {
   });
 
   it("should capture keydowns", function () {
-    var evt = document.createEvent("KeyboardEvent"); 
-    evt.initKeyboardEvent("keydown", true, true, window, false, false, false, false, 13, 13);
-    window.document.dispatchEvent(evt);
+    evt = keydownEvent(13);
 
     COMP.cycleOnce(function() {
       expect(state).toEqual({0:true});
@@ -39,17 +37,13 @@ describe("keyboardState", function() {
 
   // webkit bug prevents me from sending other keys beside 0
   it("should capture fresh keydowns", function () {
-    var evt = document.createEvent("KeyboardEvent"); 
-    evt.initKeyboardEvent("keydown", true, true, window, false, false, false, false, 13, 13);
-    window.document.dispatchEvent(evt);
+    evt = keydownEvent(1);
 
     COMP.cycleOnce(function() {
       expect(state).toEqual({0:true});
     });
 
-    var evt = document.createEvent("KeyboardEvent"); 
-    evt.initKeyboardEvent("keydown", true, true, window, false, false, false, false, 13, 13);
-    window.document.dispatchEvent(evt);
+    evt = keydownEvent(23);
 
     COMP.cycleOnce(function() {
       expect(state).toEqual({0:true});
@@ -57,9 +51,7 @@ describe("keyboardState", function() {
   });
 
   it("should prevent default", function () {
-    var evt = document.createEvent("KeyboardEvent"); 
-    evt.initKeyboardEvent("keydown", true, true, window, false, false, false, false, 13, 13);
-    window.document.dispatchEvent(evt);
+    evt = keydownEvent(13);
 
     COMP.cycleOnce(function() {
       expect(evt.defaultPrevented).toEqual(true);
