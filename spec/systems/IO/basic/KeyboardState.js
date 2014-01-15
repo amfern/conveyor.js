@@ -3,29 +3,15 @@ describe("keyboardState", function() {
 
   // add reading system
   beforeEach(function() {
-    tempSystem = new COMP.System.IO({
-      name: 'EpicSystemReadingKeyboardState',
-      dependencies: ['KeyboardState'],
-      component: function() { },
-      process: function(entities) {
-        state = entities[0]['KeyboardState'];
-      }
-    });
-  });
-
-  // add entity
-  beforeEach(function() {
-    entity = new COMP.Entity({
-      name: "EpicSystemReadingKeyboardStateEntity",
-      components: ['EpicSystemReadingKeyboardState']
-    });
+    COMP.cycleOnce();
+    tapIntoSystem('KeyboardState', function(s) {state = s;})
   });
 
   it("should capture keydowns", function () {
     evt = keydownEvent(13);
 
     COMP.cycleOnce(function() {
-      expect(state).toEqual({0:true});
+      expect(state).toEqual({13:true});
     });
   });
 
@@ -40,18 +26,18 @@ describe("keyboardState", function() {
     evt = keydownEvent(1);
 
     COMP.cycleOnce(function() {
-      expect(state).toEqual({0:true});
+      expect(state).toEqual({1: true});
     });
 
     evt = keydownEvent(23);
 
     COMP.cycleOnce(function() {
-      expect(state).toEqual({0:true});
+      expect(state).toEqual({23: true});
     });
   });
 
   it("should prevent default", function () {
-    evt = keydownEvent(13);
+    evt = keydownEvent(36);
 
     COMP.cycleOnce(function() {
       expect(evt.defaultPrevented).toEqual(true);

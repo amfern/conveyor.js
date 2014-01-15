@@ -5,7 +5,7 @@
     window.requestAnimationFrame = _.once(function(callback) {
       window.performance.now = function() { return cycleTime; } // milliseconds
       callback.call();
-      specCallback.call();
+      specCallback && specCallback.call();
     });
     COMP();
   }
