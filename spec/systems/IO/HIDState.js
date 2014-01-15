@@ -1,27 +1,15 @@
 describe("HIDState", function() {
   var state, tempSystem, entity;
-  // add reading system
-  beforeEach(function() {
-    tempSystem = new COMP.System.IO({
-      name: 'EpicSystemReadingHIDState',
-      dependencies: ['HIDState'],
-      component: function() { },
-      process: function(entities) {
-        state = entities[0]['HIDState'];
-      }
-    });
-  });
 
-  // add entity
-  beforeEach(function() {
-    entity = new COMP.Entity({
-      name: "EpicSystemReadingHIDStateEntity",
-      components: ['EpicSystemReadingHIDState']
-    });
+  // add reading system
+  beforeEach(function() {    
+    COMP.cycleOnce();
+    tapIntoSystem('HIDState', function(s) {state = s;})
   });
 
   afterEach(function() {
-    mouseEvent("mousemove", 0, 0, 0, 0, 0, 0);
+    mouseMoveEvent(0, 0);
+    COMP.cycleOnce();
   });
 
   describe('mouse movement', function() {
@@ -32,7 +20,7 @@ describe("HIDState", function() {
 
       COMP.cycleOnce(function() {
         expect(state).toEqual({
-          k0: true,
+          k13: true,
           mmovementX: 10,
           mmovementY: 20,
           mscreenX: 10,
@@ -52,17 +40,17 @@ describe("HIDState", function() {
     it("should capture new states", function () {
       COMP.cycleOnce(function() {
         expect(state).toEqual({
-          mmovementX: -10,
-          mmovementY: -20,
+          mmovementX: 0,
+          mmovementY: 0,
           mscreenX: 0,
           mscreenY: 0,
           mclientX: 0,
           mclientY: 0,
-          mmouseMovedUp: true,
+          mmouseMovedUp: false,
           mmouseMovedDown: false,
-          mmouseMovedLeft: true,
+          mmouseMovedLeft: false,
           mmouseMovedRight: false,
-          mmouseMoved: true
+          mmouseMoved: false
         });
       });
     });
