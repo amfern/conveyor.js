@@ -1,17 +1,17 @@
-// Collects Camera inputs
-// -- TODO --
-// -----------------------------------------
-(function() {
-  new COMP.System.IO({
-    name: 'CameraState',
-    dependencies: [],
+// // Collects Camera inputs
+// // -- TODO --
+// // -----------------------------------------
+// (function() {
+//   new COMP.System.IO({
+//     name: 'CameraState',
+//     dependencies: [],
 
-    component: function() {
-      return {};
-    }, 
+//     component: function() {
+//       return {};
+//     }, 
 
-    process: function(entities) {
+//     process: function(entities) {
       
-    }
-  });
-})();
+//     }
+//   });
+// })();

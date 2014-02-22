@@ -1,17 +1,17 @@
-// Provides access to local files
-// -- TODO --
-// -----------------------------------------
-(function() {
-  new COMP.System.IO({
-    name: 'LocalStorage',
-    dependencies: [],
+// // Provides access to local files
+// // -- TODO --
+// // -----------------------------------------
+// (function() {
+//   new COMP.System.IO({
+//     name: 'LocalStorage',
+//     dependencies: [],
 
-    component: function() {
-      return {};
-    }, 
+//     component: function() {
+//       return {};
+//     }, 
 
-    process: function(entities) {
+//     process: function(entities) {
       
-    }
-  });
-})();
+//     }
+//   });
+// })();

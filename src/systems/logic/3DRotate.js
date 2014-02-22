@@ -1,21 +1,23 @@
+'use strict';
+
 // 3D translate system
 // -----------------------------------------
 new COMP.System.Logic({
-  name: '3DRotate',
-  
-  dependencies: ['3DObject'],
+    name: '3DRotate',
 
-  component: function() {
-    return {
-      axis: new THREE.Vector3(0,1,0),
-      speed: 0.1
-    };
-  },
+    dependencies: ['3DObject'],
 
-  process: function(entities) {
-    _.each(entities, function(e) {
-      var rotateComponent = e['3DRotate'];
-      e['3DObject'].rotateOnAxis(rotateComponent.axis, rotateComponent.speed);
-    });
-  }
+    component: function () {
+        return {
+            axis: new THREE.Vector3(0, 1, 0),
+            speed: 0.1
+        };
+    },
+
+    process: function (entities) {
+        _.each(entities, function (e) {
+            var rotateComponent = e['3DRotate'];
+            e['3DObject'].rotateOnAxis(rotateComponent.axis, rotateComponent.speed);
+        });
+    }
 });

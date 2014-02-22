@@ -3,5 +3,6 @@ node_modules
 lib
 dist
 .grunt
-_coreSpecs.html
-_systemsSpecs.html
+spec/core.html
+spec/systems.html
+.sublime-grunt.cache

@@ -1,17 +1,17 @@
-// Collects touch inputs
-// -- TODO --
-// -----------------------------------------
-(function() {
-  new COMP.System.IO({
-    name: 'TouchState',
-    dependencies: [],
+// // Collects touch inputs
+// // -- TODO --
+// // -----------------------------------------
+// (function() {
+//   new COMP.System.IO({
+//     name: 'TouchState',
+//     dependencies: [],
 
-    component: function() {
-      return {};
-    }, 
+//     component: function() {
+//       return {};
+//     }, 
 
-    process: function(entities) {
+//     process: function(entities) {
       
-    }
-  });
-})();
+//     }
+//   });
+// })();
