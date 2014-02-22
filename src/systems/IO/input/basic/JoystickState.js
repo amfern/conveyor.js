@@ -1,17 +1,17 @@
-// Collects joystick inputs
-// -- TODO --
-// -----------------------------------------
-(function() {
-  new COMP.System.IO({
-    name: 'JoystickState',
-    dependencies: [],
+// // Collects joystick inputs
+// // -- TODO --
+// // -----------------------------------------
+// (function() {
+//   new COMP.System.IO({
+//     name: 'JoystickState',
+//     dependencies: [],
 
-    component: function() {
-      return {};
-    }, 
+//     component: function() {
+//       return {};
+//     }, 
 
-    process: function(entities) {
+//     process: function(entities) {
       
-    }
-  });
-})();
+//     }
+//   });
+// })();
