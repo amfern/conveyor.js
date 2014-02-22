@@ -1,29 +1,30 @@
+'use strict';
+
 // Object3D interpolate  system
 // -----------------------------------------
 new COMP.System.Interpolate({
-  name: '3DObjectAfter',
-  
-  dependencies: ['3DObject'],
+    name: '3DObjectAfter',
 
-  component: function() {
-  },
+    dependencies: ['3DObject'],
 
-  process: function(entities, interpolation) {
-    var before, current, after, deltaPosition, deltaQuaternion, deltaScale;
+    component: function () {},
 
-    _.each(entities, function(e) {
-      before  = e['3DObjectBefore'];
-      current = e['3DObject'];
-      after   = e['3DObjectAfter'] = current.clone();
+    process: function (entities, interpolation) {
+        var before, current, after, deltaPosition, deltaQuaternion, deltaScale;
 
-      deltaPosition   = current.position.clone().sub(before.position);
-      deltaScale      = current.scale.clone().sub(before.scale);
+        _.each(entities, function (e) {
+            before = e['3DObjectBefore'];
+            current = e['3DObject'];
+            after = e['3DObjectAfter'] = current.clone();
 
-      after.position.add( deltaPosition.multiplyScalar(interpolation) );
-      after.scale.add( deltaScale.multiplyScalar(interpolation) );
+            deltaPosition = current.position.clone().sub(before.position);
+            deltaScale = current.scale.clone().sub(before.scale);
 
-      deltaQuaternion = before.quaternion.clone();
-      after.quaternion.copy( deltaQuaternion.slerp(current.quaternion, 1 + interpolation) );
-    });
-  },
+            after.position.add(deltaPosition.multiplyScalar(interpolation));
+            after.scale.add(deltaScale.multiplyScalar(interpolation));
+
+            deltaQuaternion = before.quaternion.clone();
+            after.quaternion.copy(deltaQuaternion.slerp(current.quaternion, 1 + interpolation));
+        });
+    },
 });

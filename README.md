@@ -30,8 +30,10 @@ more code
 ### Developers
 
 Install dependencies
+comp.js uses [npm](https://www.npmjs.org/)([nodejs](http://nodejs.org/)) and [bower](http://bower.io/) to manage dependancies
 
 `sudo npm install`
+`bower install`
 
 Build Project
 
@@ -54,11 +56,27 @@ deal some how with round dependencies - or just leave stack overflow exception
 allow user to extract visual represintation of dependencies from engine
 git doesn't save softlinks???
 allow users to register and unregister systems during runtime
-systems needs initialize function for engine to call upon start
+systems needs initialize function for engine to call upon start - actualy it only for static function and their component function is called upon engine initialization
 allow to change engine SKIP_TICK and other const variables
 removing system but leaving other systems that depend on it may cause issues: (ie: start engine -> remove system -> restart engine -> dependency system not found -> exception thrown)
 systems can remove/add other systems during runtime, but they can't restart the engine, as it may cause stack overflow, solution: engine will restart it self after each cycle if system is added or removed(when unregisterSystem/registerSystem called set a restart flag to true)
 add staticEntity as invalid entity names or give static entity special treatment
+maybe rename down to pressed
+and maybe rename KeyboardState to just keyboard, as it no longer represents a state
+should be exclusive for down and up triggers?
+add mouseState to HIDState 
+add some test about mouse/wheel to hid combos state
+
+### Develop Notes
+creating new system:
+- data is always in the entity
+- logic is always in the process system
+- you can store variables in the system but only if it static and not changed between entities
+
+create cycleContinuous:
+- you pass array of function representing each engine loop
+- engine is not restarted after each loop!!!
+
 
 ### Target
 the benefit of upload html5 app is internet connection, so we can leverage server powers to calcualte AI or ggather vital player information to teach AI to performer better. also all players will fight an AI revision the constructed of players best move(lol show whoo made this move in the side notification)

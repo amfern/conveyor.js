@@ -1,225 +1,654 @@
-describe("mouseState", function() {
-  var state, tempSystem, entity, evt;
+'use strict';
 
-  // add reading system
-  beforeEach(function() {
-    COMP.cycleOnce();
-    tapIntoSystem('MouseState', function(s) {state = s;});
-  });
+describe('mouseState', function () {
+    var state, evt, evt2, evt3, evt4,
+        wheelEvt, wheelEvt2, wheelEvt3, wheelEvt4;
 
-  afterEach(function() {
-    mouseMoveEvent(0, 0);
-    COMP.cycleOnce();
-  });
-
-  it("should capture mouse move event", function () {
-    mouseMoveEvent(10, 20);
-
-    COMP.cycleOnce(function() {
-      expect(state).toEqual({
-        mouseMoved: true,
-        mouseMovedUp: false,
-        mouseMovedDown: true,
-        mouseMovedRight: true,
-        mouseMovedLeft : false,
-        movementX: 10,
-        movementY: 20,
-        screenX: 10,
-        screenY: 20,
-        clientX: 0,
-        clientY: 0
-      });
-    });
-  });
-
-  it("should reset state each engine cycle", function () {
-    COMP.cycleOnce(function() {
-      expect(state).toEqual({
-        mouseMoved: false,
-        mouseMovedUp: false,
-        mouseMovedDown: false,
-        mouseMovedRight: false,
-        mouseMovedLeft: false,
-        movementX: 0,
-        movementY: 0,
-        screenX: 0,
-        screenY: 0,
-        clientX: 0,
-        clientY: 0
-      });
-    });
-  });
-    
-  describe('mouse movement', function() {
-    beforeEach(function() {
-      COMP.cycleOnce();
-      evt = mouseMoveEvent(10, 20);
-    });
-
-    it("should updated mouse movement state even if mouse stayed on the same place", function () {
-      COMP.cycleOnce();
-      COMP.cycleOnce(function() {
-        expect(state).toEqual({
-          mouseMoved: false,
-          mouseMovedUp: false,
-          mouseMovedDown: false,
-          mouseMovedRight: false,
-          mouseMovedLeft: false,
-          movementX: 0,
-          movementY: 0,
-          screenX: 10,
-          screenY: 20,
-          clientX: 0,
-          clientY: 0
-        });
-      });
-    });
-
-    it("should run over previous value if engine hasn't looped yet", function () {
-      mouseMoveEvent(1, 45);
-
-      COMP.cycleOnce(function() {
-        expect(state).toEqual({
-          mouseMoved: true,
-          mouseMovedUp: false,
-          mouseMovedDown: true,
-          mouseMovedRight: true,
-          mouseMovedLeft: false,
-          movementX: 1,
-          movementY: 45,
-          screenX: 1,
-          screenY: 45,
-          clientX: 0,
-          clientY: 0
-        });
-      });
-    });
-
-    it("should capture mousemove and mousedown", function () {
-      mouseClickEvent(2);
-      mouseClickEvent(1);
-
-      COMP.cycleOnce(function() {
-        expect(state).toEqual({
-          mouseMoved: true,
-          mouseMovedUp: false,
-          mouseMovedDown: true,
-          mouseMovedRight: true,
-          mouseMovedLeft: false,
-          movementX: 10,
-          movementY: 20,
-          screenX: 10,
-          screenY: 20,
-          clientX: 0,
-          clientY: 0,
-          2: true,
-          1: true
-        });
-      });
-    });
-
-    it("should prevent default", function () {
-      COMP.cycleOnce(function() {
-        expect(evt.defaultPrevented).toEqual(true);
-      });
-    });
-
-    describe('should capture fresh', function() {
-      beforeEach(function() {
+    // add reading system
+    beforeEach(function () {
+        tapIntoSystem('MouseState', function (s) { state = s; });
         COMP.cycleOnce();
-        evt = mouseMoveEvent(15, 5);
-      });
-
-      it("movement", function () {
-        COMP.cycleOnce(function() {
-          expect(state).toEqual({
-            mouseMoved: true,
-            mouseMovedUp: true,
-            mouseMovedDown: false,
-            mouseMovedRight: true,
-            mouseMovedLeft: false,
-            movementX: 5,
-            movementY: -15,
-            screenX: 15,
-            screenY: 5,
-            clientX: 0,
-            clientY: 0
-          });
-        });
-      });
-
-      it("should prevent default", function () {
-        COMP.cycleOnce(function() {
-          expect(evt.defaultPrevented).toEqual(true);
-        });
-      });
-
-      // do just a normal event dispatch test with helpers and include clientX and clientY
-      it("should fill state correctly", function () {
-        evt = mouseEvent("mousemove", 1, 2, 3, 4, 0, 0);
-
-        COMP.cycleOnce(function() {
-          expect(state).toEqual({
-            mouseMoved: true,
-            mouseMovedUp: true,
-            mouseMovedDown: false,
-            mouseMovedRight: false,
-            mouseMovedLeft: true,
-            movementX: -9,
-            movementY: -18,
-            screenX: 1,
-            screenY: 2,
-            clientX: 3,
-            clientY: 4
-          });
-        });
-      });
-    });
-  });
-
-  describe('mouse click', function() {
-    beforeEach(function() {
-      COMP.cycleOnce();
     });
 
-    it("should capture mousedown button", function () {
-      mouseClickEvent(0);
-
-      COMP.cycleOnce(function() {
-        expect(state).toEqual({
-          movementX: 0,
-          movementY: 0,
-          screenX: 0,
-          screenY: 0,
-          clientX: 0,
-          clientY: 0,
-          mouseMovedUp: false,
-          mouseMovedDown:
-          false,
-          mouseMovedLeft: false,
-          mouseMovedRight: false,
-          mouseMoved: false,
-          0: true
-        });
-      });
+    // reset mouse position to 0,0 after each test
+    afterEach(function () {
+        mouseMoveEvent(0, 0);
+        COMP.cycleOnce(); // cycle again to flush any HID states
+        
+        // reset mouse state
+        resetMouseState(state);
     });
 
-    it("should reset state each engine cycle", function () {
-      COMP.cycleOnce(function() {
-        expect(state).toEqual({
-          mouseMoved: false,
-          mouseMovedUp: false,
-          mouseMovedDown: false,
-          mouseMovedRight: false,
-          mouseMovedLeft: false,
-          movementX: 0,
-          movementY: 0,
-          screenX: 0,
-          screenY: 0,
-          clientX: 0,
-          clientY: 0
+    // do just a normal event dispatch test with helpers and include clientX and clientY
+    it('should fill state correctly', function () {
+        evt = mouseEvent('mousemove', 1, 2, 3, 4, 0, 0);
+        wheelEvt = wheelEvent(5, 6);
+
+        COMP.cycleOnce(function () {
+            expect(state).toEqual({
+                moved: {
+                    down: evt.timeStamp,
+                    up: 0,
+                    pressed: true
+                },
+                movedUp: {
+                    down: 0,
+                    up: 0,
+                    pressed: false
+                },
+                movedDown: {
+                    down: evt.timeStamp,
+                    up: 0,
+                    pressed: true
+                },
+                movedRight: {
+                    down: evt.timeStamp,
+                    up: 0,
+                    pressed: true
+                },
+                movedLeft: {
+                    down: 0,
+                    up: 0,
+                    pressed: false
+                },
+                wheelMoved: {
+                    down: wheelEvt.timeStamp,
+                    up: 0,
+                    pressed: true
+                },
+                wheelMovedUp: {
+                    down: 0,
+                    up: 0,
+                    pressed: false
+                },
+                wheelMovedDown: {
+                    down: wheelEvt.timeStamp,
+                    up: 0,
+                    pressed: true
+                },
+                wheelMovedRight: {
+                    down: wheelEvt.timeStamp,
+                    up: 0,
+                    pressed: true
+                },
+                wheelMovedLeft: {
+                    down: 0,
+                    up: 0,
+                    pressed: false
+                },
+                movementX: 1,
+                movementY: 2,
+                screenX: 1,
+                screenY: 2,
+                clientX: 3,
+                clientY: 4,
+                wheelX: 5,
+                wheelY: 6,
+                wheelMovementX: 5,
+                wheelMovementY: 6
+            });
         });
-      });
     });
-  });
+
+    it('should capture mouse move event', function () {
+        COMP.cycleContinues([
+            function () {
+                expect(state).toEqual({
+                    moved: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movedUp: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movedDown: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movedRight: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMoved: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMovedUp: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMovedDown: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMovedRight: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMovedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    screenX: 0,
+                    screenY: 0,
+                    clientX: 0,
+                    clientY: 0,
+                    movementX: 0,
+                    movementY: 0,
+                    wheelX: 0,
+                    wheelY: 0,
+                    wheelMovementX: 0,
+                    wheelMovementY: 0
+                });
+
+                _(100000).times(function () {});
+                evt = mouseMoveEvent(10, 20);
+                _(100000).times(function () {});
+                wheelEvt = wheelEvent(20, 30);
+            },
+            function () {
+                expect(state).toEqual({
+                    moved: {
+                        down: evt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    movedUp: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movedDown: {
+                        down: evt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    movedRight: {
+                        down: evt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    movedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMoved: {
+                        down: wheelEvt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    wheelMovedUp: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMovedDown: {
+                        down: wheelEvt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    wheelMovedRight: {
+                        down: wheelEvt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    wheelMovedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movementX: 10,
+                    movementY: 20,
+                    screenX: 10,
+                    screenY: 20,
+                    clientX: 0,
+                    clientY: 0,
+                    wheelX: 20,
+                    wheelY: 30,
+                    wheelMovementX: 20,
+                    wheelMovementY: 30
+                });
+            }
+        ]);
+    });
+
+    it('should update mouse movement state even if mouse stayed on the same place', function () {
+        COMP.cycleContinues([
+            function () {
+                _(100000).times(function () {});
+                evt = mouseMoveEvent(10, 20);
+                _(100000).times(function () {});
+                wheelEvt = wheelEvent(20, 30);
+            },
+            function () {
+                _(100000).times(function () {});
+                evt2 = mouseMoveEvent(10, 20);
+                _(100000).times(function () {});
+                wheelEvt2 = wheelEvent(0, 0);
+            },
+            function () {
+                expect(state).toEqual({
+                    moved: {
+                        down: evt.timeStamp,
+                        up: evt.timeStamp,
+                        pressed: false
+                    },
+                    movedUp: {
+                        up: 0,
+                        down: 0,
+                        pressed: false
+                    },
+                    movedDown: {
+                        down: evt.timeStamp,
+                        up: evt.timeStamp,
+                        pressed: false
+                    },
+                    movedRight: {
+                        down: evt.timeStamp,
+                        up: evt.timeStamp,
+                        pressed: false
+                    },
+                    movedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMoved: {
+                        down: wheelEvt.timeStamp,
+                        up: wheelEvt.timeStamp,
+                        pressed: false
+                    },
+                    wheelMovedUp: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMovedDown: {
+                        down: wheelEvt.timeStamp,
+                        up: wheelEvt.timeStamp,
+                        pressed: false
+                    },
+                    wheelMovedRight: {
+                        down: wheelEvt.timeStamp,
+                        up: wheelEvt.timeStamp,
+                        pressed: false
+                    },
+                    wheelMovedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movementX: 0,
+                    movementY: 0,
+                    screenX: 10,
+                    screenY: 20,
+                    clientX: 0,
+                    clientY: 0,
+                    wheelX: 20,
+                    wheelY: 30,
+                    wheelMovementX: 0,
+                    wheelMovementY: 0
+                });
+            }
+        ]);
+    });
+
+    it('should run over previous value if engine hasn\'t looped yet', function () {
+        COMP.cycleContinues([
+            function () {
+                evt = mouseMoveEvent(10, 20);
+                _(100000).times(function () {});
+                evt2 = mouseMoveEvent(1, 45);
+                _(100000).times(function () {});
+                wheelEvt = wheelEvent(20, 30);
+                _(100000).times(function () {});
+                wheelEvt2 = wheelEvent(11, 55);
+                _(100000).times(function () {});
+            },
+            function () {
+                expect(state).toEqual({
+                    moved: {
+                        down: evt2.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    movedUp: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movedDown: {
+                        down: evt2.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    movedRight: {
+                        down: evt2.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    movedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMoved: {
+                        down: wheelEvt2.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    wheelMovedUp: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMovedDown: {
+                        down: wheelEvt2.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    wheelMovedRight: {
+                        down: wheelEvt2.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    wheelMovedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movementX: 1,
+                    movementY: 45,
+                    screenX: 1,
+                    screenY: 45,
+                    clientX: 0,
+                    clientY: 0,
+                    wheelX: 31,
+                    wheelY: 85,
+                    wheelMovementX: 31,
+                    wheelMovementY: 85
+                });
+            }
+        ]);
+    });
+
+    it('should capture mousemove and mousedown', function () {
+        COMP.cycleContinues([
+            function () {
+                evt = mouseMoveEvent(10, 20);
+                _(100000).times(function () {});
+                wheelEvt = wheelEvent(20, 30);
+                _(100000).times(function () {});
+                evt2 = mouseClickEvent(2);
+                _(100000).times(function () {});
+                evt3 = mouseClickEvent(1);
+            },
+            function () {
+                expect(state).toEqual({
+                    moved: {
+                        down: evt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    movedUp: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movedDown: {
+                        down: evt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    movedRight: {
+                        down: evt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    movedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMoved: {
+                        down: wheelEvt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    wheelMovedUp: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMovedDown: {
+                        down: wheelEvt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    wheelMovedRight: {
+                        down: wheelEvt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    wheelMovedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movementX: 10,
+                    movementY: 20,
+                    screenX: 10,
+                    screenY: 20,
+                    clientX: 0,
+                    clientY: 0,
+                    wheelX: 20,
+                    wheelY: 30,
+                    wheelMovementX: 20,
+                    wheelMovementY: 30,
+                    2: {
+                        down: evt2.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    1: {
+                        down: evt3.timeStamp,
+                        up: 0,
+                        pressed: true
+                    }
+                });
+            }
+        ]);
+    });
+
+    it('should prevent default', function () {
+        COMP.cycleContinues([
+            function () {
+                evt = mouseMoveEvent(10, 20);
+                wheelEvt = wheelEvent(20, 30);
+                evt2 = mouseClickEvent(1);
+            },
+            function () {
+                expect(evt.defaultPrevented).toEqual(true);
+                expect(wheelEvt.defaultPrevented).toEqual(true);
+                expect(evt2.defaultPrevented).toEqual(true);
+            }
+        ]);
+    });
+
+    it('should capture fresh event input', function () {
+        COMP.cycleContinues([
+            function () {
+                evt = mouseMoveEvent(10, 20);
+                wheelEvt = wheelEvent(20, 30);
+                _(100000).times(function () {});
+                evt2 = mouseClickEvent(1);
+            },
+            function () {
+                expect(state).toEqual({
+                    moved: {
+                        down: evt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    movedUp: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movedDown: {
+                        down: evt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    movedRight: {
+                        down: evt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    movedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMoved: {
+                        down: wheelEvt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    wheelMovedUp: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMovedDown: {
+                        down: wheelEvt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    wheelMovedRight: {
+                        down: wheelEvt.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    wheelMovedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movementX: 10,
+                    movementY: 20,
+                    screenX: 10,
+                    screenY: 20,
+                    clientX: 0,
+                    clientY: 0,
+                    wheelX: 20,
+                    wheelY: 30,
+                    wheelMovementX: 20,
+                    wheelMovementY: 30,
+                    1 : {
+                        down: evt2.timeStamp,
+                        up: 0,
+                        pressed: true
+                    }
+                });
+            },
+            function () {
+                _(100000).times(function () {});
+                evt3 = mouseMoveEvent(15, 5);
+                wheelEvt2 = wheelEvent(25, -15);
+                _(100000).times(function () {});
+                evt4 = mouseClickEvent(2);
+            },
+            function () {
+                expect(state).toEqual({
+                    moved: {
+                        down: evt3.timeStamp,
+                        up: evt.timeStamp,
+                        pressed: true
+                    },
+                    movedUp: {
+                        down: evt3.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    movedDown: {
+                        down: evt.timeStamp,
+                        up: evt.timeStamp,
+                        pressed: false
+                    },
+                    movedRight: {
+                        down: evt3.timeStamp,
+                        up: evt.timeStamp,
+                        pressed: true
+                    },
+                    movedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    wheelMoved: {
+                        down: wheelEvt2.timeStamp,
+                        up: wheelEvt.timeStamp,
+                        pressed: true
+                    },
+                    wheelMovedUp: {
+                        down: wheelEvt2.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    wheelMovedDown: {
+                        down: wheelEvt.timeStamp,
+                        up: wheelEvt.timeStamp,
+                        pressed: false
+                    },
+                    wheelMovedRight: {
+                        down: wheelEvt2.timeStamp,
+                        up: wheelEvt.timeStamp,
+                        pressed: true
+                    },
+                    wheelMovedLeft: {
+                        down: 0,
+                        up: 0,
+                        pressed: false
+                    },
+                    movementX: 5,
+                    movementY: -15,
+                    screenX: 15,
+                    screenY: 5,
+                    clientX: 0,
+                    clientY: 0,
+                    wheelX: 45,
+                    wheelY: 15,
+                    wheelMovementX: 25,
+                    wheelMovementY: -15,
+                    1 : {
+                        down: evt2.timeStamp,
+                        up: 0,
+                        pressed: true
+                    },
+                    2 : {
+                        down: evt4.timeStamp,
+                        up: 0,
+                        pressed: true
+                    }
+                });
+            }
+        ]);
+    });
 });

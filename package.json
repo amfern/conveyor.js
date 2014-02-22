@@ -27,10 +27,10 @@
       "url": "https://github.com/chrisenytc/generator-library/blob/master/LICENSE"
     }
   ],
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
     "grunt": "~0.4.x",
-    "bower": "~1.2.7",
     "grunt-notify": "~0.2.7",
     "grunt-contrib-uglify": "~0.2.1",
     "grunt-contrib-coffee": "~0.7.0",

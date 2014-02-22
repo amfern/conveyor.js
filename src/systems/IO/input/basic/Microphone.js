@@ -1,17 +1,17 @@
-// Collects Microphone inputs
-// -- TODO --
-// -----------------------------------------
-(function() {
-  new COMP.System.IO({
-    name: 'Microphone',
-    dependencies: [],
+// // Collects Microphone inputs
+// // -- TODO --
+// // -----------------------------------------
+// (function() {
+//   new COMP.System.IO({
+//     name: 'Microphone',
+//     dependencies: [],
 
-    component: function() {
-      return {};
-    }, 
+//     component: function() {
+//       return {};
+//     }, 
 
-    process: function(entities) {
+//     process: function(entities) {
       
-    }
-  });
-})();
+//     }
+//   });
+// })();

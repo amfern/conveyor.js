@@ -1,16 +1,16 @@
-// Provides access to remove files
-// -----------------------------------------
-(function() {
-  new COMP.System.IO({
-    name: 'RemoteStorage',
-    dependencies: [],
+// // Provides access to remove files
+// // -----------------------------------------
+// (function() {
+//   new COMP.System.IO({
+//     name: 'RemoteStorage',
+//     dependencies: [],
 
-    component: function() {
-      return {};
-    }, 
+//     component: function() {
+//       return {};
+//     }, 
 
-    process: function(entities) {
+//     process: function(entities) {
       
-    }
-  });
-})();
+//     }
+//   });
+// })();

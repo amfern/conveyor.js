@@ -1,46 +1,95 @@
-describe("keyboardState", function() {
-  var state, tempSystem, entity, evt;
+'use strict';
 
-  // add reading system
-  beforeEach(function() {
-    COMP.cycleOnce();
-    tapIntoSystem('KeyboardState', function(s) {state = s;})
-  });
+describe('keyboardState', function () {
+    var state, evt, evt2, evt3;
 
-  it("should capture keydowns", function () {
-    evt = keydownEvent(13);
-
-    COMP.cycleOnce(function() {
-      expect(state).toEqual({13:true});
-    });
-  });
-
-  it("should reset state each engine cycle", function () {
-    COMP.cycleOnce(function() {
-      expect(state).toEqual({});
-    });
-  });
-
-  // webkit bug prevents me from sending other keys beside 0
-  it("should capture fresh keydowns", function () {
-    evt = keydownEvent(1);
-
-    COMP.cycleOnce(function() {
-      expect(state).toEqual({1: true});
+    // add reading system
+    beforeEach(function () {
+        tapIntoSystem('KeyboardState', function (s) {
+            state = s;
+        });
+        COMP.cycleOnce();
     });
 
-    evt = keydownEvent(23);
-
-    COMP.cycleOnce(function() {
-      expect(state).toEqual({23: true});
+    afterEach(function () {
+        _.clearAll(state);
     });
-  });
 
-  it("should prevent default", function () {
-    evt = keydownEvent(36);
+    describe('keyboardState', function () {
 
-    COMP.cycleOnce(function() {
-      expect(evt.defaultPrevented).toEqual(true);
+        it('should capture keydowns', function () {
+            COMP.cycleContinues([
+
+                function () {
+                    evt = keydownEvent(13);
+                },
+                function () {
+                    expect(state).toEqual({
+                        13: {
+                            down: evt.timeStamp,
+                            up: 0,
+                            pressed: true
+                        }
+                    });
+                }
+            ]);
+        });
+
+        it('should capture keyups', function () {
+            COMP.cycleContinues([
+
+                function () {
+                    evt = keyupEvent(13);
+                },
+                function () {
+                    expect(state).toEqual({
+                        13: {
+                            down: 0,
+                            up: evt.timeStamp,
+                            pressed: false
+                        }
+                    });
+                }
+            ]);
+        });
+
+        it('should keep the states after cycle', function () {
+            COMP.cycleContinues([
+
+                function () {
+                    evt = keydownEvent(13);
+                    evt2 = keydownEvent(14);
+                },
+                function () {
+                    evt3 = keyupEvent(13);
+                },
+                function () {
+                    expect(state).toEqual({
+                        13: {
+                            down: evt.timeStamp,
+                            up: evt3.timeStamp,
+                            pressed: false
+                        },
+                        14: {
+                            down: evt2.timeStamp,
+                            up: 0,
+                            pressed: true
+                        }
+                    });
+                }
+            ]);
+        });
     });
-  });
+
+    it('should capture keydowns', function () {
+        COMP.cycleContinues([
+
+            function () {
+                evt = keydownEvent(36);
+            },
+            function () {
+                expect(evt.defaultPrevented).toEqual(true);
+            }
+        ]);
+    });
 });
