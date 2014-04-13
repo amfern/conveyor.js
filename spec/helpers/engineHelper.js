@@ -23,7 +23,7 @@ function tapIntoSystem(systemName, callback) {
     // add reading system
     new COMP.System.IO({
         name: 'EpicSystemReading' + systemName,
-        dependencies: [systemName],
+        requiredDependencies: [systemName],
         component: function () {},
         process: function (entities) {
             callback(entities[0][systemName]);

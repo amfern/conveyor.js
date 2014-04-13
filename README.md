@@ -61,11 +61,9 @@ allow to change engine SKIP_TICK and other const variables
 removing system but leaving other systems that depend on it may cause issues: (ie: start engine -> remove system -> restart engine -> dependency system not found -> exception thrown)
 systems can remove/add other systems during runtime, but they can't restart the engine, as it may cause stack overflow, solution: engine will restart it self after each cycle if system is added or removed(when unregisterSystem/registerSystem called set a restart flag to true)
 add staticEntity as invalid entity names or give static entity special treatment
-maybe rename down to pressed
 and maybe rename KeyboardState to just keyboard, as it no longer represents a state
 should be exclusive for down and up triggers?
-add mouseState to HIDState 
-add some test about mouse/wheel to hid combos state
+
 
 ### Develop Notes
 creating new system:

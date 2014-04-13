@@ -17,12 +17,13 @@
     new COMP.System.IO({
         name: 'HIDState',
         isStatic: true,
-        dependencies: ['KeyboardState',
-                        'MouseState',
-                        /*'TouchState',
-                        'JoystickState',
-                        '3DMouseState*/
-                    ],
+        requiredDependencies: [
+            'KeyboardState',
+            'MouseState',
+            /*'TouchState',
+            'JoystickState',
+            '3DMouseState*/
+        ],
 
         component: function () {
             return state;
