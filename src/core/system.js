@@ -24,8 +24,14 @@ COMP.System = function (config) {
     // that entity is shared between all static systems and created upon engine initialization
     this.isStatic = config.isStatic || false;
 
+    // components thats are required by system proccess function to run
+    this.requiredDependencies = config.requiredDependencies || [];
+
     // systems that should run before this one
     this.dependencies = config.dependencies || [];
+
+    // combine requiredDependencies with dependencies 
+    this.dependencies = _.union(this.dependencies, this.requiredDependencies);
     
     // new component generator for this system
     this.component = config.component || function () { return {}; };

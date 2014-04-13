@@ -18,7 +18,7 @@ COMP.Entity.prototype = {
     },
 
     update: function () {
-        COMP._updateEntity(this);
+        return COMP._updateEntity(this);
     }
 };
 

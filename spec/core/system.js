@@ -15,7 +15,7 @@ describe('System', function () {
     it('should register logic system with core', function () {
         config = {
             name: 'EpicLogicSystem',
-            dependencies: [],
+            requiredDependencies: [],
             thread: true,
             component: function () {},
             process: function () {}
@@ -25,7 +25,7 @@ describe('System', function () {
         expect(COMP._registerLogicSystem.mostRecentCall.args[0]).toMatch({
             name: 'EpicLogicSystem',
             isStatic: false,
-            dependencies: [],
+            requiredDependencies: [],
             component: config.component,
             thread: true,
             process: config.process,
@@ -36,7 +36,7 @@ describe('System', function () {
     it('should register Interpolate system with core', function () {
         config = {
             name: 'EpicInterplateSystem',
-            dependencies: [],
+            requiredDependencies: [],
             component: function () {},
             process: function () {}
         };
@@ -45,7 +45,7 @@ describe('System', function () {
         expect(COMP._registerInterpolateSystem.mostRecentCall.args[0]).toMatch({
             name: 'EpicInterplateSystem',
             isStatic: false,
-            dependencies: [],
+            requiredDependencies: [],
             component: config.component,
             thread: false,
             process: config.process,
@@ -56,7 +56,7 @@ describe('System', function () {
     it('should register IO system with core', function () {
         config = {
             name: 'EpicIOSystem',
-            dependencies: [],
+            requiredDependencies: [],
             component: function () {},
             process: function () {}
         };
@@ -65,7 +65,49 @@ describe('System', function () {
         expect(COMP._registerIOSystem.mostRecentCall.args[0]).toMatch({
             name: 'EpicIOSystem',
             isStatic: false,
-            dependencies: [],
+            requiredDependencies: [],
+            component: config.component,
+            thread: false,
+            process: config.process,
+            entities: []
+        });
+    });
+
+    it('should register system with core, and unify requiredDependencies with dependencies', function () {
+        config = {
+            name: 'EpicSystem',
+            requiredDependencies: ['EpicIORequiredSystem1', 'EpicIORequiredSystem2'],
+            dependencies: ['EpicIORequiredSystem2', 'EpicIORequiredSystem3'],
+            component: function () {},
+            process: function () {}
+        };
+
+        genericSystem = new COMP.System.IO(config);
+        expect(COMP._registerIOSystem.mostRecentCall.args[0]).toMatch({
+            name: 'EpicSystem',
+            isStatic: false,
+            requiredDependencies: ['EpicIORequiredSystem1', 'EpicIORequiredSystem2'],
+            dependencies: [
+                'EpicIORequiredSystem1',
+                'EpicIORequiredSystem2',
+                'EpicIORequiredSystem3'
+            ],
+            component: config.component,
+            thread: false,
+            process: config.process,
+            entities: []
+        });
+
+        genericSystem = new COMP.System.Logic(config);
+        expect(COMP._registerLogicSystem.mostRecentCall.args[0]).toMatch({
+            name: 'EpicSystem',
+            isStatic: false,
+            requiredDependencies: ['EpicIORequiredSystem1', 'EpicIORequiredSystem2'],
+            dependencies: [
+                'EpicIORequiredSystem1',
+                'EpicIORequiredSystem2',
+                'EpicIORequiredSystem3'
+            ],
             component: config.component,
             thread: false,
             process: config.process,
@@ -143,7 +185,7 @@ describe('System', function () {
     it('should unregister logic system with core', function () {
         config = {
             name: 'UnregisterEpicLogicSystem',
-            dependencies: [],
+            requiredDependencies: [],
             thread: true,
             component: function () {},
             process: function () {}
@@ -157,7 +199,7 @@ describe('System', function () {
     it('should unregister Interpolate system with core', function () {
         config = {
             name: 'UnregisterEpicInterpolateSystem',
-            dependencies: [],
+            requiredDependencies: [],
             thread: true,
             component: function () {},
             process: function () {}
@@ -171,7 +213,7 @@ describe('System', function () {
     it('should unregister IO system with core', function () {
         config = {
             name: 'UnregisterEpicIOSystem',
-            dependencies: [],
+            requiredDependencies: [],
             thread: true,
             component: function () {},
             process: function () {}

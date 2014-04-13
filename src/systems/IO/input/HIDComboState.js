@@ -287,7 +287,7 @@
     new COMP.System.IO({
         name: 'HIDComboState',
         isStatic: true,
-        dependencies: ['HIDState'],
+        requiredDependencies: ['HIDState'],
 
         component: function () {
             return component;

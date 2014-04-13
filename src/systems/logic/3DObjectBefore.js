@@ -1,9 +1,9 @@
-// 3D position system
-// -----------------------------------------
-new COMP.System.Logic({
-	name: '3DObjectBefore',
+// // 3D position system
+// // -----------------------------------------
+// new COMP.System.Logic({
+// 	name: '3DObjectBefore',
 
-	component: function () {},
+// 	component: function () {},
 
-	process: function () {}
-});
+// 	process: function () {}
+// });
