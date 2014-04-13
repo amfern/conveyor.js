@@ -1,3 +1,4 @@
+/*jshint bitwise: false*/
 'use strict';
 
 // Core of the engine, responsible for game loop and processing system entities
@@ -63,22 +64,15 @@ window.COMP = (function () {
     function addSystem(tempSystemCollection, systemCollection, tempSys) {
         var sysIndex = systemIndex(systemCollection, tempSys.name);
 
+        // do nothing if system already exists
         if (sysIndex !== -1) {
             return sysIndex;
-        } // do nothing if system already exists
+        }
 
         // add dependencies
         _.each(tempSys.dependencies, function (depSysName) {
             var depSys = systemsByName[depSysName]; // resolve dependency
 
-            // throw exception if dependency system doesn't exists
-            if (!depSys) {
-                throw new Error('Dependency system not found');
-            }
-            // throw exception if static system has non-static system as dependency
-            if (tempSys.isStatic && !depSys.isStatic) {
-                throw new Error('Static system can\'t have non-static system as dependency');
-            }
             // continue loop if dependency system not found but exists in the engine
             if (depSys && !_.findWhere(tempSystemCollection, {
                 name: depSysName
@@ -98,6 +92,34 @@ window.COMP = (function () {
         systemCollection.splice(sysIndex, 0, tempSys); // add system it self
 
         return sysIndex;
+    }
+
+    // validates system to meet certain criteria, will throw exception if doesn't
+    function validateSystem(tempSystemCollection, systemCollection, tempSys) {
+        // add dependencies
+        _.each(tempSys.dependencies, function (depSysName) {
+            var depSys = systemsByName[depSysName]; // resolve dependency
+
+            // throw exception if dependency system doesn't exists
+            if (!depSys) {
+                throw new Error('Dependency system not found');
+            }
+
+            // throw exception if static system has non-static system as dependency
+            if (tempSys.isStatic && !depSys.isStatic) {
+                throw new Error('Static system can\'t have non-static system as dependency');
+            }
+
+            validateSystem(tempSystemCollection, systemCollection, depSys);
+        });
+    }
+
+    // goes over all systems and validates them
+    function validateSystems(tempSystemCollection, systemCollection) {
+        // add systems in the correct order for dependencies
+        _.each(tempSystemCollection, function (tempSys) {
+            validateSystem(tempSystemCollection, systemCollection, tempSys);
+        });
     }
 
     function prepareSystem(tempSystemCollection, lastYield) {
@@ -158,7 +180,7 @@ window.COMP = (function () {
                 system.entities.push(entity);
             }
 
-            addEntityComponents(entity, system.dependencies);
+            addEntityComponents(entity, system.requiredDependencies);
         });
     }
 
@@ -183,9 +205,9 @@ window.COMP = (function () {
                 // replace old entity with new one
                 system.entities.splice(system.entities.indexOf(oldEntity), 1, newEntity);
 
-                updateEntityComponents(oldEntity, newEntity, system.dependencies);
+                updateEntityComponents(oldEntity, newEntity, system.requiredDependencies);
             } else {
-                addEntityComponents(newEntity, system.dependencies);
+                addEntityComponents(newEntity, system.requiredDependencies);
             }
         });
     }
@@ -200,9 +222,17 @@ window.COMP = (function () {
             } // dependency not found
 
             delete entity[componentName]; // remove component from entity
-            system.entities.splice(system.entities.indexOf(entity), 1); // remove entity from system
 
-            removeEntityComponents(entity, system.dependencies);
+            // find index of entity inside of system's entitites
+            var entityIndex = system.entities.indexOf(entity);
+
+            // remove entity from system only if its found
+            // (it could have been remove before)
+            if (~entityIndex) {
+                system.entities.splice(entityIndex, 1);
+            }
+
+            removeEntityComponents(entity, system.requiredDependencies);
         });
     }
 
@@ -240,12 +270,15 @@ window.COMP = (function () {
 
     // constructs entity only for static systems to use
     function constructStaticEntity() {
+        // filter only static systems
         var staticSystems = _.filter(systemsByName, function (sys) {
             return sys.isStatic;
-        }); // filter only static systems
+        });
+
+        // collect only static system names
         staticSystems = _.map(staticSystems, function (sys) {
             return sys.name;
-        }); // collect only static system names
+        });
 
         // create new entity composing only of static systems
         var staticEntity = new COMP.StaticEntity({
@@ -302,6 +335,8 @@ window.COMP = (function () {
 
         // remove other components
         removeEntityComponents(entity, _.keys(entity));
+
+        return newEntity;
     }
 
     // clear all entities of all systems
@@ -322,6 +357,10 @@ window.COMP = (function () {
 
     function mainLoop() {
         nextGameTick = window.performance.now();
+
+        validateSystems(tempLogicSystems, processLogic);
+        validateSystems(tempInterpolationSystems, processIO);
+        validateSystems(tempIOSystems, processNextFrame);
 
         staticEntity = constructStaticEntity();
 
