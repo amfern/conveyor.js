@@ -287,7 +287,7 @@
     new COMP.System.IO({
         name: 'HIDComboState',
         isStatic: true,
-        requiredDependencies: ['HIDState'],
+        dependencies: ['HIDState'],
 
         component: function () {
             return component;
@@ -298,10 +298,13 @@
             triggeredCombos = getTriggeredCombos(combos, staticEntity.HIDState, potentialOnceTriggered, outPotentialOnceTriggered);
             potentialOnceTriggered = outPotentialOnceTriggered;
 
-            _.clearAll(component.state); // reset triggered state
+            // reset triggered state
+            _.clearAll(component.state);
+             
+            // copy new triggeredCombos as the new state
             _.each(triggeredCombos, function (combo) {
                 component.state[combo.handler] = true;
-            }); // copy new triggeredCombos as the new state
+            });
         }
     });
 })();

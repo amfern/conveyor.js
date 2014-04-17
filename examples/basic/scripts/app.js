@@ -1,6 +1,11 @@
 new COMP.Entity({
-  name: "entity1",
-  components: ['3DRotate', '3DCubeRender'], // components composing this entity
+    name: 'player',
+    components: ['PlayerControl', 'Camera', 'CameraOffset', 'Mesh'], // components composing this entity
+});
+
+new COMP.Entity({
+    name: 'staticMesh',
+    components: ['Mesh'], // components composing this entity
 });
 
 COMP();
