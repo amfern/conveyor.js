@@ -161,7 +161,7 @@ module.exports = function (grunt) {
                     'spec/helpers/**/*.js',
                     'spec/mocks/**/*.js'
                 ],
-                tasks: ['jasmine:core:build'],
+                tasks: ['jasmine:core:build', 'compile'],
                 options: {
                     livereload: true,
                     atBegin: true
@@ -175,7 +175,7 @@ module.exports = function (grunt) {
                     'spec/helpers/**/*.js',
                     'spec/mocks/**/*.js'
                 ],
-                tasks: ['jasmine:systems:build'],
+                tasks: ['jasmine:systems:build', 'compile'],
                 options: {
                     livereload: true,
                     atBegin: true

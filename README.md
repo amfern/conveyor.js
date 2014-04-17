@@ -63,6 +63,9 @@ systems can remove/add other systems during runtime, but they can't restart the 
 add staticEntity as invalid entity names or give static entity special treatment
 and maybe rename KeyboardState to just keyboard, as it no longer represents a state
 should be exclusive for down and up triggers?
+players controlls using watchers mechanics to see if controls has changes and should be updateed accordinly, maybe we should use the new es6 watched function for that
+create cleanup function for when component is destroyed
+never use same component instance for more then one entity, make core handle the creation of duplicatied components each engine loop
 
 
 ### Develop Notes
