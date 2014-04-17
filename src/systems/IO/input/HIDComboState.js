@@ -16,18 +16,18 @@
             
             registers a combo
             {
-              "keys"              : null,   - array of keys 
-              "trigger"           : null,   - {down|up|release}
+                "keys"              : null,   - array of keys 
+                "trigger"           : null,   - {down|up|release}
                                               down    - combo trigger on all of the keys down
                                               up      - combo trigger on all of the keys up
                                               release - combo trigger on one of the keys up
-              "isOnce"            : false,  - Normally while holding the keys combo will be always triggered, setting this to true will trigger and wait for release before triggering again
-              "isOrdered"         : false,  - will trigger only if clicked in the correct order
-              "isSequence"        : false,  - when "isOrdered" is true will trigger only if key were clicked in one sequence meaning, no other key then specified in the combo were clicked in-between
-              "isExclusive"       : false,  - Normally when pressing a key, any and all combos that match will have their callbacks called. 
+                "isOnce"            : false,  - Normally while holding the keys combo will be always triggered, setting this to true will trigger and wait for release before triggering again
+                "isOrdered"         : false,  - will trigger only if clicked in the correct order
+                "isSequence"        : false,  - when "isOrdered" is true will trigger only if key were clicked in one sequence meaning, no other key then specified in the combo were clicked in-between
+                "isExclusive"       : false,  - Normally when pressing a key, any and all combos that match will have their callbacks called. 
                                               For instance, pressing 'shift' and then 's' would activate the following combos if they existed: "shift", "shift s" and "s". 
                                               When we set isExclusive to true, we will not call the callbacks for any combos that are also exclusive and less specific.
-              "isSolitary"        : false   - This option will check that ONLY the combo's keys are being pressed when set to true. When set to the default value of false, 
+                "isSolitary"        : false   - This option will check that ONLY the combo's keys are being pressed when set to true. When set to the default value of false, 
                                               a combo can be activated even if extraneous keys are pressed
             }
             
@@ -287,7 +287,7 @@
     new COMP.System.IO({
         name: 'HIDComboState',
         isStatic: true,
-        requiredDependencies: ['HIDState'],
+        dependencies: ['HIDState'],
 
         component: function () {
             return component;
@@ -298,10 +298,13 @@
             triggeredCombos = getTriggeredCombos(combos, staticEntity.HIDState, potentialOnceTriggered, outPotentialOnceTriggered);
             potentialOnceTriggered = outPotentialOnceTriggered;
 
-            _.clearAll(component.state); // reset triggered state
+            // reset triggered state
+            _.clearAll(component.state);
+             
+            // copy new triggeredCombos as the new state
             _.each(triggeredCombos, function (combo) {
                 component.state[combo.handler] = true;
-            }); // copy new triggeredCombos as the new state
+            });
         }
     });
 })();

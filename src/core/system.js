@@ -29,9 +29,6 @@ COMP.System = function (config) {
 
     // systems that should run before this one
     this.dependencies = config.dependencies || [];
-
-    // combine requiredDependencies with dependencies 
-    this.dependencies = _.union(this.dependencies, this.requiredDependencies);
     
     // new component generator for this system
     this.component = config.component || function () { return {}; };

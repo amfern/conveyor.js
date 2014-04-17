@@ -8302,9 +8302,8 @@ describe('HIDComboState', function () {
         });
 
         afterEach(function () {
-            COMP.cycleOnce(); // cycle to get HIDComboState state
+            COMP.cycleOnce(); // cycle to invalidate input buffers
             resetMouseState(mouseState);
-            _.clearAll(state);
         });
 
 

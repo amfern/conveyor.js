@@ -74,6 +74,7 @@ window.COMP = (function () {
             var depSys = systemsByName[depSysName]; // resolve dependency
 
             // continue loop if dependency system not found but exists in the engine
+            // because it may be system of diffrent type(eg. IO system inside of Logic system)
             if (depSys && !_.findWhere(tempSystemCollection, {
                 name: depSysName
             })) {
@@ -81,14 +82,17 @@ window.COMP = (function () {
             }
 
             // add system
-            var tempSysIndex = addSystem(tempSystemCollection, systemCollection, depSys);
-            sysIndex++;
-            // set the highest dependency
-            sysIndex = sysIndex > tempSysIndex ? sysIndex : tempSysIndex;
+            addSystem(tempSystemCollection, systemCollection, depSys);
+        });
+
+        sysIndex = 0;
+
+        // calcualte the index of the system according to it dependancies
+        _.each(tempSys.dependencies, function (depSysName) {
+            sysIndex += 1 + systemIndex(systemCollection, depSysName);
         });
 
         // TODO: rise event telling that "system finish loading(tempSys)";
-        sysIndex++;
         systemCollection.splice(sysIndex, 0, tempSys); // add system it self
 
         return sysIndex;
@@ -102,7 +106,7 @@ window.COMP = (function () {
 
             // throw exception if dependency system doesn't exists
             if (!depSys) {
-                throw new Error('Dependency system not found');
+                throw new Error('Dependency system "' + depSysName + '" not found');
             }
 
             // throw exception if static system has non-static system as dependency
@@ -149,9 +153,11 @@ window.COMP = (function () {
 
             return function () {
                 sys.process(processEntities, interpolation); // process system
+                
+                // yield if not threaded system
                 if (!sys.thread) {
                     sys.yield();
-                } // yield if not threaded system
+                }
             };
         };
 
@@ -159,8 +165,8 @@ window.COMP = (function () {
     }
 
     // adds entity and it dependencies in order
-    function addEntityComponents(entity, componentNames) {
-        _.each(componentNames, function (componentName) {
+    function addEntityComponents(entity, requiredComponents) {
+        _.each(requiredComponents, function (componentName) {
             // do nothing if component already exists
             if (entity[componentName]) {
                 return;
@@ -185,18 +191,19 @@ window.COMP = (function () {
     }
 
     // updates entity and it components
-    function updateEntityComponents(oldEntity, newEntity, componentNames) {
-        _.each(componentNames, function (componentName) {
+    function updateEntityComponents(oldEntity, newEntity, requiredComponents) {
+        _.each(requiredComponents, function (componentName) {
             var system = systemsByName[componentName];
-
+            
+            // dependency not found
             if (!system) {
                 return;
-            } // dependency not found
+            }
 
-            // if oldEntity already have that components, use it instead of creating new one
             var oldEntityComponent = oldEntity[componentName];
+            
+            // if oldEntity already have that components, use it instead of creating new one
             if (oldEntityComponent) {
-
                 newEntity[componentName] = oldEntityComponent;
 
                 // delete component from old entity
@@ -213,8 +220,8 @@ window.COMP = (function () {
     }
 
     // removes systems
-    function removeEntityComponents(entity, componentNames) {
-        _.each(componentNames, function (componentName) {
+    function removeEntityComponents(entity, requiredComponents) {
+        _.each(requiredComponents, function (componentName) {
             var system = systemsByName[componentName];
 
             if (!system) {
