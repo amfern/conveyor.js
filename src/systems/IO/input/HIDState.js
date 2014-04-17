@@ -17,7 +17,8 @@
     new COMP.System.IO({
         name: 'HIDState',
         isStatic: true,
-        requiredDependencies: [
+
+        dependencies: [
             'KeyboardState',
             'MouseState',
             /*'TouchState',
