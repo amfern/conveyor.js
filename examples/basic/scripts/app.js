@@ -1,6 +1,24 @@
 new COMP.Entity({
     name: 'player',
-    components: ['PlayerControl', 'Camera', 'CameraOffset', 'Mesh'], // components composing this entity
+
+    // components composing this entity
+    components: [
+        'PlayerControl',
+        'Rotate',
+        'Translate',
+        'Mesh'
+    ],
+});
+
+new COMP.Entity({
+    name: 'camera',
+
+    // components composing this entity
+    components: [
+        // 'CameraControl',
+        // 'Rotate',
+        'Camera'
+    ],
 });
 
 new COMP.Entity({

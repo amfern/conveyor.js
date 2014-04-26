@@ -9,5 +9,6 @@ new COMP.System.Logic({
         return new THREE.Object3D();
     },
 
-    process: function () { }
+    process: function () {
+    }
 });

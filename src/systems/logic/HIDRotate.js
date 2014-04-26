@@ -5,9 +5,9 @@
 new COMP.System.Logic({
     name: 'HIDRotate',
 
-    dependencies: ['OriginalObject', 'PlayerControl'],
+    dependencies: ['Transformer', 'PlayerControl'],
 
-    requiredDependencies: ['Object', 'HIDComboState', 'MouseState'],
+    requiredDependencies: ['Transformer', 'HIDComboState', 'MouseState'],
 
     component: function () {
         return {
@@ -16,41 +16,27 @@ new COMP.System.Logic({
             yawRightHandler: null,
             yawLeftHandler: null,
             rollRightHandler: null,
-            rollLeftHandler: null,
-            velocity: 0.01
+            rollLeftHandler: null
         };
     },
 
     process: function (entities) {
         _.each(entities, function (e) {
-            var object = e.Object,
+            var rotation = e.Transformer.rotation,
                 HIDRotate = e.HIDRotate,
                 isTriggered = e.HIDComboState.isTriggered,
-                velocity = HIDRotate.velocity,
                 mouseState = e.MouseState;
 
-            if (isTriggered(HIDRotate.pitchUpHandler)) {
-                object.rotateOnAxis(new THREE.Vector3(1, 0, 0), mouseState.movementY * velocity);
-            }
-                
-            if (isTriggered(HIDRotate.pitchDownHandler)) {
-                object.rotateOnAxis(new THREE.Vector3(1, 0, 0), mouseState.movementY * velocity);
+            if (isTriggered(HIDRotate.pitchUpHandler) || isTriggered(HIDRotate.pitchDownHandler)) {
+                rotation.y = -mouseState.movementY;
             }
 
-            if (isTriggered(HIDRotate.yawLeftHandler)) {
-                object.rotateOnAxis(new THREE.Vector3(0, 1, 0), mouseState.movementX * velocity);
+            if (isTriggered(HIDRotate.yawLeftHandler) || isTriggered(HIDRotate.yawRightHandler)) {
+                rotation.x = -mouseState.movementX;
             }
 
-            if (isTriggered(HIDRotate.yawRightHandler)) {
-                object.rotateOnAxis(new THREE.Vector3(0, 1, 0), mouseState.movementX * velocity);
-            }
-
-            if (isTriggered(HIDRotate.rollLeftHandler)) {
-                object.rotateOnAxis(new THREE.Vector3(1, 0, 0), mouseState.movementZ * velocity);
-            }
-
-            if (isTriggered(HIDRotate.rollRightHandler)) {
-                object.rotateOnAxis(new THREE.Vector3(1, 0, 0), mouseState.movementZ * velocity);
+            if (isTriggered(HIDRotate.rollLeftHandler) || isTriggered(HIDRotate.rollRightHandler)) {
+                rotation.z = -mouseState.movementZ;
             }
         });
     }
