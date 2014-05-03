@@ -5,7 +5,7 @@
 new COMP.System.Interpolate({
     name: 'ObjectInterpolation',
 
-    requiredDependencies: ['OriginalObject'],
+    requiredDependencies: ['ObjectPristine'],
 
     component: function () {},
 
@@ -13,9 +13,12 @@ new COMP.System.Interpolate({
         var before, current, after;
 
         _.each(entities, function (e) {
-            before = e.OriginalObject;
+            before = new THREE.Object3D();
             current = e.Object;
-            after = e.ObjectInterpolation = current.clone();
+            after = e.ObjectInterpolation = new THREE.Object3D();
+
+            before.applyMatrix(e.ObjectPristine.matrixWorld);
+            after.applyMatrix(current.matrixWorld);
 
             after.scale.lerp(before.scale, 1 - interpolation);
             after.position.lerp(before.position, 1 - interpolation);

@@ -102,7 +102,7 @@ window.COMP = (function () {
 
             // throw exception if dependency system doesn't exists
             if (!depSys) {
-                throw new Error('Dependency system not found');
+                throw new Error('Dependency system "' + depSysName + '" not found');
             }
 
             // throw exception if static system has non-static system as dependency

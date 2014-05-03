@@ -5,7 +5,7 @@
 new COMP.System.Logic({
     name: 'Transformer',
 
-    dependencies: ['OriginalObject'],
+    dependencies: ['Object'],
 
     component: function () { },
 
