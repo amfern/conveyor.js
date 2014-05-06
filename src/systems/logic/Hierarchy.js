@@ -11,7 +11,7 @@
         object.updateMatrix();
 
         if (parent) {
-            return new THREE.Matrix4().multiplyMatrices(object.matrix, calculateMatrixWorld(parent));
+            return new THREE.Matrix4().multiplyMatrices(calculateMatrixWorld(parent), object.matrix);
         }
 
         return object.matrix;

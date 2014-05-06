@@ -1,4 +1,4 @@
-new COMP.Entity({
+var player = new COMP.Entity({
     name: 'player',
 
     // components composing this entity
@@ -10,16 +10,29 @@ new COMP.Entity({
     ],
 });
 
-new COMP.Entity({
+var cameraContainer = new COMP.Entity({
+    name: 'cameraContainer',
+
+    // components composing this entity
+    components: [
+        'CameraControl',
+        'Rotate',
+    ],
+});
+
+cameraContainer.Hierarchy = player;
+
+var camera = new COMP.Entity({
     name: 'camera',
 
     // components composing this entity
     components: [
-        // 'CameraControl',
-        // 'Rotate',
         'Camera'
     ],
 });
+
+camera.Object.position.z = 250;
+camera.Hierarchy = cameraContainer;
 
 new COMP.Entity({
     name: 'staticMesh',

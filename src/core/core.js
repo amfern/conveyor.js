@@ -149,9 +149,11 @@ window.COMP = (function () {
 
             return function () {
                 sys.process(processEntities, interpolation); // process system
+                
+                // yield if not threaded system
                 if (!sys.thread) {
                     sys.yield();
-                } // yield if not threaded system
+                }
             };
         };
 
@@ -159,8 +161,8 @@ window.COMP = (function () {
     }
 
     // adds entity and it dependencies in order
-    function addEntityComponents(entity, componentNames) {
-        _.each(componentNames, function (componentName) {
+    function addEntityComponents(entity, requiredComponents) {
+        _.each(requiredComponents, function (componentName) {
             // do nothing if component already exists
             if (entity[componentName]) {
                 return;
@@ -185,18 +187,19 @@ window.COMP = (function () {
     }
 
     // updates entity and it components
-    function updateEntityComponents(oldEntity, newEntity, componentNames) {
-        _.each(componentNames, function (componentName) {
+    function updateEntityComponents(oldEntity, newEntity, requiredComponents) {
+        _.each(requiredComponents, function (componentName) {
             var system = systemsByName[componentName];
-
+            
+            // dependency not found
             if (!system) {
                 return;
-            } // dependency not found
+            }
 
-            // if oldEntity already have that components, use it instead of creating new one
             var oldEntityComponent = oldEntity[componentName];
+            
+            // if oldEntity already have that components, use it instead of creating new one
             if (oldEntityComponent) {
-
                 newEntity[componentName] = oldEntityComponent;
 
                 // delete component from old entity
@@ -213,8 +216,8 @@ window.COMP = (function () {
     }
 
     // removes systems
-    function removeEntityComponents(entity, componentNames) {
-        _.each(componentNames, function (componentName) {
+    function removeEntityComponents(entity, requiredComponents) {
+        _.each(requiredComponents, function (componentName) {
             var system = systemsByName[componentName];
 
             if (!system) {
