@@ -1,3 +1,5 @@
+'use strict';
+
 var player = new COMP.Entity({
     name: 'player',
 
@@ -34,9 +36,14 @@ var camera = new COMP.Entity({
 camera.Object.position.z = 250;
 camera.Hierarchy = cameraContainer;
 
-new COMP.Entity({
+var staticMesh = new COMP.Entity({
     name: 'staticMesh',
     components: ['Mesh'], // components composing this entity
 });
+
+var geometry = new THREE.PlaneGeometry( 2000, 2000 );
+var material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
+
+staticMesh.Mesh = new THREE.Mesh(geometry, material);
 
 COMP();
