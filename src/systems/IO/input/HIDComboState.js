@@ -56,18 +56,21 @@
                     throw new Error('"' + combo.keys.toString() + '" combo already exists');
                 }
 
+                // insert in-place by order of combo.keys.length
                 var insertIndex = _.sortedIndex(combos, combo, function (combo) {
                     return -combo.keys.length;
-                }); // insert in-place by order of combo.keys.length
+                });
 
                 combo.children = [];
                 if (combo.isExclusive) {
                     combo.children = getComboChildren(combo, combos.slice(insertIndex, combos.length));
                 }
 
-                addComboToParentCombos(combo, combos.slice(0, insertIndex)); // add combo as child to other combos if its keys are partially matching them
+                // add combo as child to other combos if its keys are partially matching them
+                addComboToParentCombos(combo, combos.slice(0, insertIndex));
 
-                combos.splice(insertIndex, 0, combo); // insert combo in the correct place
+                // insert combo in the correct place
+                combos.splice(insertIndex, 0, combo);
 
                 return handlerIndex;
             },
@@ -82,10 +85,13 @@
                         combo.children.splice(comboIndex, 1);
                     }
                 });
+
+                // removes combo
                 combos = _.reject(combos, function (combo) {
                     return combo.handler === handler;
-                }); // removes combo
+                });
             },
+            
             // checks if a certain combo is triggered
             // handler - (integer) a handler to a combo
             isTriggered: function (handler) {
