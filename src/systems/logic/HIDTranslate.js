@@ -24,16 +24,23 @@ new COMP.System.Logic({
         _.each(entities, function (e) {
             var translate = e.Transformer.position,
                 HIDTranslate = e.HIDTranslate,
-                isTriggered = e.HIDComboState.isTriggered;
+                HIDComboState = e.HIDComboState,
+                defaultTriggered = {triggered: false},
+                moveForward = HIDComboState[HIDTranslate.moveForwardHandler] || defaultTriggered,
+                moveBack = HIDComboState[HIDTranslate.moveBackHandler] || defaultTriggered,
+                moveLeft = HIDComboState[HIDTranslate.moveLeftHandler] || defaultTriggered,
+                moveRight = HIDComboState[HIDTranslate.moveRightHandler] || defaultTriggered,
+                moveUp = HIDComboState[HIDTranslate.moveUpHandler] || defaultTriggered,
+                moveDown = HIDComboState[HIDTranslate.moveDownHandler] || defaultTriggered;
 
-            translate.x = +isTriggered(HIDTranslate.moveRightHandler);
-            translate.x = translate.x || -isTriggered(HIDTranslate.moveLeftHandler);
+            translate.x = +!!moveRight.triggered;
+            translate.x = translate.x || -!!moveLeft.triggered;
 
-            translate.y = +isTriggered(HIDTranslate.moveUpHandler);
-            translate.y = translate.y || -isTriggered(HIDTranslate.moveDownHandler);
+            translate.y = +!!moveUp.triggered;
+            translate.y = translate.y || -!!moveDown.triggered;
 
-            translate.z = -isTriggered(HIDTranslate.moveForwardHandler);
-            translate.z = translate.z || +isTriggered(HIDTranslate.moveBackHandler);
+            translate.z = -!!moveForward.triggered;
+            translate.z = translate.z || +!!moveBack.triggered;
 
             translate.normalize();
         });

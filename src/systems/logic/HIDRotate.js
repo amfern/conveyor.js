@@ -24,18 +24,26 @@ new COMP.System.Logic({
         _.each(entities, function (e) {
             var rotation = e.Transformer.rotation,
                 HIDRotate = e.HIDRotate,
-                isTriggered = e.HIDComboState.isTriggered,
-                mouseState = e.MouseState;
+                HIDComboState = e.HIDComboState,
+                mouseState = e.MouseState,
+                defaultTriggered = {triggered: false},
+                pitchUp = HIDComboState[HIDRotate.pitchUpHandler] || defaultTriggered,
+                pitchDown = HIDComboState[HIDRotate.pitchDownHandler] || defaultTriggered,
+                yawRight = HIDComboState[HIDRotate.yawRightHandler] || defaultTriggered,
+                yawLeft = HIDComboState[HIDRotate.yawLeftHandler] || defaultTriggered,
+                rollRight = HIDComboState[HIDRotate.rollRightHandler] || defaultTriggered,
+                rollLeft = HIDComboState[HIDRotate.rollLeftHandler] || defaultTriggered;
 
-            if (isTriggered(HIDRotate.pitchUpHandler) || isTriggered(HIDRotate.pitchDownHandler)) {
+
+            if (pitchUp.triggered || pitchDown.triggered) {
                 rotation.y = -mouseState.movementY;
             }
 
-            if (isTriggered(HIDRotate.yawLeftHandler) || isTriggered(HIDRotate.yawRightHandler)) {
+            if (yawLeft.triggered || yawRight.triggered) {
                 rotation.x = -mouseState.movementX;
             }
 
-            if (isTriggered(HIDRotate.rollLeftHandler) || isTriggered(HIDRotate.rollRightHandler)) {
+            if (rollLeft.triggered || rollRight.triggered) {
                 rotation.z = -mouseState.movementZ;
             }
         });

@@ -56,11 +56,28 @@
         };
 
     function updateKeyBind(HIDComboState, keyBind) {
-        if (keyBind.handler !== null) {
-            return;
-        }
+        var fullKeyBind = {
+            keys: keyBind.keys,
+            trigger: 'down',
+            isOnce: false,
+            isOrdered: false,
+            isExclusive: false,
+            isSolitary: false
+        };
+        
+        // find the keybind exacly
+        var registeredKeyBind = _.findWhere(HIDComboState, fullKeyBind);
 
-        keyBind.handler = HIDComboState.register({ keys: keyBind.keys });
+        var handler;
+
+        // if keybind not registered then register
+        if (!registeredKeyBind) {
+            handler = HIDComboState.push(fullKeyBind);
+        } else {
+            handler = HIDComboState.indexOf(registeredKeyBind);
+        }
+        
+        keyBind.handler = handler;
     }
 
     new COMP.System.Logic({

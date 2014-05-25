@@ -66,6 +66,7 @@ should be exclusive for down and up triggers?
 players controlls using watchers mechanics to see if controls has changes and should be updateed accordinly, maybe we should use the new es6 watched function for that
 create cleanup function for when component is destroyed
 never use same component instance for more then one entity, make core handle the creation of duplicatied components each engine loop
+creating entity should allow the setting of initial components values
 
 
 ### Develop Notes
@@ -73,6 +74,8 @@ creating new system:
 - data is always in the entity
 - logic is always in the process system
 - you can store variables in the system but only if it static and not changed between entities
+- if add/remove/change entity component requires complicated reconfiguration, system should observe and do the configuration upon change
+- it's ok to set initial value just to make the system function.
 
 create cycleContinuous:
 - you pass array of function representing each engine loop
