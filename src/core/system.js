@@ -29,6 +29,8 @@ COMP.System = function (config) {
 
     // systems that should run before this one
     this.dependencies = config.dependencies || [];
+
+    this.dependencies = _.uniq(this.requiredDependencies.concat(this.dependencies));
     
     // new component generator for this system
     this.component = config.component || function () { return {}; };
