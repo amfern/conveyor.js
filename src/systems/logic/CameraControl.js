@@ -5,25 +5,18 @@
 new COMP.System.Logic({
     name: 'CameraControl',
 
-    dependencies: [],
+    dependencies: ['ActiveKeyBinds'],
 
-    requiredDependencies: ['KeyBinds', 'HIDRotate'],
+    requiredDependencies: ['ActiveKeyBinds', 'KeyBinds'],
 
-    component: function () {
-
-    },
+    component: function () { },
 
     process: function (entities) {
         _.each(entities, function (e) {
             // calculate current contols hash
-            var HIDRotate = e.HIDRotate,
-                keyBinds = e.KeyBinds;
+            var keyBinds = e.KeyBinds;
 
-            // pitchUp
-            HIDRotate.pitchUpHandler = keyBinds.pitchUp.handler;
-
-            // pitchDown
-            HIDRotate.pitchDownHandler = keyBinds.pitchDown.handler;
+            e.ActiveKeyBinds = _.pick(keyBinds, 'pitchUp', 'pitchDown');
         });
     }
 });

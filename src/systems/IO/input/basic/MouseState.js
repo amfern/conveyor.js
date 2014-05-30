@@ -160,7 +160,7 @@
                 prevState.wheelMoved.pressed,
                 wheelMovedTimeStamp,
                 function () {
-                    return state.movementX || state.movementY;
+                    return state.wheelMovementX || state.wheelMovementY;
                 }
             );
 
@@ -169,7 +169,7 @@
                 prevState.wheelMovedUp.pressed,
                 wheelMovedTimeStamp,
                 function () {
-                    return state.wheelMoved.pressed && state.movementY < 0;
+                    return state.wheelMoved.pressed && state.wheelMovementY < 0;
                 }
             );
 
@@ -178,7 +178,7 @@
                 prevState.wheelMovedDown.pressed,
                 wheelMovedTimeStamp,
                 function () {
-                    return state.wheelMoved.pressed && state.movementY > 0;
+                    return state.wheelMoved.pressed && state.wheelMovementY > 0;
                 }
             );
 
@@ -187,7 +187,7 @@
                 prevState.wheelMovedLeft.pressed,
                 wheelMovedTimeStamp,
                 function () {
-                    return state.wheelMoved.pressed && state.movementX < 0;
+                    return state.wheelMoved.pressed && state.wheelMovementX < 0;
                 }
             );
 
@@ -196,7 +196,7 @@
                 prevState.wheelMovedRight.pressed,
                 wheelMovedTimeStamp,
                 function () {
-                    return state.wheelMoved.pressed && state.movementX > 0;
+                    return state.wheelMoved.pressed && state.wheelMovementX > 0;
                 }
             );
 

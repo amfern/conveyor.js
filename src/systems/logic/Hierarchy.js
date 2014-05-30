@@ -5,24 +5,24 @@
 // -----------------------------------------
 (function () {
     function calculateMatrixWorld(entity) {
-        var object = entity.Object,
+        var Transform = entity.Transform,
             parent = entity.Hierarchy;
 
-        object.updateMatrix();
+        Transform.updateMatrix();
 
         if (parent) {
-            return new THREE.Matrix4().multiplyMatrices(calculateMatrixWorld(parent), object.matrix);
+            return new THREE.Matrix4().multiplyMatrices(calculateMatrixWorld(parent), Transform.matrix);
         }
 
-        return object.matrix;
+        return Transform.matrix;
     }
 
     new COMP.System.Logic({
         name: 'Hierarchy',
 
-        dependencies: ['Translate'],
+        dependencies: ['Transform'],
         
-        requiredDependencies: ['Object'],
+        requiredDependencies: ['Transform', 'TransformWorld'],
 
         // parent entity
         component: function () {
@@ -31,7 +31,8 @@
 
         process: function (entities) {
             _.each(entities, function (e) {
-                e.Object.matrixWorld = calculateMatrixWorld(e);
+                var TransformWorld = e.TransformWorld = new THREE.Object3D();
+                TransformWorld.applyMatrix(calculateMatrixWorld(e));
             });
         }
     });

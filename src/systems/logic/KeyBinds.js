@@ -6,61 +6,64 @@
     var component = {
             moveForward: {
                 keys: ['k87'],
-                handler: null
+                handler: -1
             },
             moveBack: {
                 keys: ['k83'],
-                handler: null
+                handler: -1
             },
             moveRight: {
                 keys: ['k68'],
-                handler: null
+                handler: -1
             },
             moveLeft: {
                 keys: ['k65'],
-                handler: null
+                handler: -1
             },
             moveUp: {
                 keys: ['k32'],
-                handler: null
+                handler: -1
             },
             moveDown: {
                 keys: ['k67'],
-                handler: null
+                handler: -1
             },
 
             pitchUp: {
                 keys: ['mmovedUp'],
-                handler: null
+                handler: -1
             },
             pitchDown: {
                 keys: ['mmovedDown'],
-                handler: null
+                handler: -1
             },
             yawRight: {
                 keys: ['mmovedRight'],
-                handler: null
+                handler: -1
             },
             yawLeft: {
                 keys: ['mmovedLeft'],
-                handler: null
+                handler: -1
             },
             rollRight: {
                 keys: ['mwheelMovedRight'],
-                handler: null
+                handler: -1
             },
             rollLeft: {
                 keys: ['mwheelMovedLeft'],
-                handler: null
+                handler: -1
             }
         };
 
-    function updateKeyBind(HIDComboState, keyBind) {
-        if (keyBind.handler !== null) {
-            return;
-        }
-
-        keyBind.handler = HIDComboState.register({ keys: keyBind.keys });
+    function generateKeyBind(keys) {
+        return {
+            keys: keys,
+            trigger: 'down',
+            isOnce: false,
+            isOrdered: false,
+            isExclusive: false,
+            isSolitary: false
+        };
     }
 
     new COMP.System.Logic({
@@ -68,9 +71,9 @@
 
         isStatic: true,
 
-        dependencies: [],
+        dependencies: ['HIDCombos'],
 
-        requiredDependencies: [],
+        requiredDependencies: ['HIDCombos'],
 
         component: function () {
             return component;
@@ -78,11 +81,11 @@
 
         process: function (staticEntity) {
             // calculate current contols hash
-            var HIDComboState = staticEntity.HIDComboState,
-                keyBinds = staticEntity.KeyBinds;
+            var KeyBinds = staticEntity.KeyBinds,
+                HIDCombos = staticEntity.HIDCombos;
 
-            _.each(keyBinds, function (keyBind) {
-                updateKeyBind(HIDComboState, keyBind);
+            _.each(KeyBinds, function (keyBind) {
+                keyBind.handler = HIDCombos.push(generateKeyBind(keyBind.keys)) - 1;
             });
         }
     });

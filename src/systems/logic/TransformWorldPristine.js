@@ -3,15 +3,17 @@
 // 3D position system before engine cycle has changed it
 // -----------------------------------------
 new COMP.System.Logic({
-    name: 'ObjectPristine',
+    name: 'TransformWorldPristine',
 
-    requiredDependencies: ['Object'],
+    dependencies: ['TransformWorld'],
+
+    requiredDependencies: ['TransformWorld'],
 
     component: function () { },
 
     process: function (entities) {
         _.each(entities, function (e) {
-            e.ObjectPristine = e.Object.clone();
+            e.TransformWorldPristine = e.TransformWorld.clone();
         });
     }
 });

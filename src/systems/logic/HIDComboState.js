@@ -7,93 +7,121 @@
 // this system logic and API is borrowed from keypress.js
 // -----------------------------------------
 (function () {
-    var combos = [], // ordered array of combos from the longest sequence of keys to the shortest
-        triggeredCombos = [],
-        potentialOnceTriggered = [], // combos that would-have been triggered unless they were once
-        handlerIndex = -1,
-        component = {
-            /*
-            
-            registers a combo
-            {
-                "keys"              : null,   - array of keys 
-                "trigger"           : null,   - {down|up|release}
-                                              down    - combo trigger on all of the keys down
-                                              up      - combo trigger on all of the keys up
-                                              release - combo trigger on one of the keys up
-                "isOnce"            : false,  - Normally while holding the keys combo will be always triggered, setting this to true will trigger and wait for release before triggering again
-                "isOrdered"         : false,  - will trigger only if clicked in the correct order
-                "isSequence"        : false,  - when "isOrdered" is true will trigger only if key were clicked in one sequence meaning, no other key then specified in the combo were clicked in-between
-                "isExclusive"       : false,  - Normally when pressing a key, any and all combos that match will have their callbacks called. 
-                                              For instance, pressing 'shift' and then 's' would activate the following combos if they existed: "shift", "shift s" and "s". 
-                                              When we set isExclusive to true, we will not call the callbacks for any combos that are also exclusive and less specific.
-                "isSolitary"        : false   - This option will check that ONLY the combo's keys are being pressed when set to true. When set to the default value of false, 
-                                              a combo can be activated even if extraneous keys are pressed
-            }
-            
-            returns handler to use with isTriggered()
+    var potentialOnceTriggered = [], // combos that would-have been triggered unless they were once
+        component = [];
 
-            */
-            register: function (args) {
-                if (_.isEmpty(args.keys)) {
-                    throw new Error('empty keys combination');
-                }
+    // find equal combo, in terms of combo functuanality
+    function findSimilarCombo(combo, combos) {
+        var keysMustBeEqual = [
+                'trigger',
+                'isOnce',
+                'isOrdered',
+                'isSequence',
+                'isExclusive',
+                'isSolitary'
+            ],
+            comboKeysMustBeEqual = _.pick(combo, keysMustBeEqual),
+            potentialEqualCombos = _.where(combos, comboKeysMustBeEqual);
 
-                var combo = {
-                    keys: args.keys,
-                    trigger: args.trigger || 'down',
-                    isOnce: args.isOnce || false,
-                    isOrdered: args.isOrdered || false,
-                    isSequence: args.isSequence || false,
-                    isExclusive: args.isExclusive || false,
-                    isSolitary: args.isSolitary || false,
-                    handler: ++handlerIndex
-                };
+        // unorederd combos are similar if they contain same keys but not same order
+        if (combo.isOrdered) {
+            return _.find(potentialEqualCombos, function (potentialEqual) {
+                return potentialEqual.keys.toString() === combo.keys.toString();
+            });
+        } else {
+            return _.find(potentialEqualCombos, function (potentialEqual) {
+                return !_.difference(potentialEqual.keys, combo.keys).length;
+            });
+        }
+    }
 
-                if (_.find(combos, function (c) {
-                    return !_.difference(c.keys, combo.keys).length;
-                })) {
-                    throw new Error('"' + combo.keys.toString() + '" combo already exists');
-                }
+    /*    
+    registers a combo
+    {
+        "keys"              : null,   - array of keys
+        
+        "trigger"           : null,   - {down|up|release}
+                                           down - combo trigger on all of the keys down
+                                             up - combo trigger on all of the keys up
+                                        release - combo trigger on one of the keys up
 
-                var insertIndex = _.sortedIndex(combos, combo, function (combo) {
-                    return -combo.keys.length;
-                }); // insert in-place by order of combo.keys.length
+        "isOnce"            : false,  - Normally while holding the keys combo will be always
+                                        triggered, setting this to true will trigger and wait
+                                        for release before triggering again
 
-                combo.children = [];
-                if (combo.isExclusive) {
-                    combo.children = getComboChildren(combo, combos.slice(insertIndex, combos.length));
-                }
-
-                addComboToParentCombos(combo, combos.slice(0, insertIndex)); // add combo as child to other combos if its keys are partially matching them
-
-                combos.splice(insertIndex, 0, combo); // insert combo in the correct place
-
-                return handlerIndex;
-            },
-
-            // removes combo
-            // handler - (integer) a handler to a combo
-            unregister: function (handler) {
-                // remove combo from all parent combos
-                _.each(combos, function (combo) {
-                    var comboIndex = combo.children.indexOf(handler);
-                    if (comboIndex) {
-                        combo.children.splice(comboIndex, 1);
-                    }
-                });
-                combos = _.reject(combos, function (combo) {
-                    return combo.handler === handler;
-                }); // removes combo
-            },
-            // checks if a certain combo is triggered
-            // handler - (integer) a handler to a combo
-            isTriggered: function (handler) {
-                return component.state[handler] || false; // even if undefined will return false
-            },
-            state: {}
+        "isOrdered"         : false,  - will trigger only if clicked in the correct order
+        
+        "isSequence"        : false,  - when "isOrdered" is true will trigger only if key
+                                        were clicked in one sequence meaning, no other key
+                                        then specified in the combo were clicked in-between
+        
+        "isExclusive"       : false,  - Normally when pressing a key, any and all combos that
+                                        match will have their callbacks called. For instance,
+                                        pressing 'shift' and then 's' would activate the following
+                                        combos if they existed: "shift", "shift s" and "s".
+                                        When we set isExclusive to true, we will not call the
+                                        callbacks for any combos that are also exclusive and less specific.
+        
+        "isSolitary"        : false   - This option will check that ONLY the combo's keys are
+                                        being pressed when set to true. When set to the default
+                                        value of false, a combo can be activated even if extraneous
+                                        keys are pressed
+    }
+    returns combo, if similar combo was registered before it will return it
+    */
+    function register(rawCombo, combos) {
+        if (_.isEmpty(rawCombo.keys)) {
+            throw new Error('empty keys combination');
+        }
+        var combo = {
+            keys: rawCombo.keys,
+            trigger: rawCombo.trigger || 'down',
+            isOnce: rawCombo.isOnce || false,
+            isOrdered: rawCombo.isOrdered || false,
+            isSequence: rawCombo.isSequence || false,
+            isExclusive: rawCombo.isExclusive || false,
+            isSolitary: rawCombo.isSolitary || false,
+            handlers: [] // array of handlers because there could be many similar combos
         };
 
+        // do nothing if similar combo already exists
+        var similarCombo = findSimilarCombo(combo, combos);
+        
+        if (similarCombo) {
+            return similarCombo;
+        }
+
+        // insert in-place by order of combo.keys.length
+        var insertIndex = _.sortedIndex(combos, combo, function (combo) {
+            return -combo.keys.length;
+        });
+
+        // insert combo in the correct place
+        combos.splice(insertIndex, 0, combo);
+
+        return combo;
+    }
+
+    function registerCombos(rawCombos) {
+        var combos = [];
+
+        // register all combos again
+        _.each(rawCombos, function (rawCombo, index) {
+            var combo = register(rawCombo, combos);
+
+            // add additional values
+            combo.handlers.push(index);
+        });
+
+        // fill children for exclusive combos
+        _.each(combos, function (combo, index) {
+            if (combo.isExclusive) {
+                combo.children = getComboChildren(combo, combos.slice(index, combos.length));
+            }
+        });
+
+        return combos;
+    }
 
     function isKeysExistsInOrder(keys, HIDStateKeys) {
         return _.intersection(HIDStateKeys, keys).toString() === keys.toString();
@@ -113,37 +141,21 @@
         return _.intersection(keys, HIDStateKeys).length === 0;
     }
 
-    function addComboToParentCombos(combo, combos) {
-        _.each(combos, function (potentialParent) {
-            var valid = false;
-
-            if (combo.isOrdered && combo.isSequence) {
-                valid = isKeysExistsInSequence(combo.keys, potentialParent.keys);
-            }
-            else if (combo.isOrdered) {
-                valid = isKeysExistsInOrder(combo.keys, potentialParent.keys);
-            }
-            else {
-                valid = isKeysExists(combo.keys, potentialParent.keys);
-            }
-
-            if (valid) {
-                potentialParent.children.push(combo);
-            }
-        });
-    }
-
     function getComboChildren(combo, combos) {
         return _.filter(combos, function (potentialChild) {
+            if (potentialChild.trigger !== combo.trigger) {
+                return false;
+            }
+
             if (combo.isOrdered && combo.isSequence) {
-                return isKeysExistsInSequence(combo.keys, potentialChild.keys);
+                return isKeysExistsInSequence(potentialChild.keys, combo.keys);
             }
 
             if (combo.isOrdered) {
-                return isKeysExistsInOrder(combo.keys, potentialChild.keys);
+                return isKeysExistsInOrder(potentialChild.keys, combo.keys);
             }
 
-            return isKeysExists(combo.keys, potentialChild.keys);
+            return isKeysExists(potentialChild.keys, combo.keys);
         });
     }
 
@@ -177,7 +189,7 @@
             var comboKeysNotPressed = _.intersection(combo.keys, HIDStateKeysNotPressed);
             return isKeysExistsInOrder(comboKeysNotPressed, HIDStateKeysNotPressed);
         }
-        
+
         // if all keys are pressed in the correct order
         if (combo.trigger === 'down') {
             return isKeysExistsInOrder(combo.keys, HIDStateKeysPressed);
@@ -201,7 +213,7 @@
         if (combo.trigger === 'down') {
             return isKeysExistsInSequence(combo.keys, HIDStateKeysPressed);
         }
-        
+
         // if combo triggered in the past now none of it keys are present
         if (combo.trigger === 'release') {
             return isKeysExistsInSequence(combo.keys, HIDStateKeysNotPressed);
@@ -243,7 +255,7 @@
             // check if combo is in valid order
             if (combo.isOrdered &&
                 !isComboValidInOrder(combo, HIDStateKeysPressed, HIDStateKeysNotPressed)) {
-                
+
                 return;
             }
 
@@ -251,15 +263,15 @@
             if (combo.isOrdered &&
                 combo.isSequence &&
                 !isComboValidInSequence(combo, HIDStateKeysPressed, HIDStateKeysNotPressed)) {
-                
+
                 return;
             }
 
             // return if combo is once and triggered before
             if (combo.isOnce) {
                 outPotentialOnceTriggered.push(combo);
-                
-                if (~potentialOnceTriggered.indexOf(combo)) {
+
+                if (findSimilarCombo(combo, potentialOnceTriggered)) {
                     return;
                 }
             }
@@ -284,26 +296,30 @@
     }
 
 
-    new COMP.System.IO({
+    new COMP.System.Logic({
         name: 'HIDComboState',
         isStatic: true,
-        dependencies: ['HIDState'],
+
+        dependencies: ['HIDState', 'KeyBinds'],
+        requiredDependencies: ['HIDState', 'HIDCombos'],
 
         component: function () {
             return component;
         },
 
         process: function (staticEntity) {
-            var outPotentialOnceTriggered = [];
-            triggeredCombos = getTriggeredCombos(combos, staticEntity.HIDState, potentialOnceTriggered, outPotentialOnceTriggered);
+            var outPotentialOnceTriggered = [],
+                combos = registerCombos(staticEntity.HIDCombos), // ordered array of combos from the longest sequence of keys to the shortest
+                triggeredCombos = getTriggeredCombos(combos, staticEntity.HIDState, potentialOnceTriggered, outPotentialOnceTriggered);
+
             potentialOnceTriggered = outPotentialOnceTriggered;
 
-            // reset triggered state
-            _.clearAll(component.state);
-             
-            // copy new triggeredCombos as the new state
+            // reset triggered handlers
+            component.length = 0;
+            
+            // push all handlers of triggered combos to HIDComboState's components
             _.each(triggeredCombos, function (combo) {
-                component.state[combo.handler] = true;
+                _.combine(component, combo.handlers);
             });
         }
     });

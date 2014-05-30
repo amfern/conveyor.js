@@ -1,3 +1,4 @@
+/*jshint bitwise: false*/
 'use strict';
 
 // Wraps THREE.js as graphic output
@@ -12,10 +13,11 @@
         return new THREE.Mesh(geometry, material);
     }
 
-    new COMP.System.IO({
+    new COMP.System.Interpolate({
         name: 'Mesh',
-        dependencies: ['ObjectInterpolation'],
-        requiredDependencies: ['Renderer', 'ObjectInterpolation'],
+        
+        dependencies: ['Interpolate', 'RendererMeshes'],
+        requiredDependencies: ['TransformWorldInterpolation', 'RendererMeshes'],
 
         component: function () {
             return initialize();
@@ -23,16 +25,17 @@
 
         process: function (entities) {
             _.each(entities, function (e) {
-                var mesh = e.Mesh,
-                    object = e.ObjectInterpolation,
-                    scene = e.Renderer.scene;
+                var RendererMeshes = e.RendererMeshes,
+                    Mesh = e.Mesh,
+                    TransformWorldInterpolation = e.TransformWorldInterpolation;
                 
-                mesh.position    = object.position;
-                mesh.rotation    = object.rotation;
-                mesh.scale       = object.scale;
-                mesh.quaternion  = object.quaternion;
+                // reset matrix
+                Mesh.matrix = new THREE.Matrix4();
 
-                scene.add(mesh);
+                // apply new matrix
+                Mesh.applyMatrix(TransformWorldInterpolation.matrix);
+                
+                RendererMeshes.push(Mesh);
             });
         }
     });

@@ -7,7 +7,7 @@ new COMP.System.Logic({
 
     dependencies: ['Transformer', 'HIDTranslate', 'Rotate'],
 
-    requiredDependencies: ['Object', 'Transformer'],
+    requiredDependencies: ['Transform', 'Transformer'],
 
     component: function () {
         return {
@@ -17,13 +17,13 @@ new COMP.System.Logic({
 
     process: function (entities) {
         _.each(entities, function (e) {
-            var object = e.Object,
+            var Transform = e.Transform,
                 position = e.Transformer.position,
                 velocity = e.Translate.velocity;
 
-            object.translateX(position.x * velocity);
-            object.translateY(position.y * velocity);
-            object.translateZ(position.z * velocity);
+            Transform.translateX(position.x * velocity);
+            Transform.translateY(position.y * velocity);
+            Transform.translateZ(position.z * velocity);
         });
     }
 });

@@ -1,24 +1,36 @@
 'use strict';
 
+/* player
+-------------------------------------------------------------------------- */
 var player = new COMP.Entity({
     name: 'player',
 
     // components composing this entity
     components: [
         'PlayerControl',
+        'HIDRotate',
+        'HIDTranslate',
         'Rotate',
         'Translate',
+        'Hierarchy',
+        'Interpolate',
         'Mesh'
     ],
 });
 
+
+/* camera
+-------------------------------------------------------------------------- */
 var cameraContainer = new COMP.Entity({
     name: 'cameraContainer',
 
     // components composing this entity
     components: [
         'CameraControl',
+        'HIDRotate',
         'Rotate',
+        'Hierarchy',
+        'Interpolate'
     ],
 });
 
@@ -29,13 +41,18 @@ var camera = new COMP.Entity({
 
     // components composing this entity
     components: [
+        'Hierarchy',
+        'Interpolate',
         'Camera'
     ],
 });
 
-camera.Object.position.z = 500;
+camera.Transform.position.z = 500;
 camera.Hierarchy = cameraContainer;
 
+
+/* static mesh
+-------------------------------------------------------------------------- */
 var staticMesh = new COMP.Entity({
     name: 'staticMesh',
     components: ['Mesh'], // components composing this entity
@@ -46,4 +63,10 @@ var material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.Double
 
 staticMesh.Mesh = new THREE.Mesh(geometry, material);
 
+staticMesh.TransformWorld.position.z = -1500;
+staticMesh.TransformWorld.updateMatrix();
+
+
+/* start engine
+-------------------------------------------------------------------------- */
 COMP();
