@@ -1,13 +1,13 @@
 'use strict';
 
-// 3D position system
+// 3D position system relative to its parent
 // -----------------------------------------
 new COMP.System.Logic({
-    name: 'Object',
+    name: 'Transform',
 
-    dependencies: ['ObjectPristine'],
+    dependencies: ['TransformWorldPristine'],
 
-    requiredDependencies: ['Hierarchy'],
+    requiredDependencies: ['TransformWorld'],
 
     component: function () {
         return new THREE.Object3D();

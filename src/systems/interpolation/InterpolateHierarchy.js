@@ -5,7 +5,7 @@
 // -----------------------------------------
 (function () {
     function calculateMatrixWorld(entity) {
-        var Transform = entity.Transform,
+        var Transform = entity.TransformInterpolation,
             parent = entity.Hierarchy;
 
         Transform.updateMatrix();
@@ -17,12 +17,12 @@
         return Transform.matrix;
     }
 
-    new COMP.System.Logic({
-        name: 'Hierarchy',
+    new COMP.System.Interpolate({
+        name: 'InterpolateHierarchy',
 
-        dependencies: ['Transform', 'Rotate', 'Translate'],
+        dependencies: ['TransformInterpolation', 'Interpolate', 'TransformWorldInterpolation'],
         
-        requiredDependencies: ['Transform', 'TransformWorld'],
+        requiredDependencies: ['TransformInterpolation', 'TransformWorldInterpolation', 'Interpolate'],
 
         // parent entity
         component: function () {
@@ -31,8 +31,8 @@
 
         process: function (entities) {
             _.each(entities, function (e) {
-                var TransformWorld = e.TransformWorld = new THREE.Object3D();
-                TransformWorld.applyMatrix(calculateMatrixWorld(e));
+                var TransformWorldInterpolation = e.TransformWorldInterpolation = new THREE.Object3D();
+                TransformWorldInterpolation.applyMatrix(calculateMatrixWorld(e));
             });
         }
     });

@@ -1,39 +1,33 @@
+/*jshint bitwise: false*/
 'use strict';
 
-// 3D position system
+// Sets Transformer translate according to triggered combos
 // -----------------------------------------
 new COMP.System.Logic({
     name: 'HIDTranslate',
 
-    dependencies: ['Transformer', 'PlayerControl'],
+    dependencies: ['CameraControl', 'PlayerControl', 'Transformer'],
 
-    requiredDependencies: ['Transformer', 'HIDComboState'],
+    requiredDependencies: ['Transformer', 'HIDComboState', 'ActiveKeyBinds'],
 
-    component: function () {
-        return {
-            moveForwardHandler: null,
-            moveBackHandler: null,
-            moveLeftHandler: null,
-            moveRightHandler: null,
-            moveUpHandler: null,
-            moveDownHandler: null
-        };
-    },
+    component: function () {},
 
     process: function (entities) {
         _.each(entities, function (e) {
             var translate = e.Transformer.position,
-                HIDTranslate = e.HIDTranslate,
-                isTriggered = e.HIDComboState.isTriggered;
+                HIDComboState = e.HIDComboState,
+                ActiveKeyBinds = e.ActiveKeyBinds,
+                triggered = {};
 
-            translate.x = +isTriggered(HIDTranslate.moveRightHandler);
-            translate.x = translate.x || -isTriggered(HIDTranslate.moveLeftHandler);
+            _.each(ActiveKeyBinds, function (keyBind, keyBindName) {
+                triggered[keyBindName] = !!~HIDComboState.indexOf(keyBindName);
+            });
 
-            translate.y = +isTriggered(HIDTranslate.moveUpHandler);
-            translate.y = translate.y || -isTriggered(HIDTranslate.moveDownHandler);
+            translate.x += +triggered.moveRight || -triggered.moveLeft;
 
-            translate.z = -isTriggered(HIDTranslate.moveForwardHandler);
-            translate.z = translate.z || +isTriggered(HIDTranslate.moveBackHandler);
+            translate.y += +triggered.moveUp || -triggered.moveDown;
+
+            translate.z += -triggered.moveForward || +triggered.moveBack;
 
             translate.normalize();
         });

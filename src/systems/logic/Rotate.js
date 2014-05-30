@@ -1,29 +1,29 @@
 'use strict';
 
-// 3D position system
+// Uses Transformer to do Euler rotation
 // -----------------------------------------
 new COMP.System.Logic({
     name: 'Rotate',
 
     dependencies: ['Transformer', 'HIDRotate'],
 
-    requiredDependencies: ['Object', 'Transformer'],
+    requiredDependencies: ['Transform', 'Transformer'],
 
     component: function () {
         return {
-            velocity: 0.01
+            velocity: 0.005
         };
     },
 
     process: function (entities) {
         _.each(entities, function (e) {
-            var object = e.Object,
+            var Transform = e.Transform,
                 rotation = e.Transformer.rotation,
                 velocity = e.Rotate.velocity;
 
-            object.rotateOnAxis(new THREE.Vector3(1, 0, 0), rotation.y * velocity);
-            object.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotation.x * velocity);
-            object.rotateOnAxis(new THREE.Vector3(0, 0, 1), rotation.z * velocity);
+            Transform.rotateOnAxis(new THREE.Vector3(1, 0, 0), rotation.y * velocity);
+            Transform.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotation.x * velocity);
+            Transform.rotateOnAxis(new THREE.Vector3(0, 0, 1), rotation.z * velocity);
         });
     }
 });
