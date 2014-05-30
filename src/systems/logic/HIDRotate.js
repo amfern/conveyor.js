@@ -1,42 +1,40 @@
+/*jshint bitwise: false*/
 'use strict';
 
-// 3D position system
+// Sets Transformer rotation according to triggered combos
 // -----------------------------------------
 new COMP.System.Logic({
     name: 'HIDRotate',
 
-    dependencies: ['Transformer', 'PlayerControl'],
+    dependencies: ['CameraControl', 'PlayerControl', 'Transformer'],
 
-    requiredDependencies: ['Transformer', 'HIDComboState', 'MouseState'],
+    requiredDependencies: ['Transformer', 'HIDComboState', 'MouseState', 'ActiveKeyBinds'],
 
-    component: function () {
-        return {
-            pitchUpHandler: null,
-            pitchDownHandler: null,
-            yawRightHandler: null,
-            yawLeftHandler: null,
-            rollRightHandler: null,
-            rollLeftHandler: null
-        };
-    },
+    component: function () { },
 
     process: function (entities) {
         _.each(entities, function (e) {
             var rotation = e.Transformer.rotation,
-                HIDRotate = e.HIDRotate,
-                isTriggered = e.HIDComboState.isTriggered,
-                mouseState = e.MouseState;
+                HIDComboState = e.HIDComboState,
+                MouseState = e.MouseState,
+                ActiveKeyBinds = e.ActiveKeyBinds,
+                triggered = {};
 
-            if (isTriggered(HIDRotate.pitchUpHandler) || isTriggered(HIDRotate.pitchDownHandler)) {
-                rotation.y = -mouseState.movementY;
+            _.each(ActiveKeyBinds, function (keyBind, keyBindName) {
+                triggered[keyBindName] = !!~HIDComboState.indexOf(keyBindName);
+            });
+
+
+            if (triggered.pitchUp || triggered.pitchDown) {
+                rotation.y += -MouseState.movementY;
             }
 
-            if (isTriggered(HIDRotate.yawLeftHandler) || isTriggered(HIDRotate.yawRightHandler)) {
-                rotation.x = -mouseState.movementX;
+            if (triggered.yawLeft || triggered.yawRight) {
+                rotation.x += -MouseState.movementX;
             }
 
-            if (isTriggered(HIDRotate.rollLeftHandler) || isTriggered(HIDRotate.rollRightHandler)) {
-                rotation.z = -mouseState.movementZ;
+            if (triggered.rollLeft || triggered.rollRight) {
+                rotation.z += -MouseState.movementZ;
             }
         });
     }

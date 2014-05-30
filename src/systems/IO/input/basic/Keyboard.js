@@ -1,6 +1,7 @@
 'use strict';
 
-// Collects keyboard inputs state collection of keycodes that currently pressed, if its not true then it false and its up
+// Collects keyboard inputs state collection of keycodes that currently pressed,
+// if its not true then it false and its up
 // -----------------------------------------
 (function () {
     var state = {},
@@ -26,7 +27,7 @@
     }, false);
 
     new COMP.System.IO({
-        name: 'KeyboardState',
+        name: 'Keyboard',
         isStatic: true,
         dependencies: [],
 

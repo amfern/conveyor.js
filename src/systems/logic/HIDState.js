@@ -5,16 +5,16 @@
 (function () {
     var state = {};
 
-    function combineStates(keyboardState, mouseState, touchState, joystickState, Mouse3DState) {
+    function combineStates(keyboardState, mouseState, touchState, joystickState, mouse3DState) {
         return _.extend({},
                 _.prefixKeys(keyboardState, 'k'),
                 _.prefixKeys(mouseState, 'm'),
                 _.prefixKeys(joystickState, 'j'),
-                _.prefixKeys(Mouse3DState, 'm3d')
+                _.prefixKeys(mouse3DState, 'm3d')
             );
     }
 
-    new COMP.System.IO({
+    new COMP.System.Logic({
         name: 'HIDState',
         isStatic: true,
 
@@ -32,7 +32,13 @@
 
         process: function (staticEntity) {
             _.clearAll(state); // clear state
-            _.extend(state, combineStates(staticEntity.KeyboardState, staticEntity.MouseState)); //, staticEntity.TouchState,  staticEntity.JoystickState, staticEntity.Mouse3DState));
+            _.extend(state, combineStates(
+                    staticEntity.KeyboardState,
+                    staticEntity.MouseState
+                    // staticEntity.TouchState
+                    // staticEntity.JoystickState
+                    // staticEntity.Mouse3DState
+                ));
         }
     });
 })();

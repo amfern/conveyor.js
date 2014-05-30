@@ -69,12 +69,16 @@ window.COMP = (function () {
             return sysIndex;
         }
 
-        // add dependencies
         _.each(tempSys.dependencies, function (depSysName) {
             var depSys = systemsByName[depSysName]; // resolve dependency
 
+            // do nothing if system is missing
+            if (!depSys) {
+                return;
+            }
+
             // continue loop if dependency system not found but exists in the engine
-            // because it may be system of diffrent type(eg. IO system inside of Logic system)
+            // because it may be system of different type(eg. IO system inside of Logic system)
             if (depSys && !_.findWhere(tempSystemCollection, {
                 name: depSysName
             })) {
@@ -87,7 +91,7 @@ window.COMP = (function () {
 
         sysIndex = 0;
 
-        // calcualte the index of the system according to it dependancies
+        // calculate the index of the system according to it dependencies
         _.each(tempSys.dependencies, function (depSysName) {
             sysIndex += 1 + systemIndex(systemCollection, depSysName);
         });
@@ -98,31 +102,47 @@ window.COMP = (function () {
         return sysIndex;
     }
 
-    // validates system to meet certain criteria, will throw exception if doesn't
-    function validateSystem(tempSystemCollection, systemCollection, tempSys) {
-        // add dependencies
-        _.each(tempSys.dependencies, function (depSysName) {
+    function validateSystemDependencies(tempSysDependencies, isStatic) {
+        // iterate the dependencies and validate their correctness
+        _.each(tempSysDependencies, function (depSysName) {
+            var depSys = systemsByName[depSysName]; // resolve dependency
+
+            // do nothing is dependency system is not found
+            if (!depSys) {
+                return;
+            }
+
+            // throw exception if static system has non-static system as dependency
+            if (isStatic && !depSys.isStatic) {
+                throw new Error('Static system can\'t have non-static system as required dependency');
+            }
+
+            validateSystem(depSys);
+        });
+    }
+
+    function validateSystemRequiredDependencies(tempSysDependencies) {
+        _.each(tempSysDependencies, function (depSysName) {
             var depSys = systemsByName[depSysName]; // resolve dependency
 
             // throw exception if dependency system doesn't exists
             if (!depSys) {
                 throw new Error('Dependency system "' + depSysName + '" not found');
             }
-
-            // throw exception if static system has non-static system as dependency
-            if (tempSys.isStatic && !depSys.isStatic) {
-                throw new Error('Static system can\'t have non-static system as dependency');
-            }
-
-            validateSystem(tempSystemCollection, systemCollection, depSys);
         });
     }
 
+    // validates system to meet certain criteria, will throw exception if doesn't
+    function validateSystem(tempSys) {
+        validateSystemDependencies(tempSys.dependencies, tempSys.isStatic);
+        validateSystemRequiredDependencies(tempSys.requiredDependencies);
+    }
+
     // goes over all systems and validates them
-    function validateSystems(tempSystemCollection, systemCollection) {
+    function validateSystems(tempSystemCollection) {
         // add systems in the correct order for dependencies
         _.each(tempSystemCollection, function (tempSys) {
-            validateSystem(tempSystemCollection, systemCollection, tempSys);
+            validateSystem(tempSys);
         });
     }
 
@@ -181,7 +201,7 @@ window.COMP = (function () {
 
             entity[system.name] = system.component();
 
-            // static systems depend only on other static systems
+            // static systems require only other static systems components
             if (!system.isStatic) {
                 system.entities.push(entity);
             }
@@ -230,7 +250,7 @@ window.COMP = (function () {
 
             delete entity[componentName]; // remove component from entity
 
-            // find index of entity inside of system's entitites
+            // find index of entity inside of system's entities
             var entityIndex = system.entities.indexOf(entity);
 
             // remove entity from system only if its found
@@ -247,11 +267,19 @@ window.COMP = (function () {
     function processLogic() {
         interpolation = null;
 
-        if (window.performance.now() >= nextGameTick && loops < MAX_FRAMESKIP) {
-            nextGameTick += SKIP_TICKS;
-            loops++;
-            firstLogicCallback();
-            return;
+        var performanceNow = window.performance.now();
+
+        if (performanceNow >= nextGameTick) {
+            // if we overflowed the max loops there is no point to get back
+            if (loops >= MAX_FRAMESKIP) {
+                nextGameTick = performanceNow;
+            } else {
+                nextGameTick += SKIP_TICKS;
+                loops++;
+                firstLogicCallback();
+                    
+                return;
+            }
         }
 
         loops = 0;
@@ -365,9 +393,9 @@ window.COMP = (function () {
     function mainLoop() {
         nextGameTick = window.performance.now();
 
-        validateSystems(tempLogicSystems, processLogic);
-        validateSystems(tempInterpolationSystems, processIO);
-        validateSystems(tempIOSystems, processNextFrame);
+        validateSystems(tempLogicSystems);
+        validateSystems(tempInterpolationSystems);
+        validateSystems(tempIOSystems);
 
         staticEntity = constructStaticEntity();
 

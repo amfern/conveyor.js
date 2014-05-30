@@ -1,13 +1,11 @@
 'use strict';
 
-// 3D position system
-// -----------------------------------------
 new COMP.System.Logic({
     name: 'PlayerControl',
 
-    dependencies: [],
+    dependencies: ['ActiveKeyBinds'],
 
-    requiredDependencies: ['KeyBinds', 'HIDTranslate', 'HIDRotate'],
+    requiredDependencies: ['KeyBinds', 'ActiveKeyBinds'],
 
     component: function () {
 
@@ -16,33 +14,18 @@ new COMP.System.Logic({
     process: function (entities) {
         _.each(entities, function (e) {
             // calculate current contols hash
-            var HIDTranslate = e.HIDTranslate,
-                HIDRotate = e.HIDRotate,
-                keyBinds = e.KeyBinds;
+            var keyBinds = e.KeyBinds;
 
-            // yawRight
-            HIDRotate.yawRightHandler = keyBinds.yawRight.handler;
-            
-            // yawLeft
-            HIDRotate.yawLeftHandler = keyBinds.yawLeft.handler;
-
-            // moveForward
-            HIDTranslate.moveForwardHandler = keyBinds.moveForward.handler;
-
-            // moveBack
-            HIDTranslate.moveBackHandler = keyBinds.moveBack.handler;
-
-            // moveLeft
-            HIDTranslate.moveLeftHandler = keyBinds.moveLeft.handler;
-
-            // moveRight
-            HIDTranslate.moveRightHandler = keyBinds.moveRight.handler;
-
-            // moveUp
-            HIDTranslate.moveUpHandler = keyBinds.moveUp.handler;
-
-            // moveDown
-            HIDTranslate.moveDownHandler = keyBinds.moveDown.handler;
+            e.ActiveKeyBinds = _.pick(keyBinds,
+                    'yawRight',
+                    'yawLeft',
+                    'moveForward',
+                    'moveBack',
+                    'moveLeft',
+                    'moveRight',
+                    'moveUp',
+                    'moveDown'
+                );
         });
     }
 });

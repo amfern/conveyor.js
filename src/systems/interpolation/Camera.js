@@ -2,26 +2,25 @@
 
 // 3D position system
 // -----------------------------------------
-new COMP.System.IO({
+new COMP.System.Interpolate({
     name: 'Camera',
 
-    dependencies: ['ObjectInterpolation'],
+    dependencies: ['Interpolate', 'InterpolateHierarchy'],
 
-    requiredDependencies: ['ObjectInterpolation', 'Renderer'],
+    requiredDependencies: ['TransformWorldInterpolation', 'RendererCamera'],
 
     component: function () { },
 
-    // process: function () {  }
-
     process: function (entities) {
-        _.each(entities, function (e) {
-            var object = e.ObjectInterpolation,
-                camera = e.Renderer.camera;
+        var entity = _.first(entities);
 
-            camera.position    = object.position.clone();
-            camera.rotation    = object.rotation.clone();
-            camera.scale       = object.scale.clone();
-            camera.quaternion  = object.quaternion.clone();
-        });
+        if (!entity) {
+            return;
+        }
+
+        var RendererCamera = entity.RendererCamera;
+
+        RendererCamera.matrix = new THREE.Matrix4();
+        RendererCamera.applyMatrix(entity.TransformWorldInterpolation.matrix);
     }
 });

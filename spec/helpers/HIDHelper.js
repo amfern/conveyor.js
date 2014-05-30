@@ -83,6 +83,17 @@ function resetMouseState(state) {
     state.wheelMovedRight = { down: 0, up: 0 };
 }
 
+function resetIOMouse(state) {
+    // reset mouse state
+    _.clearAll(state);
+    state.screenX = 0;
+    state.screenY = 0;
+    state.clientX = 0;
+    state.clientY = 0;
+    state.wheelX = 0;
+    state.wheelY = 0;
+}
+
 function keydownEvent(keyCode) {
     var eventObj = createGenericEvent();
 

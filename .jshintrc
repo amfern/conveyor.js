@@ -53,6 +53,7 @@
         "mouseMoveEvent": true,
         "mouseClickEvent": true,
         "resetMouseState": true,
+        "resetIOMouse": true,
         "keydownEvent": true,
         "keyupEvent": true
     }
