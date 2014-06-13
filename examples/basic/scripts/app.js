@@ -29,8 +29,7 @@ var cameraContainer = new COMP.Entity({
         'CameraControl',
         'HIDRotate',
         'Rotate',
-        'Hierarchy',
-        'Interpolate'
+        'Hierarchy'
     ],
 });
 

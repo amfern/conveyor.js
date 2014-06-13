@@ -1,7 +1,7 @@
 'use strict';
 
 describe('HIDComboState', function () {
-    var state, keyboardState,
+    var state, combosState, keyboardState,
         handler, handler2, handler3;
 
     // add reading system
@@ -12,62 +12,72 @@ describe('HIDComboState', function () {
         tapIntoSystem('KeyboardState', function (s) {
             keyboardState = s;
         });
+        tapIntoSystem('HIDCombos', function (s) {
+            combosState = s;
+        });
+
         COMP.cycleOnce(); // cycle to get HIDComboState state
     });
 
     // reset mouse movement after each test
     afterEach(function () {
+        combosState.length = 0;
         COMP.cycleOnce(); // cycle again to flush any HID states
         _.clearAll(keyboardState);
     });
 
-    it('Should throw exception for empty keys', function () {
-        expect(state.register.bind(null, {})).toThrow('empty keys combination');
-        expect(state.register.bind(null, {
-            keys: []
-        })).toThrow('empty keys combination');
-    });
-
     describe('', function () {
-        afterEach(function () {
-            state.unregister(handler); // Should unregister combo
-            state.unregister(handler2);
-            state.unregister(handler3);
-        });
-
         describe('register combo', function () {
-            it('Should register the combo and return handler', function () {
-                handler = state.register({
-                    keys: ['k1', 'k2', 'k3'],
-                    trigger: 'down',
-                    isOnce: false,
-                    isOrdered: false,
-                    isSequence: false,
-                    isExclusive: false,
-                    isSolitary: false
-                });
+            it('Should register combo and set handler same as combo index', function () {
+                COMP.cycleContinues([
+                    function () {
+                        combosState.handler1 = {
+                            keys: ['k1'],
+                            trigger: 'down',
+                            isOnce: false,
+                            isOrdered: false,
+                            isSequence: false,
+                            isExclusive: false,
+                            isSolitary: false
+                        };
 
-                expect(handler).toBeDefined();
+                        // expect triggered states to be empty
+                        expect(state.length).toBe(0);
+                    }, function() {
+                        expect(state.length).toBe(0);
+
+                        keydownEvent(1);
+                        _(100000).times(function () {});
+                    }, function() {
+                    }, function() {
+                        expect(state.length).toBe(1);
+                        expect(state[0]).toBe('handler1');
+                    }
+                ]);
             });
 
             // hmm i don't really have a way of telling if default values were filled
             it('should fill in default values', function () {
-                handler = state.register({
-                    keys: ['k1', 'k2', 'k3']
-                });
+                // handler = combosState.push({
+                //     keys: ['k1', 'k2', 'k3']
+                // });
 
-                expect(handler).toBeDefined();
+                // expect(handler).toBeDefined();
             });
 
             it('should throw exception for existing combo', function () {
-                handler = state.register({
-                    keys: ['k1', 'k2', 'k3']
-                });
+                // handler = combosState.push({
+                //     keys: ['k1', 'k2', 'k3']
+                // });
 
-                expect(handler).toBeDefined();
-                expect(state.register.bind(null, {
-                    keys: ['k1', 'k2', 'k3']
-                })).toThrow('"k1,k2,k3" combo already exists');
+                // expect(handler).toBeDefined();
+                // expect(combosState.push.bind(null, {
+                //     keys: ['k1', 'k2', 'k3']
+                // })).toThrow('"k1,k2,k3" combo already exists');
+            });
+
+            it('should register duplicated combos', function () {
+
             });
         });
 
@@ -78,7 +88,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -121,7 +131,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -180,7 +190,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -246,7 +256,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -305,7 +315,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -370,7 +380,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -443,7 +453,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -515,7 +525,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -578,7 +588,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -649,7 +659,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -660,7 +670,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -671,7 +681,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -721,7 +731,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -732,7 +742,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -743,7 +753,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -806,7 +816,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -817,7 +827,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -828,7 +838,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -893,7 +903,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -904,7 +914,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -915,7 +925,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -982,7 +992,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -993,7 +1003,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -1004,7 +1014,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -1084,7 +1094,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -1095,7 +1105,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -1106,7 +1116,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -1188,7 +1198,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -1199,7 +1209,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -1210,7 +1220,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -1292,7 +1302,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -1303,7 +1313,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -1314,7 +1324,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -1409,7 +1419,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -1420,7 +1430,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -1431,7 +1441,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -1548,7 +1558,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: true,
@@ -1604,7 +1614,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: true,
@@ -1681,7 +1691,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: true,
@@ -1768,7 +1778,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: true,
@@ -1835,7 +1845,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: true,
@@ -1913,7 +1923,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: true,
@@ -2019,7 +2029,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: true,
@@ -2099,7 +2109,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: true,
@@ -2192,7 +2202,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: true,
@@ -2318,7 +2328,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -2329,7 +2339,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -2340,7 +2350,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -2388,7 +2398,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -2399,7 +2409,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -2410,7 +2420,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -2472,7 +2482,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -2483,7 +2493,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -2494,7 +2504,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -2558,7 +2568,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -2569,7 +2579,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -2580,7 +2590,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -2646,7 +2656,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -2657,7 +2667,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -2668,7 +2678,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -2747,7 +2757,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -2758,7 +2768,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -2769,7 +2779,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -2850,7 +2860,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -2861,7 +2871,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -2872,7 +2882,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -2953,7 +2963,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -2964,7 +2974,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -2975,7 +2985,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -3070,7 +3080,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -3081,7 +3091,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -3092,7 +3102,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -3190,7 +3200,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -3201,7 +3211,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -3212,7 +3222,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -3276,7 +3286,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -3287,7 +3297,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -3298,7 +3308,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -3383,7 +3393,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -3394,7 +3404,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -3405,7 +3415,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -3492,7 +3502,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -3503,7 +3513,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -3514,7 +3524,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -3608,7 +3618,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -3619,7 +3629,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -3630,7 +3640,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -3741,7 +3751,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -3752,7 +3762,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -3763,7 +3773,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -3877,7 +3887,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -3888,7 +3898,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -3899,7 +3909,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -3996,7 +4006,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -4007,7 +4017,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -4018,7 +4028,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -4125,7 +4135,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -4136,7 +4146,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -4147,7 +4157,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -4259,7 +4269,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -4270,7 +4280,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -4281,7 +4291,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -4329,7 +4339,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -4340,7 +4350,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -4351,7 +4361,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -4419,7 +4429,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -4430,7 +4440,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -4441,7 +4451,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -4511,7 +4521,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -4522,7 +4532,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -4533,7 +4543,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -4599,7 +4609,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -4610,7 +4620,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -4621,7 +4631,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -4716,7 +4726,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -4727,7 +4737,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -4738,7 +4748,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -4835,7 +4845,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -4846,7 +4856,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -4857,7 +4867,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'down',
                                 isOnce: false,
@@ -4923,7 +4933,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -4934,7 +4944,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -4945,7 +4955,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'up',
                                 isOnce: false,
@@ -5033,7 +5043,7 @@ describe('HIDComboState', function () {
 
                         function () {
                             // register combo
-                            handler = state.register({
+                            handler = combosState.push({
                                 keys: ['k1', 'k2', 'k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -5044,7 +5054,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler2 = state.register({
+                            handler2 = combosState.push({
                                 keys: ['k3'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -5055,7 +5065,7 @@ describe('HIDComboState', function () {
                             });
 
                             // register combo
-                            handler3 = state.register({
+                            handler3 = combosState.push({
                                 keys: ['k1', 'k2'],
                                 trigger: 'release',
                                 isOnce: false,
@@ -5146,7 +5156,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -5157,7 +5167,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -5168,7 +5178,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -5249,7 +5259,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -5260,7 +5270,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -5271,7 +5281,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -5368,7 +5378,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -5379,7 +5389,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -5390,7 +5400,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -5489,7 +5499,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -5500,7 +5510,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -5511,7 +5521,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -5614,7 +5624,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -5625,7 +5635,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -5636,7 +5646,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -5757,7 +5767,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -5768,7 +5778,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -5779,7 +5789,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -5902,7 +5912,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -5913,7 +5923,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -5924,7 +5934,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'down',
                                     isOnce: true,
@@ -6027,7 +6037,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -6038,7 +6048,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -6049,7 +6059,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'up',
                                     isOnce: true,
@@ -6169,7 +6179,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -6180,7 +6190,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -6191,7 +6201,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'release',
                                     isOnce: true,
@@ -6315,7 +6325,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'down',
                                     isOnce: false,
@@ -6326,7 +6336,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'down',
                                     isOnce: false,
@@ -6337,7 +6347,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'down',
                                     isOnce: false,
@@ -6385,7 +6395,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'up',
                                     isOnce: false,
@@ -6396,7 +6406,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'up',
                                     isOnce: false,
@@ -6407,7 +6417,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'up',
                                     isOnce: false,
@@ -6471,7 +6481,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'release',
                                     isOnce: false,
@@ -6482,7 +6492,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'release',
                                     isOnce: false,
@@ -6493,7 +6503,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'release',
                                     isOnce: false,
@@ -6559,7 +6569,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'down',
                                     isOnce: false,
@@ -6570,7 +6580,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'down',
                                     isOnce: false,
@@ -6581,7 +6591,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'down',
                                     isOnce: false,
@@ -6647,7 +6657,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'up',
                                     isOnce: false,
@@ -6658,7 +6668,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'up',
                                     isOnce: false,
@@ -6669,7 +6679,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'up',
                                     isOnce: false,
@@ -6751,7 +6761,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'release',
                                     isOnce: false,
@@ -6762,7 +6772,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'release',
                                     isOnce: false,
@@ -6773,7 +6783,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'release',
                                     isOnce: false,
@@ -6857,7 +6867,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'down',
                                     isOnce: false,
@@ -6868,7 +6878,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'down',
                                     isOnce: false,
@@ -6879,7 +6889,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'down',
                                     isOnce: false,
@@ -6953,7 +6963,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'up',
                                     isOnce: false,
@@ -6964,7 +6974,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'up',
                                     isOnce: false,
@@ -6975,7 +6985,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'up',
                                     isOnce: false,
@@ -7065,7 +7075,7 @@ describe('HIDComboState', function () {
 
                             function () {
                                 // register combo
-                                handler = state.register({
+                                handler = combosState.push({
                                     keys: ['k1', 'k2', 'k3'],
                                     trigger: 'release',
                                     isOnce: false,
@@ -7076,7 +7086,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler2 = state.register({
+                                handler2 = combosState.push({
                                     keys: ['k3'],
                                     trigger: 'release',
                                     isOnce: false,
@@ -7087,7 +7097,7 @@ describe('HIDComboState', function () {
                                 });
 
                                 // register combo
-                                handler3 = state.register({
+                                handler3 = combosState.push({
                                     keys: ['k1', 'k2'],
                                     trigger: 'release',
                                     isOnce: false,
@@ -7180,7 +7190,7 @@ describe('HIDComboState', function () {
 
                                 function () {
                                     // register combo
-                                    handler = state.register({
+                                    handler = combosState.push({
                                         keys: ['k1', 'k2', 'k3'],
                                         trigger: 'down',
                                         isOnce: true,
@@ -7191,7 +7201,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler2 = state.register({
+                                    handler2 = combosState.push({
                                         keys: ['k3'],
                                         trigger: 'down',
                                         isOnce: true,
@@ -7202,7 +7212,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler3 = state.register({
+                                    handler3 = combosState.push({
                                         keys: ['k1', 'k2'],
                                         trigger: 'down',
                                         isOnce: true,
@@ -7268,7 +7278,7 @@ describe('HIDComboState', function () {
 
                                 function () {
                                     // register combo
-                                    handler = state.register({
+                                    handler = combosState.push({
                                         keys: ['k1', 'k2', 'k3'],
                                         trigger: 'up',
                                         isOnce: true,
@@ -7279,7 +7289,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler2 = state.register({
+                                    handler2 = combosState.push({
                                         keys: ['k3'],
                                         trigger: 'up',
                                         isOnce: true,
@@ -7290,7 +7300,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler3 = state.register({
+                                    handler3 = combosState.push({
                                         keys: ['k1', 'k2'],
                                         trigger: 'up',
                                         isOnce: true,
@@ -7390,7 +7400,7 @@ describe('HIDComboState', function () {
 
                                 function () {
                                     // register combo
-                                    handler = state.register({
+                                    handler = combosState.push({
                                         keys: ['k1', 'k2', 'k3'],
                                         trigger: 'release',
                                         isOnce: true,
@@ -7401,7 +7411,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler2 = state.register({
+                                    handler2 = combosState.push({
                                         keys: ['k3'],
                                         trigger: 'release',
                                         isOnce: true,
@@ -7412,7 +7422,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler3 = state.register({
+                                    handler3 = combosState.push({
                                         keys: ['k1', 'k2'],
                                         trigger: 'release',
                                         isOnce: true,
@@ -7514,7 +7524,7 @@ describe('HIDComboState', function () {
 
                                 function () {
                                     // register combo
-                                    handler = state.register({
+                                    handler = combosState.push({
                                         keys: ['k1', 'k2', 'k3'],
                                         trigger: 'down',
                                         isOnce: true,
@@ -7525,7 +7535,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler2 = state.register({
+                                    handler2 = combosState.push({
                                         keys: ['k3'],
                                         trigger: 'down',
                                         isOnce: true,
@@ -7536,7 +7546,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler3 = state.register({
+                                    handler3 = combosState.push({
                                         keys: ['k1', 'k2'],
                                         trigger: 'down',
                                         isOnce: true,
@@ -7633,7 +7643,7 @@ describe('HIDComboState', function () {
 
                                 function () {
                                     // register combo
-                                    handler = state.register({
+                                    handler = combosState.push({
                                         keys: ['k1', 'k2', 'k3'],
                                         trigger: 'up',
                                         isOnce: true,
@@ -7644,7 +7654,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler2 = state.register({
+                                    handler2 = combosState.push({
                                         keys: ['k3'],
                                         trigger: 'up',
                                         isOnce: true,
@@ -7655,7 +7665,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler3 = state.register({
+                                    handler3 = combosState.push({
                                         keys: ['k1', 'k2'],
                                         trigger: 'up',
                                         isOnce: true,
@@ -7766,7 +7776,7 @@ describe('HIDComboState', function () {
 
                                 function () {
                                     // register combo
-                                    handler = state.register({
+                                    handler = combosState.push({
                                         keys: ['k1', 'k2', 'k3'],
                                         trigger: 'release',
                                         isOnce: true,
@@ -7777,7 +7787,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler2 = state.register({
+                                    handler2 = combosState.push({
                                         keys: ['k3'],
                                         trigger: 'release',
                                         isOnce: true,
@@ -7788,7 +7798,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler3 = state.register({
+                                    handler3 = combosState.push({
                                         keys: ['k1', 'k2'],
                                         trigger: 'release',
                                         isOnce: true,
@@ -7901,7 +7911,7 @@ describe('HIDComboState', function () {
 
                                 function () {
                                     // register combo
-                                    handler = state.register({
+                                    handler = combosState.push({
                                         keys: ['k1', 'k2', 'k3'],
                                         trigger: 'down',
                                         isOnce: true,
@@ -7912,7 +7922,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler2 = state.register({
+                                    handler2 = combosState.push({
                                         keys: ['k3'],
                                         trigger: 'down',
                                         isOnce: true,
@@ -7923,7 +7933,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler3 = state.register({
+                                    handler3 = combosState.push({
                                         keys: ['k1', 'k2'],
                                         trigger: 'down',
                                         isOnce: true,
@@ -8020,7 +8030,7 @@ describe('HIDComboState', function () {
 
                                 function () {
                                     // register combo
-                                    handler = state.register({
+                                    handler = combosState.push({
                                         keys: ['k1', 'k2', 'k3'],
                                         trigger: 'up',
                                         isOnce: true,
@@ -8031,7 +8041,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler2 = state.register({
+                                    handler2 = combosState.push({
                                         keys: ['k3'],
                                         trigger: 'up',
                                         isOnce: true,
@@ -8042,7 +8052,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler3 = state.register({
+                                    handler3 = combosState.push({
                                         keys: ['k1', 'k2'],
                                         trigger: 'up',
                                         isOnce: true,
@@ -8155,7 +8165,7 @@ describe('HIDComboState', function () {
 
                                 function () {
                                     // register combo
-                                    handler = state.register({
+                                    handler = combosState.push({
                                         keys: ['k1', 'k2', 'k3'],
                                         trigger: 'release',
                                         isOnce: true,
@@ -8166,7 +8176,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler2 = state.register({
+                                    handler2 = combosState.push({
                                         keys: ['k3'],
                                         trigger: 'release',
                                         isOnce: true,
@@ -8177,7 +8187,7 @@ describe('HIDComboState', function () {
                                     });
 
                                     // register combo
-                                    handler3 = state.register({
+                                    handler3 = combosState.push({
                                         keys: ['k1', 'k2'],
                                         trigger: 'release',
                                         isOnce: true,
@@ -8311,7 +8321,7 @@ describe('HIDComboState', function () {
             COMP.cycleContinues([
                 function () {
                     // register combo
-                    handler = state.register({
+                    handler = combosState.push({
                         keys: ['k1', 'mmoved', 'mwheelMoved', 'm0'],
                         trigger: 'down',
                         isOnce: false,

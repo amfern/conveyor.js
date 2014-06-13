@@ -5,53 +5,41 @@
 (function () {
     var component = {
             moveForward: {
-                keys: ['k87'],
-                handler: -1
+                keys: ['k87']
             },
             moveBack: {
-                keys: ['k83'],
-                handler: -1
+                keys: ['k83']
             },
             moveRight: {
-                keys: ['k68'],
-                handler: -1
+                keys: ['k68']
             },
             moveLeft: {
-                keys: ['k65'],
-                handler: -1
+                keys: ['k65']
             },
             moveUp: {
-                keys: ['k32'],
-                handler: -1
+                keys: ['k32']
             },
             moveDown: {
-                keys: ['k67'],
-                handler: -1
+                keys: ['k67']
             },
 
             pitchUp: {
-                keys: ['mmovedUp'],
-                handler: -1
+                keys: ['mmovedUp']
             },
             pitchDown: {
-                keys: ['mmovedDown'],
-                handler: -1
+                keys: ['mmovedDown']
             },
             yawRight: {
-                keys: ['mmovedRight'],
-                handler: -1
+                keys: ['mmovedRight']
             },
             yawLeft: {
-                keys: ['mmovedLeft'],
-                handler: -1
+                keys: ['mmovedLeft']
             },
             rollRight: {
-                keys: ['mwheelMovedRight'],
-                handler: -1
+                keys: ['mwheelMovedRight']
             },
             rollLeft: {
-                keys: ['mwheelMovedLeft'],
-                handler: -1
+                keys: ['mwheelMovedLeft']
             }
         };
 
@@ -84,8 +72,8 @@
             var KeyBinds = staticEntity.KeyBinds,
                 HIDCombos = staticEntity.HIDCombos;
 
-            _.each(KeyBinds, function (keyBind) {
-                keyBind.handler = HIDCombos.push(generateKeyBind(keyBind.keys)) - 1;
+            _.each(KeyBinds, function (keyBind, key) {
+                HIDCombos[key] = generateKeyBind(keyBind.keys);
             });
         }
     });

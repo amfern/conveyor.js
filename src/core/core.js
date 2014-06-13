@@ -247,10 +247,17 @@ window.COMP = (function () {
     function processLogic() {
         interpolation = null;
 
-        if (window.performance.now() >= nextGameTick && loops < MAX_FRAMESKIP) {
+        var performanceNow = window.performance.now();
+
+        if (performanceNow >= nextGameTick) {
+            if (loops > MAX_FRAMESKIP) {
+                nextGameTick = performanceNow;
+            }
+
             nextGameTick += SKIP_TICKS;
             loops++;
             firstLogicCallback();
+
             return;
         }
 

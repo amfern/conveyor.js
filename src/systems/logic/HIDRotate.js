@@ -21,7 +21,7 @@ new COMP.System.Logic({
                 triggered = {};
 
             _.each(ActiveKeyBinds, function (keyBind, keyBindName) {
-                triggered[keyBindName] = !!~HIDComboState.indexOf(keyBind.handler);
+                triggered[keyBindName] = !!~HIDComboState.indexOf(keyBindName);
             });
 
 

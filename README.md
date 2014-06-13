@@ -62,17 +62,19 @@ Browse examples
 - systems can remove/add other systems during runtime, but they can't restart the engine, as it may cause stack overflow, solution: engine will restart it self after each cycle if system is added or removed(when unregisterSystem/registerSystem called set a restart flag to true).
 - add staticEntity as invalid entity names or give static entity special treatment.
 - and maybe rename KeyboardState to just keyboard, as it no longer represents a state.
-- players controls using watchers mechanics to see if controls has changes and should be updated accordingly, maybe we should use the new es6 watched function for that but it should do the watch only upon system processes.
 - create cleanup function for when component is destroyed.
-- never use same component instance for more then one entity, make core handle the creation of duplicated components each engine loop.
+- never use same component instance for more then one entity, make core handle the creation of duplicated components each engine loop. ??? is it talking about static systems?
 - creating entity should allow the setting of initial components values.
 - in some systems we reset component each loop(HIDCombos) and in some we don't(Transform) how do we decide it, should it be unified(always reset or never)
 - make correct description for systems
 - should i make a system that benefits from IO immediate processing and Logic constant processing?
-- add tests to wheelMovement
 - should we have somethink else to upgrade transformWorld beside hierarchy?
 - update grunt-contrib-jasmine to newest version(this will require to upgrade jasmine aswel)
-
+- add tests to wheelMovement
+- add tests for exclusive combos are now categorized also by trigger type
+- maybe seperate HIDComboState into 2 systems one is registering the combos and is logic type the other is IO type and calculates the triggered combos
+- create this.name in system so we won't have to write the system name each time
+- update lodash and use _.now() instead of perforamnce.now()
 
 ### Develop Notes
 This engine works as a giant factory filled with conveyor belts, each component makes his way along the belt towards stops, the systems which modify the components based on other previous components related by entity.

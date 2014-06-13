@@ -106,11 +106,11 @@
         var combos = [];
 
         // register all combos again
-        _.each(rawCombos, function (rawCombo, index) {
+        _.each(rawCombos, function (rawCombo, handler) {
             var combo = register(rawCombo, combos);
 
             // add additional values
-            combo.handlers.push(index);
+            combo.handlers.push(handler);
         });
 
         // fill children for exclusive combos

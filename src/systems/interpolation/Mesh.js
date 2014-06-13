@@ -24,16 +24,15 @@
         },
 
         process: function (entities) {
+            var RendererMeshes = entities[0].RendererMeshes;
+
+            RendererMeshes = RendererMeshes.Mesh = [];
+
             _.each(entities, function (e) {
-                var RendererMeshes = e.RendererMeshes,
-                    Mesh = e.Mesh,
+                var Mesh = e.Mesh,
                     TransformWorldInterpolation = e.TransformWorldInterpolation;
                 
-                // reset matrix
-                Mesh.matrix = new THREE.Matrix4();
-
-                // apply new matrix
-                Mesh.applyMatrix(TransformWorldInterpolation.matrix);
+                Mesh.matrixWorld = TransformWorldInterpolation.matrix;
                 
                 RendererMeshes.push(Mesh);
             });

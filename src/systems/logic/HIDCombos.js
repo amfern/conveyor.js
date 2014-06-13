@@ -3,7 +3,7 @@
 // 3D position system
 // -----------------------------------------
 (function () {
-    var component = [];
+    var component = {};
 
     new COMP.System.Logic({
         name: 'HIDCombos',
@@ -14,8 +14,6 @@
             return component;
         },
 
-        process: function (staticEntity) {
-            staticEntity.HIDCombos.length = 0;
-        }
+        process: function () { }
     });
 })();

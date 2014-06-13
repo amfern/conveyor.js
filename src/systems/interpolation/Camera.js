@@ -2,7 +2,7 @@
 
 // 3D position system
 // -----------------------------------------
-new COMP.System.IO({
+new COMP.System.Interpolate({
     name: 'Camera',
 
     dependencies: ['Interpolate'],
@@ -14,7 +14,7 @@ new COMP.System.IO({
     process: function (entities) {
         var entity = _.first(entities);
 
-        if(!entity) {
+        if (!entity) {
             return;
         }
 

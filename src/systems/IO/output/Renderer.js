@@ -21,7 +21,7 @@
 
     function initializeScene() {
         var scene = new THREE.Scene();
-        scene.autoUpdate = true;
+        scene.autoUpdate = false;
         
         return scene;
     }
@@ -49,7 +49,7 @@
         process: function (staticEntity) {
             var Renderer = staticEntity.Renderer,
                 RendererCamera = staticEntity.RendererCamera,
-                RendererMeshes = staticEntity.RendererMeshes,
+                rendererMeshes = _(staticEntity.RendererMeshes).toArray().flatten().value(),
                 renderer = Renderer.renderer,
                 scene = Renderer.scene,
                 camera = Renderer.camera;
@@ -59,11 +59,16 @@
             camera.applyMatrix(RendererCamera.matrix);
 
             // add all meshes to the scene
-            _.each(RendererMeshes, function (mesh) {
+            _.each(rendererMeshes, function (mesh) {
                 scene.add(mesh);
             });
 
             renderer.render(scene, camera);
+
+            // release resources after render
+            _.each(rendererMeshes, function (mesh) {
+                scene.remove(mesh);
+            });
         }
     });
 })();

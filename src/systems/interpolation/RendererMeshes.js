@@ -3,7 +3,7 @@
 // 3D position system
 // -----------------------------------------
 (function () {
-    var component = [];
+    var component = {};
 
     new COMP.System.Interpolate({
         name: 'RendererMeshes',
@@ -14,8 +14,6 @@
             return component;
         },
 
-        process: function (staticEntity) {
-            staticEntity.RendererMeshes.length = 0;
-        }
+        process: function () { }
     });
 })();

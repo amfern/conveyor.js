@@ -20,7 +20,7 @@
     new COMP.System.Logic({
         name: 'Hierarchy',
 
-        dependencies: ['Transform'],
+        dependencies: ['Transform', 'Rotate', 'Translate'],
         
         requiredDependencies: ['Transform', 'TransformWorld'],
 
