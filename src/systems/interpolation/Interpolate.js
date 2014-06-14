@@ -5,9 +5,9 @@
 new COMP.System.Interpolate({
     name: 'Interpolate',
 
-    dependencies: ['TransformWorldInterpolation'],
+    dependencies: ['TransformInterpolation'],
 
-    requiredDependencies: ['TransformWorldInterpolation', 'TransformWorldPristine'],
+    requiredDependencies: ['TransformInterpolation', 'TransformPristine'],
 
     component: function () {},
 
@@ -15,8 +15,8 @@ new COMP.System.Interpolate({
         var before, after;
 
         _.each(entities, function (e) {
-            before = e.TransformWorldPristine;
-            after = e.TransformWorldInterpolation;
+            before = e.TransformPristine;
+            after = e.TransformInterpolation;
 
             after.scale.lerp(before.scale, 1 - interpolation);
             after.position.lerp(before.position, 1 - interpolation);

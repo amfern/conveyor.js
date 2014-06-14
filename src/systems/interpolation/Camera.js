@@ -5,7 +5,7 @@
 new COMP.System.Interpolate({
     name: 'Camera',
 
-    dependencies: ['Interpolate'],
+    dependencies: ['Interpolate', 'InterpolateHierarchy'],
 
     requiredDependencies: ['TransformWorldInterpolation', 'RendererCamera'],
 

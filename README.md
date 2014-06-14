@@ -76,6 +76,7 @@ Browse examples
 - create this.name in system so we won't have to write the system name each time
 - update lodash and use _.now() instead of perforamnce.now()
 
+
 ### Develop Notes
 This engine works as a giant factory filled with conveyor belts, each component makes his way along the belt towards stops, the systems which modify the components based on other previous components related by entity.
 

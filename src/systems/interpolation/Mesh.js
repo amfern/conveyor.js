@@ -16,7 +16,7 @@
     new COMP.System.Interpolate({
         name: 'Mesh',
         
-        dependencies: ['Interpolate', 'RendererMeshes'],
+        dependencies: ['Interpolate', 'InterpolateHierarchy', 'RendererMeshes'],
         requiredDependencies: ['TransformWorldInterpolation', 'RendererMeshes'],
 
         component: function () {

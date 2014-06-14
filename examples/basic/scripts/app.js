@@ -13,7 +13,7 @@ var player = new COMP.Entity({
         'Rotate',
         'Translate',
         'Hierarchy',
-        'Interpolate',
+        'InterpolateHierarchy',
         'Mesh'
     ],
 });
@@ -29,7 +29,8 @@ var cameraContainer = new COMP.Entity({
         'CameraControl',
         'HIDRotate',
         'Rotate',
-        'Hierarchy'
+        'Hierarchy',
+        'InterpolateHierarchy'
     ],
 });
 
@@ -41,7 +42,7 @@ var camera = new COMP.Entity({
     // components composing this entity
     components: [
         'Hierarchy',
-        'Interpolate',
+        'InterpolateHierarchy',
         'Camera'
     ],
 });
