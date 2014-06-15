@@ -14,7 +14,7 @@
             );
     }
 
-    new COMP.System.IO({
+    new COMP.System.Logic({
         name: 'HIDState',
         isStatic: true,
 

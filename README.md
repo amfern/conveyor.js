@@ -68,24 +68,28 @@ Browse examples
 - in some systems we reset component each loop(HIDCombos) and in some we don't(Transform) how do we decide it, should it be unified(always reset or never)
 - make correct description for systems
 - should i make a system that benefits from IO immediate processing and Logic constant processing?
-- should we have somethink else to upgrade transformWorld beside hierarchy?
-- update grunt-contrib-jasmine to newest version(this will require to upgrade jasmine aswel)
+- should we have something else to upgrade transformWorld beside hierarchy?
+- update grunt-contrib-jasmine to newest version(this will require to upgrade jasmine as-well)
 - add tests to wheelMovement
 - add tests for exclusive combos are now categorized also by trigger type
-- maybe seperate HIDComboState into 2 systems one is registering the combos and is logic type the other is IO type and calculates the triggered combos
+- maybe separate HIDComboState into 2 systems one is registering the combos and is logic type the other is IO type and calculates the triggered combos
 - create this.name in system so we won't have to write the system name each time
-- update lodash and use _.now() instead of perforamnce.now()
+- update lodash and use _.now() instead of performance.now()
+- there is no point in Logic, interpolation and IO there should be only Logic and Output, input is part of logic, interpolate is part of the output
+- keyboard and mouse should buffer their changes just like HIDComboState does
+- fix system's dependencies validation to check 'requiredDependencies' and allow non static system to depend ('dependencies') on static system - fix tests
 
 
 ### Develop Notes
 This engine works as a giant factory filled with conveyor belts, each component makes his way along the belt towards stops, the systems which modify the components based on other previous components related by entity.
 
-creati0ng new system:
+creating new system:
 - data is always in the entity
 - logic is always in the process system
 - you can store variables in the system but only if it static and not changed between entities
 - system can change only components of other systems it depends directly or indirectly(never change system that are in-front of you)
 - it's ok to set initial value just to make the system function, but initial value that specified by user takes precedence.
+- IO systems are for high frequency input gathering but not processing, all processing of input should be done in Logic systems, high frequency is mandatory to catch as much keys as possible and later calculate the changes from previous state to current
 
 create cycleContinuous:
 - you pass array of function representing each engine loop

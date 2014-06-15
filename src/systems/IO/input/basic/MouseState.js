@@ -31,7 +31,6 @@
             wheelMovedRight: _.clone(defaultHidState),
             wheelMoved: _.clone(defaultHidState),
         },
-        prevState = _.cloneDeep(state),
         movedTimeStamp = 0,
         wheelMovedTimeStamp = 0;
 
@@ -70,29 +69,9 @@
         e.preventDefault();
     }, false);
 
-    // constructs state for mouseMove[...] states
-    function constructState(mouseState, prevPressed, timeStamp, directionCheck) {
-        if (directionCheck()) {
-            return {
-                pressed: true,
-                // update up timestamp only if state changed to pressed from not pressed
-                down: prevPressed ? mouseState.down : timeStamp,
-                up: mouseState.up
-            };
-        }
-     
-        return {
-            pressed: false,
-            // update down timestamp only if state changed to not pressed from pressed
-            down: mouseState.down,
-            // up: prevPressed ? timeStamp : mouseState.up
-            up: prevPressed ? mouseState.down : mouseState.up
-        };
-    }
-
     // MouseState
     new COMP.System.IO({
-        name: 'MouseState',
+        name: 'Mouse',
         isStatic: true,
         dependencies: [],
 
@@ -101,108 +80,8 @@
         },
 
         process: function () {
-            // calculate movement
-            state.movementX = state.screenX - prevState.screenX;
-            state.movementY = state.screenY - prevState.screenY;
-
-            state.wheelMovementX = state.wheelX - prevState.wheelX;
-            state.wheelMovementY = state.wheelY - prevState.wheelY;
-
-            // calculate mouse movement
-            state.moved = constructState(
-                state.moved,
-                prevState.moved.pressed,
-                movedTimeStamp,
-                function () {
-                    return state.movementX || state.movementY;
-                }
-            );
-
-            state.movedUp = constructState(
-                state.movedUp,
-                prevState.movedUp.pressed,
-                movedTimeStamp,
-                function () {
-                    return state.moved.pressed && state.movementY < 0;
-                }
-            );
-
-            state.movedDown = constructState(
-                state.movedDown,
-                prevState.movedDown.pressed,
-                movedTimeStamp,
-                function () {
-                    return state.moved.pressed && state.movementY > 0;
-                }
-            );
-
-            state.movedLeft = constructState(
-                state.movedLeft,
-                prevState.movedLeft.pressed,
-                movedTimeStamp,
-                function () {
-                    return state.moved.pressed && state.movementX < 0;
-                }
-            );
-
-            state.movedRight = constructState(
-                state.movedRight,
-                prevState.movedRight.pressed,
-                movedTimeStamp,
-                function () {
-                    return state.moved.pressed && state.movementX > 0;
-                }
-            );
-
-            // calculate wheel movement
-            state.wheelMoved = constructState(
-                state.wheelMoved,
-                prevState.wheelMoved.pressed,
-                wheelMovedTimeStamp,
-                function () {
-                    return state.wheelMovementX || state.wheelMovementY;
-                }
-            );
-
-            state.wheelMovedUp = constructState(
-                state.wheelMovedUp,
-                prevState.wheelMovedUp.pressed,
-                wheelMovedTimeStamp,
-                function () {
-                    return state.wheelMoved.pressed && state.wheelMovementY < 0;
-                }
-            );
-
-            state.wheelMovedDown = constructState(
-                state.wheelMovedDown,
-                prevState.wheelMovedDown.pressed,
-                wheelMovedTimeStamp,
-                function () {
-                    return state.wheelMoved.pressed && state.wheelMovementY > 0;
-                }
-            );
-
-            state.wheelMovedLeft = constructState(
-                state.wheelMovedLeft,
-                prevState.wheelMovedLeft.pressed,
-                wheelMovedTimeStamp,
-                function () {
-                    return state.wheelMoved.pressed && state.wheelMovementX < 0;
-                }
-            );
-
-            state.wheelMovedRight = constructState(
-                state.wheelMovedRight,
-                prevState.wheelMovedRight.pressed,
-                wheelMovedTimeStamp,
-                function () {
-                    return state.wheelMoved.pressed && state.wheelMovementX > 0;
-                }
-            );
-
             wheelMovedTimeStamp = 0;
             movedTimeStamp = 0;
-            prevState = _.cloneDeep(state); // copy bufferState to state
         }
     });
 })();

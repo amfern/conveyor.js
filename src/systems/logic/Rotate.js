@@ -11,7 +11,7 @@ new COMP.System.Logic({
 
     component: function () {
         return {
-            velocity: 0.01
+            velocity: 0.005
         };
     },
 

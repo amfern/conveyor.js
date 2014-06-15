@@ -12,7 +12,6 @@ var player = new COMP.Entity({
         'HIDTranslate',
         'Rotate',
         'Translate',
-        'Hierarchy',
         'InterpolateHierarchy',
         'Mesh'
     ],
@@ -29,7 +28,6 @@ var cameraContainer = new COMP.Entity({
         'CameraControl',
         'HIDRotate',
         'Rotate',
-        'Hierarchy',
         'InterpolateHierarchy'
     ],
 });
@@ -41,7 +39,6 @@ var camera = new COMP.Entity({
 
     // components composing this entity
     components: [
-        'Hierarchy',
         'InterpolateHierarchy',
         'Camera'
     ],
@@ -49,6 +46,21 @@ var camera = new COMP.Entity({
 
 camera.Transform.position.z = 500;
 camera.Hierarchy = cameraContainer;
+
+// _.each(_.range(1000), function(index) {
+//     var entity = new COMP.Entity({
+//         name: 'entity' + index,
+
+//         // components composing this entity
+//         components: [
+//             'InterpolateHierarchy',
+//             'Mesh'
+//         ],
+//     });
+
+//     entity.Transform.translateZ(-500);
+//     entity.Hierarchy = cameraContainer;
+// });
 
 
 /* static mesh

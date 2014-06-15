@@ -98,8 +98,7 @@ window.COMP = (function () {
         return sysIndex;
     }
 
-    // validates system to meet certain criteria, will throw exception if doesn't
-    function validateSystem(tempSystemCollection, systemCollection, tempSys) {
+    function validateSystemDependencies(tempSys) {
         // add dependencies
         _.each(tempSys.dependencies, function (depSysName) {
             var depSys = systemsByName[depSysName]; // resolve dependency
@@ -109,12 +108,39 @@ window.COMP = (function () {
                 throw new Error('Dependency system "' + depSysName + '" not found');
             }
 
-            // throw exception if static system has non-static system as dependency
-            if (tempSys.isStatic && !depSys.isStatic) {
-                throw new Error('Static system can\'t have non-static system as dependency');
+            validateSystemDependencies(depSys);
+        });
+    }
+
+    function validateSystemRequiredDependencies(tempSys) {
+        // add dependencies
+        _.each(tempSys.requiredDependencies, function (depSysName) {
+            var depSys = systemsByName[depSysName]; // resolve dependency
+
+            // throw exception if dependency system doesn't exists
+            if (!depSys) {
+                throw new Error('Dependency system "' + depSysName + '" not found');
             }
 
-            validateSystem(tempSystemCollection, systemCollection, depSys);
+            // throw exception if static system has non-static system as dependency
+            if (tempSys.isStatic && !depSys.isStatic) {
+                throw new Error('Static system can\'t have non-static system as required dependency');
+            }
+
+            validateSystemRequiredDependencies(depSys);
+        });
+    }
+
+    // validates system to meet certain criteria, will throw exception if doesn't
+    function validateSystem(tempSys) {
+        // add dependencies
+        _.each(tempSys.dependencies, function (depSysName) {
+            var depSys = systemsByName[depSysName]; // resolve dependency
+
+            validateSystemDependencies(depSys);
+            validateSystemRequiredDependencies(depSys);
+
+            validateSystem(depSys);
         });
     }
 
@@ -122,7 +148,7 @@ window.COMP = (function () {
     function validateSystems(tempSystemCollection, systemCollection) {
         // add systems in the correct order for dependencies
         _.each(tempSystemCollection, function (tempSys) {
-            validateSystem(tempSystemCollection, systemCollection, tempSys);
+            validateSystem(systemCollection, tempSys);
         });
     }
 
@@ -181,7 +207,7 @@ window.COMP = (function () {
 
             entity[system.name] = system.component();
 
-            // static systems depend only on other static systems
+            // static systems reuire only other static systems components
             if (!system.isStatic) {
                 system.entities.push(entity);
             }
@@ -250,6 +276,7 @@ window.COMP = (function () {
         var performanceNow = window.performance.now();
 
         if (performanceNow >= nextGameTick) {
+            // if we oveflowed the max loops there is no point to get back
             if (loops > MAX_FRAMESKIP) {
                 nextGameTick = performanceNow;
             }

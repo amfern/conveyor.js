@@ -26,7 +26,7 @@
     }, false);
 
     new COMP.System.IO({
-        name: 'KeyboardState',
+        name: 'Keyboard',
         isStatic: true,
         dependencies: [],
 

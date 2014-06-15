@@ -24,8 +24,14 @@
         },
 
         process: function (entities) {
-            var RendererMeshes = entities[0].RendererMeshes;
+            var entity = _.first(entities),
+                RendererMeshes;
 
+            if (!entity) {
+                return;
+            }
+
+            RendererMeshes = entity.RendererMeshes;
             RendererMeshes = RendererMeshes.Mesh = [];
 
             _.each(entities, function (e) {
