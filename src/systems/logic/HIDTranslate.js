@@ -23,14 +23,11 @@ new COMP.System.Logic({
                 triggered[keyBindName] = !!~HIDComboState.indexOf(keyBindName);
             });
 
-            translate.x = +triggered.moveRight;
-            translate.x = translate.x || -triggered.moveLeft;
+            translate.x += +triggered.moveRight || -triggered.moveLeft;
 
-            translate.y = +triggered.moveUp;
-            translate.y = translate.y || -triggered.moveDown;
+            translate.y += +triggered.moveUp || -triggered.moveDown;
 
-            translate.z = -triggered.moveForward;
-            translate.z = translate.z || +triggered.moveBack;
+            translate.z += -triggered.moveForward || +triggered.moveBack;
 
             translate.normalize();
         });

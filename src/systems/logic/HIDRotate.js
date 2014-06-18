@@ -26,15 +26,15 @@ new COMP.System.Logic({
 
 
             if (triggered.pitchUp || triggered.pitchDown) {
-                rotation.y = -MouseState.movementY;
+                rotation.y += -MouseState.movementY;
             }
 
             if (triggered.yawLeft || triggered.yawRight) {
-                rotation.x = -MouseState.movementX;
+                rotation.x += -MouseState.movementX;
             }
 
             if (triggered.rollLeft || triggered.rollRight) {
-                rotation.z = -MouseState.movementZ;
+                rotation.z += -MouseState.movementZ;
             }
         });
     }
