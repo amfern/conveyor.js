@@ -54,7 +54,7 @@ Browse examples
 ### TODO
 - deal some how with round dependencies - or just leave stack overflow exception.
 - allow user to extract visual representation of dependencies from engine.
-- git doesn't save softlinks???
+- git doesn't save softlinks??? apparently not
 - allow users to register and unregister systems during runtime
 - systems needs initialize function for engine to call upon start - actual it only for static function and their component function is called upon engine initialization.
 - allow to change engine SKIP_TICK and other const variables.
@@ -70,15 +70,16 @@ Browse examples
 - should i make a system that benefits from IO immediate processing and Logic constant processing?
 - should we have something else to upgrade transformWorld beside hierarchy?
 - update grunt-contrib-jasmine to newest version(this will require to upgrade jasmine as-well)
-- add tests to wheelMovement
-- add tests for exclusive combos are now categorized also by trigger type
+- add tests to wheelMovement in mouse state
 - maybe separate HIDComboState into 2 systems one is registering the combos and is logic type the other is IO type and calculates the triggered combos
 - create this.name in system so we won't have to write the system name each time
 - update lodash and use _.now() instead of performance.now()
 - there is no point in Logic, interpolation and IO there should be only Logic and Output, input is part of logic, interpolate is part of the output
 - keyboard and mouse should buffer their changes just like HIDComboState does
 - fix system's dependencies validation to check 'requiredDependencies' and allow non static system to depend ('dependencies') on static system - fix tests
-
+- if we move to DB for storing components we can elevate the use of of events. with events we can collect only the entities which component has been changed in relative to which components the system depends, and pass it to system so it could optionally iterate only over them instead of every thing(in addition all entities are passed)
+- don't forget to fix the commented tests on HIDComboState
+- move relevant specs from IO to Logic
 
 ### Develop Notes
 This engine works as a giant factory filled with conveyor belts, each component makes his way along the belt towards stops, the systems which modify the components based on other previous components related by entity.
@@ -99,6 +100,7 @@ create cycleContinuous:
 ### Target
 the benefit of upload html5 app is internet connection, so we can leverage server powers to calcualte AI or ggather vital player information to teach AI to performer better. also all players will fight an AI revision the constructed of players best move(lol show whoo made this move in the side notification)
 build a fast passed game targeting gameplay, tactics, inviting the player to expolit it vast new laws of phisics to achieve an epic battles and moves.
+The Input to player movement should be instant like in mario and not prince of persia the first.
 
 ### License
 

@@ -23,6 +23,11 @@
             comboKeysMustBeEqual = _.pick(combo, keysMustBeEqual),
             potentialEqualCombos = _.where(combos, comboKeysMustBeEqual);
 
+        // plimenary filtering all combos whos don't have same amount of keys
+        potentialEqualCombos = _.filter(potentialEqualCombos, function(potentialEqualCombo) {
+            return potentialEqualCombo.keys.length === combo.keys.length;
+        });
+
         // unorederd combos are similar if they contain same keys but not same order
         if (combo.isOrdered) {
             return _.find(potentialEqualCombos, function (potentialEqual) {
@@ -143,6 +148,12 @@
 
     function getComboChildren(combo, combos) {
         return _.filter(combos, function (potentialChild) {
+            // return if potential child is the actual combo
+            if (potentialChild === combo) {
+                return false;
+            }
+
+            // return if trigger is not the same
             if (potentialChild.trigger !== combo.trigger) {
                 return false;
             }

@@ -65,6 +65,17 @@
         process: function (staticEntity) {
             var Mouse = staticEntity.Mouse;
 
+            _.extend(state, _.omit(Mouse,[
+                'movementX',
+                'movementY',
+                'screenX',
+                'screenY',
+                'clientX',
+                'clientY',
+                'wheelX',
+                'wheelY',
+            ]));
+
             // calculate movement
             state.movementX = Mouse.screenX - state.screenX;
             state.movementY = Mouse.screenY - state.screenY;
