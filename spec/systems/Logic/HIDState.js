@@ -1,10 +1,18 @@
 'use strict';
 
 describe('HIDState', function () {
-    var state, keyboardState, mouseState, evt, evt2, evt3, wheelEvt;
+    var state, IOkeyboard, IOmouse, keyboardState, mouseState, evt, evt2, evt3, wheelEvt;
 
     // add reading system
     beforeEach(function () {
+        tapIntoSystem('Keyboard', function (s) {
+            IOkeyboard = s;
+        });
+
+        tapIntoSystem('Mouse', function (s) {
+            IOmouse = s;
+        });
+
         tapIntoSystem('HIDState', function (s) {
             state = s;
         });
@@ -19,10 +27,14 @@ describe('HIDState', function () {
     });
 
     afterEach(function () {
+        mouseMoveEvent(0, 0);
         COMP.cycleOnce();
+        _.clearAll(IOkeyboard);
         _.clearAll(keyboardState);
+        resetIOMouse(IOmouse);
         resetMouseState(mouseState);
         _.clearAll(state);
+        COMP.cycleOnce();
     });
 
     it('should capture HID state of mouseMove, mouseClick, keydown', function () {
@@ -211,7 +223,7 @@ describe('HIDState', function () {
                     mmoved: {
                         pressed: false,
                         down: evt.timeStamp,
-                        up: evt2.timeStamp
+                        up: evt.timeStamp
                     },
                     mwheelX: 20,
                     mwheelY: 30,

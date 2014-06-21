@@ -8332,14 +8332,14 @@ describe('HIDComboState', function () {
 
 
     describe('', function () {
-        var mouseState, Mouse;
+        var mouseState, IOmouse;
 
         beforeEach(function () {
             tapIntoSystem('MouseState', function (s) {
                 mouseState = s;
             });
             tapIntoSystem('Mouse', function (s) {
-                Mouse = s;
+                IOmouse = s;
             });
             COMP.cycleOnce(); // cycle to get HIDComboState state
         });
@@ -8348,7 +8348,7 @@ describe('HIDComboState', function () {
             mouseMoveEvent(0, 0);
             COMP.cycleOnce(); // cycle to invalidate input buffers
             resetMouseState(mouseState);
-            resetIOMouse(Mouse);
+            resetIOMouse(IOmouse);
         });
 
 

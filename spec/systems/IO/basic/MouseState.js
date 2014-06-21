@@ -1,13 +1,13 @@
 'use strict';
 
 describe('mouseState', function () {
-    var state, Mouse, evt, evt2, evt3, evt4,
-        wheelEvt, wheelEvt2, wheelEvt3, wheelEvt4;
+    var state, IOmouse, evt, evt2, evt3, evt4,
+        wheelEvt, wheelEvt2;
 
     // add reading system
     beforeEach(function () {
         tapIntoSystem('MouseState', function (s) { state = s; });
-        tapIntoSystem('Mouse', function (s) { Mouse = s; });
+        tapIntoSystem('Mouse', function (s) { IOmouse = s; });
         COMP.cycleOnce();
     });
 
@@ -17,7 +17,7 @@ describe('mouseState', function () {
         COMP.cycleOnce(); // cycle again to flush any HID states
         // reset mouse state
         resetMouseState(state);
-        resetIOMouse(Mouse);
+        resetIOMouse(IOmouse);
     });
 
     // do just a normal event dispatch test with helpers and include clientX and clientY
