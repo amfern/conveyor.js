@@ -15,7 +15,7 @@
         },
 
         process: function (staticEntity) {
-            staticEntity.KeyboardState = _.cloneDeep(staticEntity.Keyboard);
+            _.extend(state, staticEntity.Keyboard);
         }
     });
 })();

@@ -32,23 +32,23 @@
         };
 
     // constructs state for mouseMove[...] states
-    function constructState(mouseState, timeStamp, directionCheck) {
-        mouseState = mouseState || {};
+    function constructState(mouse, timeStamp, directionCheck) {
+        mouse = mouse || {};
 
         // update up timestamp only if state changed to pressed from not pressed
         if (directionCheck()) {
             return {
                 pressed: true,
-                down: mouseState.pressed ? mouseState.down : timeStamp,
-                up: mouseState.up
+                down: mouse.pressed ? mouse.down : timeStamp,
+                up: mouse.up
             };
         }
      
         // update down timestamp only if state changed to not pressed from pressed
         return {
             pressed: false,
-            down: mouseState.down,
-            up: mouseState.pressed ? mouseState.down : mouseState.up
+            down: mouse.down,
+            up: mouse.pressed ? mouse.down : mouse.up
         };
     }
 
@@ -65,7 +65,7 @@
         process: function (staticEntity) {
             var Mouse = staticEntity.Mouse;
 
-            _.extend(state, _.omit(Mouse,[
+            _.extend(state, _.omit(Mouse, [
                 'movementX',
                 'movementY',
                 'screenX',
@@ -74,6 +74,8 @@
                 'clientY',
                 'wheelX',
                 'wheelY',
+                'timeStamp',
+                'wheelTimeStamp'
             ]));
 
             // calculate movement
@@ -83,15 +85,12 @@
             state.wheelMovementX = Mouse.wheelX - state.wheelX;
             state.wheelMovementY = Mouse.wheelY - state.wheelY;
 
-            state.screenX = Mouse.screenX;
-            state.screenY = Mouse.screenY;
-            state.wheelX = Mouse.wheelX;
-            state.wheelY = Mouse.wheelY;
+            _.extend(state, _.pick(Mouse, ['clientX', 'clientY', 'screenX', 'screenY', 'wheelX', 'wheelY']));
 
             // calculate mouse movement
             state.moved = constructState(
                 state.moved,
-                Mouse.movedTimeStamp,
+                Mouse.timeStamp,
                 function () {
                     return state.movementX || state.movementY;
                 }
@@ -99,7 +98,7 @@
 
             state.movedUp = constructState(
                 state.movedUp,
-                Mouse.movedTimeStamp,
+                Mouse.timeStamp,
                 function () {
                     return state.moved.pressed && state.movementY < 0;
                 }
@@ -107,7 +106,7 @@
 
             state.movedDown = constructState(
                 state.movedDown,
-                Mouse.movedTimeStamp,
+                Mouse.timeStamp,
                 function () {
                     return state.moved.pressed && state.movementY > 0;
                 }
@@ -115,7 +114,7 @@
 
             state.movedLeft = constructState(
                 state.movedLeft,
-                Mouse.movedTimeStamp,
+                Mouse.timeStamp,
                 function () {
                     return state.moved.pressed && state.movementX < 0;
                 }
@@ -123,7 +122,7 @@
 
             state.movedRight = constructState(
                 state.movedRight,
-                Mouse.movedTimeStamp,
+                Mouse.timeStamp,
                 function () {
                     return state.moved.pressed && state.movementX > 0;
                 }
@@ -132,7 +131,7 @@
             // calculate wheel movement
             state.wheelMoved = constructState(
                 state.wheelMoved,
-                Mouse.wheelMovedTimeStamp,
+                Mouse.wheelTimeStamp,
                 function () {
                     return state.wheelMovementX || state.wheelMovementY;
                 }
@@ -140,7 +139,7 @@
 
             state.wheelMovedUp = constructState(
                 state.wheelMovedUp,
-                Mouse.wheelMovedTimeStamp,
+                Mouse.wheelTimeStamp,
                 function () {
                     return state.wheelMoved.pressed && state.wheelMovementY < 0;
                 }
@@ -148,7 +147,7 @@
 
             state.wheelMovedDown = constructState(
                 state.wheelMovedDown,
-                Mouse.wheelMovedTimeStamp,
+                Mouse.wheelTimeStamp,
                 function () {
                     return state.wheelMoved.pressed && state.wheelMovementY > 0;
                 }
@@ -156,7 +155,7 @@
 
             state.wheelMovedLeft = constructState(
                 state.wheelMovedLeft,
-                Mouse.wheelMovedTimeStamp,
+                Mouse.wheelTimeStamp,
                 function () {
                     return state.wheelMoved.pressed && state.wheelMovementX < 0;
                 }
@@ -164,7 +163,7 @@
 
             state.wheelMovedRight = constructState(
                 state.wheelMovedRight,
-                Mouse.wheelMovedTimeStamp,
+                Mouse.wheelTimeStamp,
                 function () {
                     return state.wheelMoved.pressed && state.wheelMovementX > 0;
                 }

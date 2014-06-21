@@ -24,7 +24,7 @@
             potentialEqualCombos = _.where(combos, comboKeysMustBeEqual);
 
         // plimenary filtering all combos whos don't have same amount of keys
-        potentialEqualCombos = _.filter(potentialEqualCombos, function(potentialEqualCombo) {
+        potentialEqualCombos = _.filter(potentialEqualCombos, function (potentialEqualCombo) {
             return potentialEqualCombo.keys.length === combo.keys.length;
         });
 

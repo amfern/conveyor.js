@@ -78,8 +78,6 @@ Browse examples
 - keyboard and mouse should buffer their changes just like HIDComboState does
 - fix system's dependencies validation to check 'requiredDependencies' and allow non static system to depend ('dependencies') on static system - fix tests
 - if we move to DB for storing components we can elevate the use of of events. with events we can collect only the entities which component has been changed in relative to which components the system depends, and pass it to system so it could optionally iterate only over them instead of every thing(in addition all entities are passed)
-- don't forget to fix the commented tests on HIDComboState
-- move relevant specs from IO to Logic
 
 ### Develop Notes
 This engine works as a giant factory filled with conveyor belts, each component makes his way along the belt towards stops, the systems which modify the components based on other previous components related by entity.

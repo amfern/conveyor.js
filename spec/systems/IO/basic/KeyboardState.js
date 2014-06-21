@@ -1,25 +1,29 @@
 'use strict';
 
 describe('keyboardState', function () {
-    var state, evt, evt2, evt3;
+    var state, IOkeyboard, evt, evt2, evt3;
 
     // add reading system
     beforeEach(function () {
         tapIntoSystem('KeyboardState', function (s) {
             state = s;
         });
+
+        tapIntoSystem('Keyboard', function (s) {
+            IOkeyboard = s;
+        });
+
         COMP.cycleOnce();
     });
 
     afterEach(function () {
         _.clearAll(state);
+        _.clearAll(IOkeyboard);
     });
 
     describe('keyboardState', function () {
-
         it('should capture keydowns', function () {
             COMP.cycleContinues([
-
                 function () {
                     evt = keydownEvent(13);
                 },
