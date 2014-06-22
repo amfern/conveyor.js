@@ -1,7 +1,5 @@
 'use strict';
 
-// 3D position system
-// -----------------------------------------
 new COMP.System.Logic({
     name: 'CameraControl',
 

@@ -117,7 +117,6 @@ window.COMP = (function () {
                 throw new Error('Static system can\'t have non-static system as required dependency');
             }
 
-
             validateSystem(depSys);
         });
     }
@@ -394,9 +393,9 @@ window.COMP = (function () {
     function mainLoop() {
         nextGameTick = window.performance.now();
 
-        validateSystems(tempLogicSystems, processLogic);
-        validateSystems(tempInterpolationSystems, processIO);
-        validateSystems(tempIOSystems, processNextFrame);
+        validateSystems(tempLogicSystems);
+        validateSystems(tempInterpolationSystems);
+        validateSystems(tempIOSystems);
 
         staticEntity = constructStaticEntity();
 

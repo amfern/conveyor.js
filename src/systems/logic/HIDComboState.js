@@ -1,10 +1,47 @@
 /*jshint bitwise: false*/
 'use strict';
 
-// API for register combos combination from keyboard, mouse, touch, joystick and 3Dmouse.
-// when the combo pressed API will set appropriate flag to true.
+// Recieves combos combination from HIDCombos returns the triggered combos
+// according to HIDState(keyboard, mouse, touch, joystick and 3Dmouse).
+// When the combo pressed, the key under which it is registered will be added to component
+// as indication of triggered combo.
 // passing additional values will effect the behavior of the key
-// this system logic and API is borrowed from keypress.js
+// 
+// HIDCombos object expected to contain: 
+// key   - unique combo undentifier
+// value - {
+//              "keys"*             : null,   - array of keys
+                
+//              "trigger"           : null,   - {down|up|release}
+//                                                 down - combo trigger on all of the keys down
+//                                                   up - combo trigger on all of the keys up
+//                                              release - combo trigger on one of the keys up
+
+//              "isOnce"            : false,  - Normally while holding the keys combo will be always
+//                                              triggered, setting this to true will trigger and wait
+//                                              for release before triggering again
+
+//              "isOrdered"         : false,  - will trigger only if clicked in the correct order
+                
+//              "isSequence"        : false,  - when "isOrdered" is true will trigger only if key
+//                                              were clicked in one sequence meaning, no other key
+//                                              then specified in the combo were clicked in-between
+                
+//              "isExclusive"       : false,  - Normally when pressing a key, any and all combos that
+//                                              match will have their callbacks called. For instance,
+//                                              pressing 'shift' and then 's' would activate the following
+//                                              combos if they existed: "shift", "shift s" and "s".
+//                                              When we set isExclusive to true, we will not call the
+//                                              callbacks for any combos that are also exclusive and less specific.
+                
+//              "isSolitary"        : false   - This option will check that ONLY the combo's keys are
+//                                              being pressed when set to true. When set to the default
+//                                              value of false, a combo can be activated even if extraneous
+//                                              keys are pressed
+//          }
+// *only keys value is mandatory the rest are optional
+// 
+// General combos mechanics behavior is borrowed from keypress.js
 // -----------------------------------------
 (function () {
     var potentialOnceTriggered = [], // combos that would-have been triggered unless they were once
@@ -40,40 +77,7 @@
         }
     }
 
-    /*    
-    registers a combo
-    {
-        "keys"              : null,   - array of keys
-        
-        "trigger"           : null,   - {down|up|release}
-                                           down - combo trigger on all of the keys down
-                                             up - combo trigger on all of the keys up
-                                        release - combo trigger on one of the keys up
-
-        "isOnce"            : false,  - Normally while holding the keys combo will be always
-                                        triggered, setting this to true will trigger and wait
-                                        for release before triggering again
-
-        "isOrdered"         : false,  - will trigger only if clicked in the correct order
-        
-        "isSequence"        : false,  - when "isOrdered" is true will trigger only if key
-                                        were clicked in one sequence meaning, no other key
-                                        then specified in the combo were clicked in-between
-        
-        "isExclusive"       : false,  - Normally when pressing a key, any and all combos that
-                                        match will have their callbacks called. For instance,
-                                        pressing 'shift' and then 's' would activate the following
-                                        combos if they existed: "shift", "shift s" and "s".
-                                        When we set isExclusive to true, we will not call the
-                                        callbacks for any combos that are also exclusive and less specific.
-        
-        "isSolitary"        : false   - This option will check that ONLY the combo's keys are
-                                        being pressed when set to true. When set to the default
-                                        value of false, a combo can be activated even if extraneous
-                                        keys are pressed
-    }
-    returns combo, if similar combo was registered before it will return it
-    */
+    // registers the actual combo or return existing combo, if similar combo found
     function register(rawCombo, combos) {
         if (_.isEmpty(rawCombo.keys)) {
             throw new Error('empty keys combination');
@@ -91,7 +95,7 @@
 
         // do nothing if similar combo already exists
         var similarCombo = findSimilarCombo(combo, combos);
-        
+
         if (similarCombo) {
             return similarCombo;
         }

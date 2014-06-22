@@ -1,6 +1,6 @@
 'use strict';
 
-// 3D position system
+// 3D position system relative to the world
 // -----------------------------------------
 new COMP.System.Logic({
     name: 'TransformWorld',

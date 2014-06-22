@@ -1,6 +1,6 @@
 'use strict';
 
-// 3D position system
+// Uses Transformer to translate along the xyz axis
 // -----------------------------------------
 new COMP.System.Logic({
     name: 'Translate',

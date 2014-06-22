@@ -1,6 +1,6 @@
 'use strict';
 
-// 3D position system
+// Collection of whitelisted  keybinds 
 // -----------------------------------------
 new COMP.System.Logic({
     name: 'ActiveKeyBinds',

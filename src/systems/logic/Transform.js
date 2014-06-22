@@ -1,6 +1,6 @@
 'use strict';
 
-// 3D position system
+// 3D position system relative to its parent
 // -----------------------------------------
 new COMP.System.Logic({
     name: 'Transform',

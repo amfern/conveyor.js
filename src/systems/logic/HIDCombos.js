@@ -1,6 +1,6 @@
 'use strict';
 
-// 3D position system
+// Collection of combos(for use with HIDComboState)
 // -----------------------------------------
 (function () {
     var component = {};

@@ -1,6 +1,6 @@
 'use strict';
 
-// 3D position system
+// Collection of keybinds
 // -----------------------------------------
 (function () {
     var component = {

@@ -1,7 +1,7 @@
 /*jshint bitwise: false*/
 'use strict';
 
-// 3D position system
+// Sets Transformer rotation according to triggered combos
 // -----------------------------------------
 new COMP.System.Logic({
     name: 'HIDRotate',

@@ -1,6 +1,6 @@
 'use strict';
 
-// 3D position system
+// Uses Transformer to do Euler rotation
 // -----------------------------------------
 new COMP.System.Logic({
     name: 'Rotate',

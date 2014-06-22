@@ -1,6 +1,13 @@
 'use strict';
 
-// Collects keyboard inputs state collection of keycodes that currently pressed, if its not true then it false and its up
+// Collection of keys represents keyboardstate
+// 
+// key   - unique key indentifier(keycode)
+// value - {
+//              up        : timestamp of last time key was up
+//              down      : timestamp of last time key was down
+//              pressed   : bool current key press state
+//          }
 // -----------------------------------------
 (function () {
     var state = {};

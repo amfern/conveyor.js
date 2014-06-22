@@ -1,7 +1,7 @@
 /*jshint bitwise: false*/
 'use strict';
 
-// 3D position system
+// Sets Transformer translate according to triggered combos
 // -----------------------------------------
 new COMP.System.Logic({
     name: 'HIDTranslate',
