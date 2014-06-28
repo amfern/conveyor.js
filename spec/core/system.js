@@ -22,7 +22,7 @@ describe('System', function () {
         };
 
         genericSystem = new COMP.System.Logic(config);
-        expect(COMP._registerLogicSystem.mostRecentCall.args[0]).toMatch({
+        expect(COMP._registerLogicSystem.calls.allArgs()[0]).toMatch({
             name: 'EpicLogicSystem',
             isStatic: false,
             requiredDependencies: [],
@@ -42,7 +42,7 @@ describe('System', function () {
         };
 
         genericSystem = new COMP.System.Interpolate(config);
-        expect(COMP._registerInterpolateSystem.mostRecentCall.args[0]).toMatch({
+        expect(COMP._registerInterpolateSystem.calls.allArgs()[0]).toMatch({
             name: 'EpicInterplateSystem',
             isStatic: false,
             requiredDependencies: [],
@@ -62,7 +62,7 @@ describe('System', function () {
         };
 
         genericSystem = new COMP.System.IO(config);
-        expect(COMP._registerIOSystem.mostRecentCall.args[0]).toMatch({
+        expect(COMP._registerIOSystem.calls.allArgs()[0]).toMatch({
             name: 'EpicIOSystem',
             isStatic: false,
             requiredDependencies: [],
@@ -83,7 +83,7 @@ describe('System', function () {
         };
 
         genericSystem = new COMP.System.IO(config);
-        expect(COMP._registerIOSystem.mostRecentCall.args[0]).toMatch({
+        expect(COMP._registerIOSystem.calls.allArgs()[0]).toMatch({
             name: 'EpicSystem',
             isStatic: false,
             requiredDependencies: ['EpicIORequiredSystem1', 'EpicIORequiredSystem2'],
@@ -99,7 +99,7 @@ describe('System', function () {
         });
 
         genericSystem = new COMP.System.Logic(config);
-        expect(COMP._registerLogicSystem.mostRecentCall.args[0]).toMatch({
+        expect(COMP._registerLogicSystem.calls.allArgs()[0]).toMatch({
             name: 'EpicSystem',
             isStatic: false,
             requiredDependencies: ['EpicIORequiredSystem1', 'EpicIORequiredSystem2'],
@@ -118,49 +118,49 @@ describe('System', function () {
     it('should raise exception for system name == "name"', function () {
         expect(COMP.System.bind(null, {
             name: 'name'
-        })).toThrow('"name" is saved system name');
+        })).toThrow(new Error('"name" is saved system name'));
     });
 
     it('should raise exception for system name == "dependencies"', function () {
         expect(COMP.System.bind(null, {
             name: 'dependencies'
-        })).toThrow('"dependencies" is saved system name');
+        })).toThrow(new Error('"dependencies" is saved system name'));
     });
 
     it('should raise exception for system name == "entities"', function () {
         expect(COMP.System.bind(null, {
             name: 'entities'
-        })).toThrow('"entities" is saved system name');
+        })).toThrow(new Error('"entities" is saved system name'));
     });
 
     it('should raise exception for system name == "component"', function () {
         expect(COMP.System.bind(null, {
             name: 'component'
-        })).toThrow('"component" is saved system name');
+        })).toThrow(new Error('"component" is saved system name'));
     });
 
     it('should raise exception for system name == "process"', function () {
         expect(COMP.System.bind(null, {
             name: 'process'
-        })).toThrow('"process" is saved system name');
+        })).toThrow(new Error('"process" is saved system name'));
     });
 
     it('should raise exception for system name == "yield"', function () {
         expect(COMP.System.bind(null, {
             name: 'yield'
-        })).toThrow('"yield" is saved system name');
+        })).toThrow(new Error('"yield" is saved system name'));
     });
 
     it('should raise exception for missing process function', function () {
         expect(COMP.System.bind(null, {
             name: 'epicName'
-        })).toThrow('process function is mandatory');
+        })).toThrow(new Error('process function is mandatory'));
     });
 
     it('should raise exception for missing name', function () {
         expect(COMP.System.bind(null, {
             process: function () {}
-        })).toThrow('empty system name is not allowed');
+        })).toThrow(new Error('empty system name is not allowed'));
     });
 
     describe('new system', function () {
