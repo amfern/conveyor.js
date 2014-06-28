@@ -6,3 +6,5 @@ dist
 spec/core.html
 spec/systems.html
 .sublime-grunt.cache
+compjs.sublime-project
+compjs.sublime-workspace

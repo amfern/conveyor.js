@@ -54,30 +54,28 @@ Browse examples
 ### TODO
 - deal some how with round dependencies - or just leave stack overflow exception.
 - allow user to extract visual representation of dependencies from engine.
-- git doesn't save softlinks??? apparently not
 - allow users to register and unregister systems during runtime
 - systems needs initialize function for engine to call upon start - actual it only for static function and their component function is called upon engine initialization.
 - allow to change engine SKIP_TICK and other const variables.
 - removing system but leaving other systems that depend on it may cause issues: (ie: start engine -> remove system -> restart engine -> dependency system not found -> exception thrown).
 - systems can remove/add other systems during runtime, but they can't restart the engine, as it may cause stack overflow, solution: engine will restart it self after each cycle if system is added or removed(when unregisterSystem/registerSystem called set a restart flag to true).
 - add staticEntity as invalid entity names or give static entity special treatment.
-- create cleanup function for when component is destroyed.
-- never use same component instance for more then one entity, make core handle the creation of duplicated components each engine loop. ??? is it talking about static systems? i believe so.
-- creating entity should allow the setting of initial components values.
-- should i make a system that benefits from IO immediate processing and Logic constant processing?
 - should we have something else to upgrade transformWorld beside hierarchy?
-- create this.name in system so we won't have to write the system name each time
-- update grunt-contrib-jasmine to newest version(this will require to upgrade jasmine as-well)
-- update lodash and use _.now() instead of performance.now()
 - if we move to DB for storing components we can elevate the use of of events. with events we can collect only the entities which component has been changed in relative to which components the system depends, and pass it to system so it could optionally iterate only over them instead of every thing(in addition all entities are passed)
-- make correct description for systems
 - CameraControl and PlayerControl should be replaced by initially setting ActiveKeyBinds
 - maybe rename the project to conveyor and use some cool doodle like [> > >] to represent conveyor
-- instead of passing the entities with all of their components, create new array of entities with only the needed components by the system(maybe we will achieve less cache misses), be ware changing it will break every system that sets component directly onto entity
+- maybe it is possible to  enchantment performance by avoiding cache-misses by aggregating the systems's components together
+- never use same component instance for more then one entity, make core handle the creation of duplicated components each engine loop. ??? is it talking about static systems? i believe so.
+- git doesn't save softlinks??? apparently not
+- create cleanup function for when component is destroyed.
+- creating entity should allow the setting of initial components values.
+- create this.name in system so we won't have to write the system name each time, already exists but it is not needed, remove if you think so
+- update grunt-contrib-jasmine to newest version(this will require to upgrade jasmine as-well)
+- maybe use the new async testing of jasmine 2.0 instead of thus filthy 2000 function calls
 
 
 ### Develop Notes
-This engine implements it's own version of [Data-Oriented Design](http://gamesfromwithin.com/data-oriented-design)
+This engine implements it's own version of [Data-Oriented Design](http://gamesfromwithin.com/data-oriented-design) with addition of semi-fixed game loop and Entity component system.
 
 This engine works as a giant factory filled with conveyor belts, transporting small packages which represented by a component class, each system creates it own component and different component are tied together to create entity.
 Thus components makes their way along the belt towards different stations represented by System class.

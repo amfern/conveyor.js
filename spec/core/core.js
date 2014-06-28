@@ -556,13 +556,13 @@ describe('core register systems', function () {
             name: 'EpicSystemLogic1',
             component: function () {},
             process: function () {}
-        })).toThrow('system under name "EpicSystemLogic1" already exists');
+        })).toThrow(new Error('system under name "EpicSystemLogic1" already exists'));
 
         expect(COMP.System.IO.bind({}, {
             name: 'EpicSystemIO1',
             component: function () {},
             process: function () {}
-        })).toThrow('system under name "EpicSystemIO1" already exists');
+        })).toThrow(new Error('system under name "EpicSystemIO1" already exists'));
     });
 
     it('should throw exception for dependency containg same system name', function () {
@@ -571,28 +571,28 @@ describe('core register systems', function () {
             dependencies: ['SameEpicSystemLogic'],
             component: function () {},
             process: function () {}
-        })).toThrow('system cannot depend on it self');
+        })).toThrow(new Error('system cannot depend on it self'));
 
         expect(COMP.System.Interpolate.bind({}, {
             name: 'SameEpicSystemIO',
             dependencies: ['SameEpicSystemIO'],
             component: function () {},
             process: function () {}
-        })).toThrow('system cannot depend on it self');
+        })).toThrow(new Error('system cannot depend on it self'));
 
         expect(COMP.System.IO.bind({}, {
             name: 'SameEpicSystemIO',
             dependencies: ['SameEpicSystemIO'],
             component: function () {},
             process: function () {}
-        })).toThrow('system cannot depend on it self');
+        })).toThrow(new Error('system cannot depend on it self'));
     });
 
     it('should throw exception for component not found', function () {
         expect(COMP.Entity.bind({}, {
             name: 'CrapEntity',
             components: ['NonExistingEpicSystem']
-        })).toThrow('System "NonExistingEpicSystem" not found');
+        })).toThrow(new Error('System "NonExistingEpicSystem" not found'));
     });
 
     it('should process Logic, Interpolation and IO systems in correct order', function () {
@@ -832,7 +832,7 @@ describe('core register systems', function () {
             });
 
             it('should throw exception when removing system with entities', function () {
-                expect(systemLogic8.remove.bind(systemLogic8, {})).toThrow('entities still using this system, please remove dependent entities before removing the system');
+                expect(systemLogic8.remove.bind(systemLogic8, {})).toThrow(new Error('entities still using this system, please remove dependent entities before removing the system'));
             });
 
             describe('remove system', function () {
@@ -854,7 +854,7 @@ describe('core register systems', function () {
                 });
 
                 it('should throw exception when removing static system with entities', function () {
-                    expect(systemStaticLogic1.remove.bind(systemStaticLogic1, {})).toThrow('entities still using this system, please remove dependent entities before removing the system');
+                    expect(systemStaticLogic1.remove.bind(systemStaticLogic1, {})).toThrow(new Error('entities still using this system, please remove dependent entities before removing the system'));
                 });
 
                 it('should remove static system', function () {
@@ -897,7 +897,7 @@ describe('core register systems', function () {
                         process: function () {}
                     });
 
-                    expect(COMP).toThrow('Dependency system "MissingSystem" not found');
+                    expect(COMP).toThrow(new Error('Dependency system "MissingSystem" not found'));
                     missingDepSystem.remove();
                 });
 
@@ -911,7 +911,7 @@ describe('core register systems', function () {
                         process: function () {}
                     });
 
-                    expect(COMP).toThrow('Static system can\'t have non-static system as required dependency');
+                    expect(COMP).toThrow(new Error('Static system can\'t have non-static system as required dependency'));
                     badStaticLogic.remove();
                 });
             });
