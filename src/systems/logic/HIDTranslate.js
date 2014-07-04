@@ -6,7 +6,7 @@
 new COMP.System.Logic({
     name: 'HIDTranslate',
 
-    dependencies: ['CameraControl', 'PlayerControl', 'Transformer'],
+    dependencies: ['Transformer'],
 
     requiredDependencies: ['Transformer', 'HIDComboState', 'ActiveKeyBinds'],
 
@@ -19,7 +19,7 @@ new COMP.System.Logic({
                 ActiveKeyBinds = e.ActiveKeyBinds,
                 triggered = {};
 
-            _.each(ActiveKeyBinds, function (keyBind, keyBindName) {
+            _.each(ActiveKeyBinds, function (keyBindName) {
                 triggered[keyBindName] = !!~HIDComboState.indexOf(keyBindName);
             });
 

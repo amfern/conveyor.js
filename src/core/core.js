@@ -184,9 +184,26 @@ window.COMP = (function () {
         return constructCallbacks(_.first(systemCollection), 0);
     }
 
+
+    // adds entity and it dependencies in order
+    function addEntitySystemComponent(system, entity) {
+        // get the initial values to be passed when creating a component
+        entity[system.name] = system.component(entity.components[system.name]);
+
+        // static systems require only other static systems components
+        if (!system.isStatic) {
+            system.entities.push(entity);
+        }
+
+        addEntityComponents(entity, system.requiredDependencies);
+    }
+
     // adds entity and it dependencies in order
     function addEntityComponents(entity, requiredComponents) {
-        _.each(requiredComponents, function (componentName) {
+        _.each(requiredComponents, function (componentName, key) {
+            // suport array and object iteration
+            componentName = _.isString(componentName) ? componentName : key;
+    
             // do nothing if component already exists
             if (entity[componentName]) {
                 return;
@@ -194,30 +211,27 @@ window.COMP = (function () {
 
             var system = systemsByName[componentName];
 
-            // throw exception if dependency system doesn't
+            // throw exception if dependency system doesn't exists
             if (!system) {
                 throw new Error('System "' + componentName + '" not found');
             }
 
-            entity[system.name] = system.component();
-
-            // static systems require only other static systems components
-            if (!system.isStatic) {
-                system.entities.push(entity);
-            }
-
-            addEntityComponents(entity, system.requiredDependencies);
+            addEntitySystemComponent(system, entity);
         });
     }
 
-    // updates entity and it components
+    // updates entity and it components, it will not recreate already existing
+    // components nor use new defaults to recreate new component
     function updateEntityComponents(oldEntity, newEntity, requiredComponents) {
-        _.each(requiredComponents, function (componentName) {
+        _.each(requiredComponents, function (componentName, key) {
+            // suport array and object iteration
+            componentName = _.isString(componentName) ? componentName : key;
+
             var system = systemsByName[componentName];
             
-            // dependency not found
+            // throw exception if dependency system doesn't exists
             if (!system) {
-                return;
+                throw new Error('System "' + componentName + '" not found');
             }
 
             var oldEntityComponent = oldEntity[componentName];
@@ -233,15 +247,18 @@ window.COMP = (function () {
                 system.entities.splice(system.entities.indexOf(oldEntity), 1, newEntity);
 
                 updateEntityComponents(oldEntity, newEntity, system.requiredDependencies);
-            } else {
-                addEntityComponents(newEntity, system.requiredDependencies);
+            } else if(!newEntity[componentName]) { // do nothing if component already exists
+                addEntitySystemComponent(system, newEntity);
             }
         });
     }
 
     // removes systems
     function removeEntityComponents(entity, requiredComponents) {
-        _.each(requiredComponents, function (componentName) {
+        _.each(requiredComponents, function (componentName, key) {
+            // suport array and object iteration
+            componentName = _.isString(componentName) ? componentName : key;
+
             var system = systemsByName[componentName];
 
             if (!system) {

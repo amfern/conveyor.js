@@ -6,7 +6,7 @@
 new COMP.System.Logic({
     name: 'HIDRotate',
 
-    dependencies: ['CameraControl', 'PlayerControl', 'Transformer'],
+    dependencies: ['Transformer'],
 
     requiredDependencies: ['Transformer', 'HIDComboState', 'MouseState', 'ActiveKeyBinds'],
 
@@ -20,7 +20,7 @@ new COMP.System.Logic({
                 ActiveKeyBinds = e.ActiveKeyBinds,
                 triggered = {};
 
-            _.each(ActiveKeyBinds, function (keyBind, keyBindName) {
+            _.each(ActiveKeyBinds, function (keyBindName) {
                 triggered[keyBindName] = !!~HIDComboState.indexOf(keyBindName);
             });
 

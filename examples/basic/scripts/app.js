@@ -6,15 +6,24 @@ var player = new COMP.Entity({
     name: 'player',
 
     // components composing this entity
-    components: [
-        'PlayerControl',
-        'HIDRotate',
-        'HIDTranslate',
-        'Rotate',
-        'Translate',
-        'InterpolateHierarchy',
-        'Mesh'
-    ],
+    components: {
+        'ActiveKeyBinds': [
+            'yawRight',
+            'yawLeft',
+            'moveForward',
+            'moveBack',
+            'moveLeft',
+            'moveRight',
+            'moveUp',
+            'moveDown'
+        ],
+        'HIDRotate': undefined,
+        'HIDTranslate': undefined,
+        'Rotate': undefined,
+        'Translate': undefined,
+        'InterpolateHierarchy': undefined,
+        'Mesh': undefined
+    },
 });
 
 
@@ -24,12 +33,12 @@ var cameraContainer = new COMP.Entity({
     name: 'cameraContainer',
 
     // components composing this entity
-    components: [
-        'CameraControl',
-        'HIDRotate',
-        'Rotate',
-        'InterpolateHierarchy'
-    ],
+    components: {
+        'ActiveKeyBinds': ['pitchUp', 'pitchDown'],
+        'HIDRotate': undefined,
+        'Rotate': undefined,
+        'InterpolateHierarchy': undefined
+    }
 });
 
 cameraContainer.Hierarchy = player;

@@ -9,8 +9,8 @@ new COMP.System.Logic({
 
     requiredDependencies: [],
 
-    component: function () {
-        return {};
+    component: function (defaults) {
+        return defaults || [];
     },
 
     process: function () { }
