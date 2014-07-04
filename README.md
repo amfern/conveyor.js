@@ -61,17 +61,14 @@ Browse examples
 - systems can remove/add other systems during runtime, but they can't restart the engine, as it may cause stack overflow, solution: engine will restart it self after each cycle if system is added or removed(when unregisterSystem/registerSystem called set a restart flag to true).
 - add staticEntity as invalid entity names or give static entity special treatment.
 - should we have something else to upgrade transformWorld beside hierarchy?
-- if we move to DB for storing components we can elevate the use of of events. with events we can collect only the entities which component has been changed in relative to which components the system depends, and pass it to system so it could optionally iterate only over them instead of every thing(in addition all entities are passed)
-- CameraControl and PlayerControl should be replaced by initially setting ActiveKeyBinds
+- if we move to DB for storing components we can elevate the use of of events. with events we can collect only the entities which component has been changed in relative to which components the system depends, and pass it to system so it could optionally iterate only over them instead of every thing(in addition all entities are passed) - but then we have to figure out what changed, maybe it is best just to compute it and be done?.
 - maybe rename the project to conveyor and use some cool doodle like [> > >] to represent conveyor
 - maybe it is possible to  enchantment performance by avoiding cache-misses by aggregating the systems's components together
 - never use same component instance for more then one entity, make core handle the creation of duplicated components each engine loop. ??? is it talking about static systems? i believe so.
 - git doesn't save softlinks??? apparently not
 - create cleanup function for when component is destroyed.
-- creating entity should allow the setting of initial components values.
-- create this.name in system so we won't have to write the system name each time, already exists but it is not needed, remove if you think so
-- update grunt-contrib-jasmine to newest version(this will require to upgrade jasmine as-well)
-- maybe use the new async testing of jasmine 2.0 instead of thus filthy 2000 function calls
+- maybe add some running ID for each entity
+
 
 
 ### Develop Notes
