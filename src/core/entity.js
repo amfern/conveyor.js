@@ -29,10 +29,3 @@ COMP.Entity.prototype = {
         return COMP._updateEntity(this);
     }
 };
-
-COMP.StaticEntity = function (config) {
-    COMP.Entity.call(this, config);
-};
-COMP.StaticEntity.prototype = {
-    constructor: COMP.Entity
-};

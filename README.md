@@ -70,7 +70,6 @@ Browse examples
 - maybe add some running ID for each entity
 
 
-
 ### Develop Notes
 This engine implements it's own version of [Data-Oriented Design](http://gamesfromwithin.com/data-oriented-design) with addition of semi-fixed game loop and Entity component system.
 

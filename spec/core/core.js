@@ -844,7 +844,8 @@ describe('core register systems', function () {
             });
 
             it('should throw exception when removing system with entities', function () {
-                expect(systemLogic8.remove.bind(systemLogic8, {})).toThrow(new Error('entities still using this system, please remove dependent entities before removing the system'));
+                expect(systemLogic8.remove.bind(systemLogic8, {}))
+                    .toThrow(new Error('entities still using this system, please remove dependent entities before removing the system'));
             });
 
             describe('remove system', function () {
@@ -866,7 +867,8 @@ describe('core register systems', function () {
                 });
 
                 it('should throw exception when removing static system with entities', function () {
-                    expect(systemStaticLogic1.remove.bind(systemStaticLogic1, {})).toThrow(new Error('entities still using this system, please remove dependent entities before removing the system'));
+                    expect(systemStaticLogic1.remove.bind(systemStaticLogic1, {}))
+                        .toThrow(new Error('entities still using this system, please remove dependent entities before removing the system'));
                 });
 
                 it('should remove static system', function () {
