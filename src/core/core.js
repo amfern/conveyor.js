@@ -1,6 +1,11 @@
 /*jshint bitwise: false*/
 'use strict';
 
+// custome static entity
+function StaticEntity() {
+    this.name = 'staticEntity';
+}
+
 // Core of the engine, responsible for game loop and processing system entities
 // -----------------------------------------
 window.COMP = (function () {
@@ -11,13 +16,13 @@ window.COMP = (function () {
         tempInterpolationSystems = [],
         tempIOSystems = [],
         systemsByName = {},
+        staticEntity = new StaticEntity(),    // create new entity composing only of static systems
         firstLogicCallback,
         firstInterpolationCallback,
         firstIOCallback,
         loops = 0,
         interpolation,
-        nextGameTick,
-        staticEntity;
+        nextGameTick;
 
     // Private
     // --------------------------
@@ -40,6 +45,11 @@ window.COMP = (function () {
 
         systemCollection.push(system);
         systemsByName[system.name] = system;
+
+        // static systems enjoy their own component
+        if(system.isStatic) {
+            staticEntity[system.name] = system.component();
+        }
 
         return system;
     }
@@ -190,10 +200,7 @@ window.COMP = (function () {
         // get the initial values to be passed when creating a component
         entity[system.name] = system.component(entity.components[system.name]);
 
-        // static systems require only other static systems components
-        if (!system.isStatic) {
-            system.entities.push(entity);
-        }
+        system.entities.push(entity);
 
         addEntityComponents(entity, system.requiredDependencies);
     }
@@ -221,8 +228,8 @@ window.COMP = (function () {
     }
 
     // updates entity and it components, it will not recreate already existing
-    // components nor use new defaults to recreate new component
-    function updateEntityComponents(oldEntity, newEntity, requiredComponents) {
+    // components, nor use new defaults to recreate new component
+    function updateEntityComponents(entity, oldEntity, requiredComponents) {
         _.each(requiredComponents, function (componentName, key) {
             // suport array and object iteration
             componentName = _.isString(componentName) ? componentName : key;
@@ -234,21 +241,14 @@ window.COMP = (function () {
                 throw new Error('System "' + componentName + '" not found');
             }
 
-            var oldEntityComponent = oldEntity[componentName];
-            
             // if oldEntity already have that components, use it instead of creating new one
-            if (oldEntityComponent) {
-                newEntity[componentName] = oldEntityComponent;
-
+            if (entity[componentName]) {
                 // delete component from old entity
                 delete oldEntity[componentName];
 
-                // replace old entity with new one
-                system.entities.splice(system.entities.indexOf(oldEntity), 1, newEntity);
-
-                updateEntityComponents(oldEntity, newEntity, system.requiredDependencies);
-            } else if(!newEntity[componentName]) { // do nothing if component already exists
-                addEntitySystemComponent(system, newEntity);
+                updateEntityComponents(entity, oldEntity, system.requiredDependencies);
+            } else { // do nothing if component already exists
+                addEntitySystemComponent(system, entity);
             }
         });
     }
@@ -261,9 +261,10 @@ window.COMP = (function () {
 
             var system = systemsByName[componentName];
 
+            // dependency not found
             if (!system) {
                 return;
-            } // dependency not found
+            }
 
             delete entity[componentName]; // remove component from entity
 
@@ -320,27 +321,6 @@ window.COMP = (function () {
         window.requestAnimationFrame(processLogic);
     }
 
-    // constructs entity only for static systems to use
-    function constructStaticEntity() {
-        // filter only static systems
-        var staticSystems = _.filter(systemsByName, function (sys) {
-            return sys.isStatic;
-        });
-
-        // collect only static system names
-        staticSystems = _.map(staticSystems, function (sys) {
-            return sys.name;
-        });
-
-        // create new entity composing only of static systems
-        var staticEntity = new COMP.StaticEntity({
-            name: 'staticEntity',
-            components: staticSystems,
-        });
-
-        return staticEntity;
-    }
-
     // Public
     // --------------------------
 
@@ -379,16 +359,19 @@ window.COMP = (function () {
     }
 
     function updateEntity(entity) {
-        var newEntity = new COMP.Entity({
-            name: entity.name
+        var oldEntity = _.clone(entity);
+
+        updateEntityComponents(entity, oldEntity, entity.components);
+
+        // remove unused components by the entity
+        _.each(_.omit(oldEntity, 'name', 'components'), function(component, componentName) {
+            delete entity[componentName];
+
+            var system = systemsByName[componentName];
+            system.entities.splice(system.entities.indexOf(entity), 1);
         });
-        newEntity.components = entity.components;
-        updateEntityComponents(entity, newEntity, newEntity.components);
 
-        // remove other components
-        removeEntityComponents(entity, _.keys(entity));
-
-        return newEntity;
+        return entity;
     }
 
     // clear all entities of all systems
@@ -409,12 +392,10 @@ window.COMP = (function () {
 
     function mainLoop() {
         nextGameTick = window.performance.now();
-
+        
         validateSystems(tempLogicSystems);
         validateSystems(tempInterpolationSystems);
         validateSystems(tempIOSystems);
-
-        staticEntity = constructStaticEntity();
 
         firstLogicCallback = prepareSystem(tempLogicSystems, processLogic);
         firstInterpolationCallback = prepareSystem(tempInterpolationSystems, processIO);
