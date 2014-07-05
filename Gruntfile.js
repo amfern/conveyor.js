@@ -10,6 +10,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-shell');
 
     grunt.initConfig({
 
@@ -193,6 +194,15 @@ module.exports = function (grunt) {
                     livereload: true
                 }
             }
+        },
+
+        shell: {                                // Task
+            ungit: {                      // Target
+                options: {                      // Options
+                    failOnError: false
+                },
+                command: 'ungit'
+            }
         }
     });
 
@@ -203,7 +213,7 @@ module.exports = function (grunt) {
     grunt.registerTask('compile', ['jshint', 'concat', 'copy']);
     grunt.registerTask('build', ['clean:build', 'bower:install', 'compile', 'jasmine', 'uglify']);
 
-    grunt.registerTask('specBase', ['bower:install', 'connect']);
+    grunt.registerTask('specBase', ['bower:install', 'connect', 'shell']);
     grunt.registerTask('spec', ['specBase', 'watch']);
     grunt.registerTask('spec:core', ['specBase', 'watch:specCore']);
     grunt.registerTask('spec:system', ['specBase', 'watch:specSystems']);
