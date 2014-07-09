@@ -14,7 +14,12 @@ COMP.Entity = function (config) {
     //         initialValue: 1
     //     }
     // }
-    this.components = config.components || [];
+    this.components = config.components || {};
+
+    // make sure requiredDependencies is allways an object
+    if(_.isArray(this.components)) {
+        this.components = _.object(this.components, []);
+    }
 
     COMP._registerEntity(this);
 };

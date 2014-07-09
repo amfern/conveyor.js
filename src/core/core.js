@@ -60,10 +60,6 @@ window.COMP = (function () {
         }
 
         var sys = systemsByName[system.name];
-        
-        if (!sys) {
-            return;
-        }
 
         delete systemsByName[system.name];
         systemCollection.splice(systemCollection.indexOf(sys), 1); // remove system
@@ -194,28 +190,9 @@ window.COMP = (function () {
         return constructCallbacks(_.first(systemCollection), 0);
     }
 
-
-    // adds entity and it dependencies in order
-    function addEntitySystemComponent(system, entity) {
-        // get the initial values to be passed when creating a component
-        entity[system.name] = system.component(entity.components[system.name]);
-
-        system.entities.push(entity);
-
-        addEntityComponents(entity, system.requiredDependencies);
-    }
-
-    // adds entity and it dependencies in order
-    function addEntityComponents(entity, requiredComponents) {
-        _.each(requiredComponents, function (componentName, key) {
-            // suport array and object iteration
-            componentName = _.isString(componentName) ? componentName : key;
-    
-            // do nothing if component already exists
-            if (entity[componentName]) {
-                return;
-            }
-
+    // returns complete list of entity components
+    function inflateEntityComponents(requiredComponents) {
+        var componentNames = _.inject(requiredComponents, function (componentsList, componentName) {
             var system = systemsByName[componentName];
 
             // throw exception if dependency system doesn't exists
@@ -223,61 +200,36 @@ window.COMP = (function () {
                 throw new Error('System "' + componentName + '" not found');
             }
 
-            addEntitySystemComponent(system, entity);
-        });
+            return componentsList
+                    .concat(system.requiredDependencies)
+                    .concat(inflateEntityComponents(system.requiredDependencies));
+        }, requiredComponents);
+
+        return _.uniq(componentNames);
     }
 
-    // updates entity and it components, it will not recreate already existing
-    // components, nor use new defaults to recreate new component
-    function updateEntityComponents(entity, oldEntity, requiredComponents) {
-        _.each(requiredComponents, function (componentName, key) {
-            // suport array and object iteration
-            componentName = _.isString(componentName) ? componentName : key;
-
+    // register components with systems and returns collection of components
+    function registerComponents(entity, componentNames) {
+        return _.inject(componentNames, function (components, componentName) {
             var system = systemsByName[componentName];
-            
-            // throw exception if dependency system doesn't exists
-            if (!system) {
-                throw new Error('System "' + componentName + '" not found');
-            }
 
-            // if oldEntity already have that components, use it instead of creating new one
-            if (entity[componentName]) {
-                // delete component from old entity
-                delete oldEntity[componentName];
+            system.entities.push(entity);
 
-                updateEntityComponents(entity, oldEntity, system.requiredDependencies);
-            } else { // do nothing if component already exists
-                addEntitySystemComponent(system, entity);
-            }
-        });
+            components[componentName] = system.component(entity.components[componentName]);
+            return components;
+        }, {});
     }
 
-    // removes systems
-    function removeEntityComponents(entity, requiredComponents) {
-        _.each(requiredComponents, function (componentName, key) {
-            // suport array and object iteration
-            componentName = _.isString(componentName) ? componentName : key;
-
+    // unregisters components with systems
+    function unregisterComponents(entity, componentNames) {
+        _.each(componentNames, function (componentName) {
             var system = systemsByName[componentName];
-
-            // dependency not found
-            if (!system) {
-                return;
-            }
-
-            delete entity[componentName]; // remove component from entity
 
             // find index of entity inside of system's entities
             var entityIndex = system.entities.indexOf(entity);
 
             // remove entity from system only if its found
-            // (it could have been remove before)
-            if (~entityIndex) {
-                system.entities.splice(entityIndex, 1);
-            }
-
-            removeEntityComponents(entity, system.requiredDependencies);
+            system.entities.splice(entityIndex, 1);
         });
     }
 
@@ -351,27 +303,35 @@ window.COMP = (function () {
 
     // add new entity
     function registerEntity(entity) {
-        addEntityComponents(entity, entity.components);
+        var componentNames = inflateEntityComponents(_.keys(entity.components)),
+            components = registerComponents(entity, componentNames);
+
+        return _.extend(entity, components);
     }
 
     function unregisterEntity(entity) {
-        removeEntityComponents(entity, entity.components);
+        // get componentNames only
+        var componentNames = _(entity).keys().without('name', 'components').value();
+
+        unregisterComponents(entity, componentNames);
     }
 
     function updateEntity(entity) {
-        var oldEntity = _.clone(entity);
-
-        updateEntityComponents(entity, oldEntity, entity.components);
+        var oldComponents = _(entity).keys().without('name', 'components').value(),
+            newComponents = inflateEntityComponents(_.keys(entity.components)),
+            removedComponents = _.difference(oldComponents, newComponents),
+            addedComponents = _.difference(newComponents, oldComponents);
 
         // remove unused components by the entity
-        _.each(_.omit(oldEntity, 'name', 'components'), function(component, componentName) {
+        unregisterComponents(entity, removedComponents);
+        _.each(removedComponents, function(componentName) {
             delete entity[componentName];
-
-            var system = systemsByName[componentName];
-            system.entities.splice(system.entities.indexOf(entity), 1);
         });
 
-        return entity;
+        // add newly used components
+        var components = registerComponents(entity, addedComponents);
+
+        return _.extend(entity, components);
     }
 
     // clear all entities of all systems
