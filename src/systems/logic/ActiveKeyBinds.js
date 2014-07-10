@@ -2,7 +2,7 @@
 
 // Collection of whitelisted  keybinds 
 // -----------------------------------------
-new COMP.System.Logic({
+new CONV.System.Logic({
     name: 'ActiveKeyBinds',
 
     dependencies: [],

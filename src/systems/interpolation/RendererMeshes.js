@@ -5,7 +5,7 @@
 (function () {
     var component = {};
 
-    new COMP.System.Interpolate({
+    new CONV.System.Interpolate({
         name: 'RendererMeshes',
         isStatic: true,
 

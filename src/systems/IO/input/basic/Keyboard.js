@@ -26,7 +26,7 @@
         e.preventDefault();
     }, false);
 
-    new COMP.System.IO({
+    new CONV.System.IO({
         name: 'Keyboard',
         isStatic: true,
         dependencies: [],

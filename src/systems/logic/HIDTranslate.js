@@ -3,7 +3,7 @@
 
 // Sets Transformer translate according to triggered combos
 // -----------------------------------------
-new COMP.System.Logic({
+new CONV.System.Logic({
     name: 'HIDTranslate',
 
     dependencies: ['Transformer'],

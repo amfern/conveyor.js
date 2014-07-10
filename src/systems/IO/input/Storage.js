@@ -1,7 +1,7 @@
 // // Provides access to files
 // // -----------------------------------------
 // (function() {
-//   new COMP.System.IO({
+//   new CONV.System.IO({
 //     name: 'Storage',
 //     dependencies: ['RemoteStorage', 'LocalStorage'],
 

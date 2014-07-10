@@ -12,7 +12,7 @@
 (function () {
     var state = {};
 
-    new COMP.System.Logic({
+    new CONV.System.Logic({
         name: 'KeyboardState',
         isStatic: true,
         dependencies: [],

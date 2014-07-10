@@ -8,13 +8,13 @@ describe('mouseState', function () {
     beforeEach(function () {
         tapIntoSystem('MouseState', function (s) { state = s; });
         tapIntoSystem('Mouse', function (s) { IOmouse = s; });
-        COMP.cycleOnce();
+        CONV.cycleOnce();
     });
 
     // reset mouse position to 0,0 after each test
     afterEach(function () {
         mouseMoveEvent(0, 0);
-        COMP.cycleOnce(); // cycle again to flush any HID states
+        CONV.cycleOnce(); // cycle again to flush any HID states
         // reset mouse state
         resetMouseState(state);
         resetIOMouse(IOmouse);
@@ -25,7 +25,7 @@ describe('mouseState', function () {
         evt = mouseEvent('mousemove', 1, 2, 3, 4, 0, 0);
         wheelEvt = wheelEvent(5, 6);
 
-        COMP.cycleOnce(function () {
+        CONV.cycleOnce(function () {
             expect(state).toEqual({
                 moved: {
                     down: evt.timeStamp,
@@ -92,7 +92,7 @@ describe('mouseState', function () {
     });
 
     it('should capture mouse move event', function () {
-        COMP.cycleContinues([
+        CONV.cycleContinues([
             function () {
                 expect(state).toEqual({
                     moved: {
@@ -230,7 +230,7 @@ describe('mouseState', function () {
     });
 
     it('should update mouse movement state even if mouse stayed on the same place', function () {
-        COMP.cycleContinues([
+        CONV.cycleContinues([
             function () {
                 _(100000).times(function () {});
                 evt = mouseMoveEvent(10, 20);
@@ -309,7 +309,7 @@ describe('mouseState', function () {
     });
 
     it('should run over previous value if engine hasn\'t looped yet', function () {
-        COMP.cycleContinues([
+        CONV.cycleContinues([
             function () {
                 evt = mouseMoveEvent(10, 20);
                 _(100000).times(function () {});
@@ -388,7 +388,7 @@ describe('mouseState', function () {
     });
 
     it('should capture mousemove and mousedown', function () {
-        COMP.cycleContinues([
+        CONV.cycleContinues([
             function () {
                 evt = mouseMoveEvent(10, 20);
                 _(100000).times(function () {});
@@ -476,7 +476,7 @@ describe('mouseState', function () {
     });
 
     it('should prevent default', function () {
-        COMP.cycleContinues([
+        CONV.cycleContinues([
             function () {
                 evt = mouseMoveEvent(10, 20);
                 wheelEvt = wheelEvent(20, 30);
@@ -491,7 +491,7 @@ describe('mouseState', function () {
     });
 
     it('should capture fresh event input', function () {
-        COMP.cycleContinues([
+        CONV.cycleContinues([
             function () {
                 evt = mouseMoveEvent(10, 20);
                 wheelEvt = wheelEvent(20, 30);

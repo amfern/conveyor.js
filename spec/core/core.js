@@ -15,7 +15,7 @@ describe('core register systems', function () {
     beforeEach(function () {
         // Logic systems
         // -------------------------------------
-        systemLogic1 = new COMP.System.Logic({
+        systemLogic1 = new CONV.System.Logic({
             name: 'EpicSystemLogic1',
             dependencies: ['EpicSystemLogic3', 'EpicSystemLogic2'],
             requiredDependencies: ['EpicSystemLogic3', 'EpicSystemLogic2'],
@@ -30,7 +30,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemLogic2 = new COMP.System.Logic({
+        systemLogic2 = new CONV.System.Logic({
             name: 'EpicSystemLogic2',
             component: function () {
                 return 'L2c';
@@ -43,7 +43,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemLogic3 = new COMP.System.Logic({
+        systemLogic3 = new CONV.System.Logic({
             name: 'EpicSystemLogic3',
             component: function () {
                 return 'L3c';
@@ -56,7 +56,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemLogic4 = new COMP.System.Logic({
+        systemLogic4 = new CONV.System.Logic({
             name: 'EpicSystemLogic4',
             component: function () {
                 return 'L4c';
@@ -69,7 +69,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemLogic5 = new COMP.System.Logic({
+        systemLogic5 = new CONV.System.Logic({
             name: 'EpicSystemLogic5',
             dependencies: ['EpicSystemLogic1', 'EpicSystemIO8'],
             requiredDependencies: ['EpicSystemLogic1', 'EpicSystemIO8'],
@@ -84,7 +84,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemLogic6 = new COMP.System.Logic({
+        systemLogic6 = new CONV.System.Logic({
             name: 'EpicSystemLogic6',
             thread: true,
             // requiredDependencies: ['NonExistandSystem1', 'NonExistandSystem2'],
@@ -100,7 +100,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemLogic7 = new COMP.System.Logic({
+        systemLogic7 = new CONV.System.Logic({
             name: 'EpicSystemLogic7',
             dependencies: ['EpicSystemLogic8', 'EpicSystemLogic1', 'EpicSystemSL1'],
             requiredDependencies: ['EpicSystemLogic8', 'EpicSystemLogic1', 'EpicSystemSL1'],
@@ -115,7 +115,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemLogic8 = new COMP.System.Logic({
+        systemLogic8 = new CONV.System.Logic({
             name: 'EpicSystemLogic8',
             component: function (defaults) {
                 return defaults ? defaults.value : 'L8c';
@@ -128,7 +128,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemLogic9 = new COMP.System.Logic({
+        systemLogic9 = new CONV.System.Logic({
             name: 'EpicSystemLogic9',
             dependencies: ['EpicSystemLogic1'],
             requiredDependencies: ['EpicSystemLogic3'],
@@ -143,7 +143,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemStaticLogic1 = new COMP.System.Logic({
+        systemStaticLogic1 = new CONV.System.Logic({
             name: 'EpicSystemSL1',
             isStatic: true,
             dependencies: ['EpicSystemSL2'],
@@ -157,7 +157,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemStaticLogic2 = new COMP.System.Logic({
+        systemStaticLogic2 = new CONV.System.Logic({
             name: 'EpicSystemSL2',
             isStatic: true,
             component: function () {
@@ -171,7 +171,7 @@ describe('core register systems', function () {
 
         // Interpolation systems
         // -------------------------------------
-        systemInterpolation1 = new COMP.System.Interpolate({
+        systemInterpolation1 = new CONV.System.Interpolate({
             name: 'EpicSystemInterpolate1',
             dependencies: ['EpicSystemInterpolate3', 'EpicSystemInterpolate2'],
             requiredDependencies: ['EpicSystemInterpolate3', 'EpicSystemInterpolate2'],
@@ -187,7 +187,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemInterpolation2 = new COMP.System.Interpolate({
+        systemInterpolation2 = new CONV.System.Interpolate({
             name: 'EpicSystemInterpolate2',
             component: function () {
                 return 'I2c';
@@ -201,7 +201,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemInterpolation3 = new COMP.System.Interpolate({
+        systemInterpolation3 = new CONV.System.Interpolate({
             name: 'EpicSystemInterpolate3',
             component: function () {
                 return 'I3c';
@@ -215,7 +215,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemInterpolation4 = new COMP.System.Interpolate({
+        systemInterpolation4 = new CONV.System.Interpolate({
             name: 'EpicSystemInterpolate4',
             component: function () {
                 return 'I4c';
@@ -229,7 +229,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemInterpolation5 = new COMP.System.Interpolate({
+        systemInterpolation5 = new CONV.System.Interpolate({
             name: 'EpicSystemInterpolate5',
             dependencies: ['EpicSystemInterpolate1'],
             requiredDependencies: ['EpicSystemInterpolate1'],
@@ -245,7 +245,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemInterpolation6 = new COMP.System.Interpolate({
+        systemInterpolation6 = new CONV.System.Interpolate({
             name: 'EpicSystemInterpolate6',
             thread: true,
             // requiredDependencies: ['NonExistandSystem1', 'NonExistandSystem2'],
@@ -262,7 +262,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemInterpolation7 = new COMP.System.Interpolate({
+        systemInterpolation7 = new CONV.System.Interpolate({
             name: 'EpicSystemInterpolate7',
             dependencies: ['EpicSystemInterpolate8', 'EpicSystemInterpolate1'],
             requiredDependencies: ['EpicSystemInterpolate8', 'EpicSystemInterpolate1'],
@@ -278,7 +278,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemInterpolation8 = new COMP.System.Interpolate({
+        systemInterpolation8 = new CONV.System.Interpolate({
             name: 'EpicSystemInterpolate8',
             component: function () {
                 return 'I8c';
@@ -292,7 +292,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemInterpolation9 = new COMP.System.Interpolate({
+        systemInterpolation9 = new CONV.System.Interpolate({
             name: 'EpicSystemInterpolate9',
             dependencies: ['EpicSystemInterpolate1'],
             requiredDependencies: ['EpicSystemInterpolate3'],
@@ -308,7 +308,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemStaticInterpolation1 = new COMP.System.Interpolate({
+        systemStaticInterpolation1 = new CONV.System.Interpolate({
             name: 'EpicSystemSI1',
             isStatic: true,
             dependencies: ['EpicSystemSI2'],
@@ -322,7 +322,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemStaticInterpolation2 = new COMP.System.Interpolate({
+        systemStaticInterpolation2 = new CONV.System.Interpolate({
             name: 'EpicSystemSI2',
             isStatic: true,
             component: function () {
@@ -336,7 +336,7 @@ describe('core register systems', function () {
 
         // IO systems
         // -------------------------------------
-        systemIO1 = new COMP.System.IO({
+        systemIO1 = new CONV.System.IO({
             name: 'EpicSystemIO1',
             dependencies: ['EpicSystemIO3', 'EpicSystemIO2'],
             requiredDependencies: ['EpicSystemIO3', 'EpicSystemIO2'],
@@ -351,7 +351,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemIO2 = new COMP.System.IO({
+        systemIO2 = new CONV.System.IO({
             name: 'EpicSystemIO2',
             component: function () {
                 return 'IO2c';
@@ -364,7 +364,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemIO3 = new COMP.System.IO({
+        systemIO3 = new CONV.System.IO({
             name: 'EpicSystemIO3',
             component: function () {
                 return 'IO3c';
@@ -377,7 +377,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemIO4 = new COMP.System.IO({
+        systemIO4 = new CONV.System.IO({
             name: 'EpicSystemIO4',
             component: function () {
                 return 'IO4c';
@@ -390,7 +390,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemIO5 = new COMP.System.IO({
+        systemIO5 = new CONV.System.IO({
             name: 'EpicSystemIO5',
             dependencies: ['EpicSystemIO1'],
             requiredDependencies: ['EpicSystemIO1'],
@@ -405,7 +405,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemIO6 = new COMP.System.IO({
+        systemIO6 = new CONV.System.IO({
             name: 'EpicSystemIO6',
             thread: true,
             // requiredDependencies: ['NonExistandSystem1', 'NonExistandSystem2'],
@@ -421,7 +421,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemIO7 = new COMP.System.IO({
+        systemIO7 = new CONV.System.IO({
             name: 'EpicSystemIO7',
             dependencies: ['EpicSystemIO8', 'EpicSystemIO1'],
             requiredDependencies: ['EpicSystemIO8', 'EpicSystemIO1'],
@@ -436,7 +436,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemIO8 = new COMP.System.IO({
+        systemIO8 = new CONV.System.IO({
             name: 'EpicSystemIO8',
             dependencies: [],
             requiredDependencies: [],
@@ -451,7 +451,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemIO9 = new COMP.System.IO({
+        systemIO9 = new CONV.System.IO({
             name: 'EpicSystemIO9',
             dependencies: ['EpicSystemIO1'],
             requiredDependencies: ['EpicSystemIO3'],
@@ -466,7 +466,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemStaticIO1 = new COMP.System.IO({
+        systemStaticIO1 = new CONV.System.IO({
             name: 'EpicSystemSIO1',
             isStatic: true,
             dependencies: ['EpicSystemSIO2'],
@@ -480,7 +480,7 @@ describe('core register systems', function () {
             }
         });
 
-        systemStaticIO2 = new COMP.System.IO({
+        systemStaticIO2 = new CONV.System.IO({
             name: 'EpicSystemSIO2',
             isStatic: true,
             component: function () {
@@ -495,12 +495,12 @@ describe('core register systems', function () {
 
     // add entities
     beforeEach(function () {
-        entity1 = new COMP.Entity({
+        entity1 = new CONV.Entity({
             name: 'entity1',
             components: ['EpicSystemLogic1']
         });
 
-        entity2 = new COMP.Entity({
+        entity2 = new CONV.Entity({
             name: 'entity2',
             components: [
                 'EpicSystemLogic8',
@@ -508,12 +508,12 @@ describe('core register systems', function () {
             ]
         });
 
-        entity3 = new COMP.Entity({
+        entity3 = new CONV.Entity({
             name: 'entity3',
             components: ['EpicSystemLogic2', 'EpicSystemSL1']
         });
 
-        entity4 = new COMP.Entity({
+        entity4 = new CONV.Entity({
             name: 'entity4',
             components: [
                 'EpicSystemLogic6',
@@ -523,7 +523,7 @@ describe('core register systems', function () {
             ]
         });
 
-        entity5 = new COMP.Entity({
+        entity5 = new CONV.Entity({
             name: 'entity5',
             components: [
                 'EpicSystemLogic6',
@@ -534,7 +534,7 @@ describe('core register systems', function () {
             ]
         });
 
-        entity6 = new COMP.Entity({
+        entity6 = new CONV.Entity({
             name: 'entity6',
             components: {
                 'EpicSystemIO1': undefined,
@@ -545,7 +545,7 @@ describe('core register systems', function () {
             }
         });
 
-        entity7 = new COMP.Entity({
+        entity7 = new CONV.Entity({
             name: 'entity7',
             components: [
                 'EpicSystemIO9',
@@ -556,13 +556,13 @@ describe('core register systems', function () {
     });
 
     it('should throw exception for existance system name', function () {
-        expect(COMP.System.Logic.bind({}, {
+        expect(CONV.System.Logic.bind({}, {
             name: 'EpicSystemLogic1',
             component: function () {},
             process: function () {}
         })).toThrow(new Error('system under name "EpicSystemLogic1" already exists'));
 
-        expect(COMP.System.IO.bind({}, {
+        expect(CONV.System.IO.bind({}, {
             name: 'EpicSystemIO1',
             component: function () {},
             process: function () {}
@@ -570,21 +570,21 @@ describe('core register systems', function () {
     });
 
     it('should throw exception for dependency containg same system name', function () {
-        expect(COMP.System.Logic.bind({}, {
+        expect(CONV.System.Logic.bind({}, {
             name: 'SameEpicSystemLogic',
             dependencies: ['SameEpicSystemLogic'],
             component: function () {},
             process: function () {}
         })).toThrow(new Error('system cannot depend on it self'));
 
-        expect(COMP.System.Interpolate.bind({}, {
+        expect(CONV.System.Interpolate.bind({}, {
             name: 'SameEpicSystemIO',
             dependencies: ['SameEpicSystemIO'],
             component: function () {},
             process: function () {}
         })).toThrow(new Error('system cannot depend on it self'));
 
-        expect(COMP.System.IO.bind({}, {
+        expect(CONV.System.IO.bind({}, {
             name: 'SameEpicSystemIO',
             dependencies: ['SameEpicSystemIO'],
             component: function () {},
@@ -593,14 +593,14 @@ describe('core register systems', function () {
     });
 
     it('should throw exception for component not found', function () {
-        expect(COMP.Entity.bind({}, {
+        expect(CONV.Entity.bind({}, {
             name: 'CrapEntity',
             components: ['NonExistingEpicSystem']
         })).toThrow(new Error('System "NonExistingEpicSystem" not found'));
     });
 
     it('should process Logic, Interpolation and IO systems in correct order', function () {
-        COMP.cycleOnce(function () {
+        CONV.cycleOnce(function () {
             // should execute logic and IO systems in order
             expect(systemExecutionPattern).toEqual([
                 'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
@@ -612,7 +612,7 @@ describe('core register systems', function () {
             componentExecutionPattern = [];
         });
 
-        COMP.spiralCycle(function () {
+        CONV.spiralCycle(function () {
             // should execute logic systems maximum times to avoid spiral of death
             expect(systemExecutionPattern).toEqual([
                 'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
@@ -630,7 +630,7 @@ describe('core register systems', function () {
     });
 
     it('should process entities in the correct order', function () {
-        COMP.cycleOnce(function () {
+        CONV.cycleOnce(function () {
             // should execute components in order
             expect(componentExecutionPattern).toEqual([
                 'SL2c-staticEntity', 'SL1c-staticEntity',
@@ -662,7 +662,7 @@ describe('core register systems', function () {
             componentExecutionPattern = [];
         });
 
-        COMP.spiralCycle(function () {
+        CONV.spiralCycle(function () {
             expect(componentExecutionPattern).toEqual([
                 'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity2', 'L8c-custome-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L3c-entity7', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L5c-entity4', 'L5c-entity5', 'L7c-entity6', 'L9c-entity7',
                 'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity2', 'L8c-custome-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L3c-entity7', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L5c-entity4', 'L5c-entity5', 'L7c-entity6', 'L9c-entity7',
@@ -688,7 +688,7 @@ describe('core register systems', function () {
         });
 
         it('should remove entities and process systems in correct order', function () {
-            COMP.cycleOnce(function () {
+            CONV.cycleOnce(function () {
                 // should execute components in order
                 expect(componentExecutionPattern).toEqual([
                     'SL2c-staticEntity', 'SL1c-staticEntity',
@@ -703,7 +703,7 @@ describe('core register systems', function () {
                 componentExecutionPattern = [];
             });
 
-            COMP.spiralCycle(function () {
+            CONV.spiralCycle(function () {
                 expect(componentExecutionPattern).toEqual([
                     'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
                     'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
@@ -735,7 +735,7 @@ describe('core register systems', function () {
             });
 
             it('should update entity6 and process systems in correct order', function () {
-                COMP.cycleOnce(function () {
+                CONV.cycleOnce(function () {
                     // should execute components in order
                     expect(componentExecutionPattern).toEqual([
                         'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
@@ -747,7 +747,7 @@ describe('core register systems', function () {
                     componentExecutionPattern = [];
                 });
 
-                COMP.spiralCycle(function () {
+                CONV.spiralCycle(function () {
                     expect(componentExecutionPattern).toEqual([
                         'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
                         'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
@@ -766,7 +766,7 @@ describe('core register systems', function () {
             });
 
             it('should run cycles 5 times', function () {
-                COMP.cycleMany(5, function () {
+                CONV.cycleMany(5, function () {
                     expect(systemExecutionPattern).toEqual([
                         'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
                         'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
@@ -795,7 +795,7 @@ describe('core register systems', function () {
             });
 
             it('should run spiral cycles 5 times', function () {
-                COMP.spiralCycleMany(5, function () {
+                CONV.spiralCycleMany(5, function () {
                     expect(systemExecutionPattern).toEqual([
                         'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
                         'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
@@ -854,7 +854,7 @@ describe('core register systems', function () {
                 });
 
                 it('should remove system', function () {
-                    COMP.cycleOnce(function () {
+                    CONV.cycleOnce(function () {
                         expect(systemExecutionPattern).toEqual([
                             'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L9',
                             'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
@@ -876,7 +876,7 @@ describe('core register systems', function () {
                     systemLogic7.remove();
                     systemStaticLogic1.remove();
 
-                    COMP.cycleOnce(function () {
+                    CONV.cycleOnce(function () {
                         expect(systemExecutionPattern).toEqual([
                             'SL2', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9',
                             'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
@@ -889,7 +889,7 @@ describe('core register systems', function () {
                 });
 
                 it('should allow to have missing dependency system', function () {
-                    var missingDepSystem = new COMP.System.Logic({
+                    var missingDepSystem = new CONV.System.Logic({
                         name: 'MissingDepEpicSystem',
                         dependencies: ['EpicSystemIO1', 'MissingSystem'],
                         requiredDependencies: ['EpicSystemIO1'],
@@ -897,13 +897,13 @@ describe('core register systems', function () {
                         process: function () {}
                     });
 
-                    COMP();
+                    CONV();
 
                     missingDepSystem.remove();
                 });
 
                 it('should throw exception if system has missing required dependency system', function () {
-                    var missingDepSystem = new COMP.System.Logic({
+                    var missingDepSystem = new CONV.System.Logic({
                         name: 'MissingDepEpicSystem',
                         dependencies: ['EpicSystemIO1'],
                         requiredDependencies: ['EpicSystemIO1', 'MissingSystem'],
@@ -911,12 +911,12 @@ describe('core register systems', function () {
                         process: function () {}
                     });
 
-                    expect(COMP).toThrow(new Error('Dependency system "MissingSystem" not found'));
+                    expect(CONV).toThrow(new Error('Dependency system "MissingSystem" not found'));
                     missingDepSystem.remove();
                 });
 
                 it('should throw exception if static system has non-static system as dependency', function () {
-                    var badStaticLogic = new COMP.System.Logic({
+                    var badStaticLogic = new CONV.System.Logic({
                         name: 'BadEpicSystemSL',
                         isStatic: true,
                         dependencies: ['EpicSystemIO1'],
@@ -925,7 +925,7 @@ describe('core register systems', function () {
                         process: function () {}
                     });
 
-                    expect(COMP).toThrow(new Error('Static system can\'t have non-static system as required dependency'));
+                    expect(CONV).toThrow(new Error('Static system can\'t have non-static system as required dependency'));
                     badStaticLogic.remove();
                 });
             });

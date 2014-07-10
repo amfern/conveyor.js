@@ -2,7 +2,7 @@
 
 // 3D position system relative to its parent
 // -----------------------------------------
-new COMP.System.Logic({
+new CONV.System.Logic({
     name: 'Transform',
 
     dependencies: ['TransformWorldPristine'],

@@ -9,19 +9,19 @@ afterEach(function () {
     };
 
     // remove all systems created during test
-    _.each(COMP.Entity.mockedEntities, function (mEnt) {
+    _.each(CONV.Entity.mockedEntities, function (mEnt) {
         mEnt.originalRemove();
     });
-    _.each(COMP.System.mockedSystems, function (mSys) {
+    _.each(CONV.System.mockedSystems, function (mSys) {
         mSys.originalRemove();
     });
-    COMP.Entity.mockedEntities = [];
-    COMP.System.mockedSystems = [];
+    CONV.Entity.mockedEntities = [];
+    CONV.System.mockedSystems = [];
 });
 
 function tapIntoSystem(systemName, callback) {
     // add reading system
-    new COMP.System.IO({
+    new CONV.System.IO({
         name: 'EpicSystemReading' + systemName,
         requiredDependencies: [systemName],
         component: function () {},
@@ -29,7 +29,7 @@ function tapIntoSystem(systemName, callback) {
             callback(entities[0][systemName]);
         }
     });
-    new COMP.Entity({
+    new CONV.Entity({
         name: 'EpicSystemReading' + systemName + 'Entity',
         components: ['EpicSystemReading' + systemName]
     });

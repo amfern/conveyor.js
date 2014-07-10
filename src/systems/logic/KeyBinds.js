@@ -54,7 +54,7 @@
         };
     }
 
-    new COMP.System.Logic({
+    new CONV.System.Logic({
         name: 'KeyBinds',
 
         isStatic: true,

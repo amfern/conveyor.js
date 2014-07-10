@@ -61,7 +61,7 @@
     }
 
     // MouseState
-    new COMP.System.Logic({
+    new CONV.System.Logic({
         name: 'MouseState',
         isStatic: true,
         dependencies: [],

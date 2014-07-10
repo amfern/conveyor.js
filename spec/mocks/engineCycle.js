@@ -2,22 +2,22 @@
 
 // reset engine
 afterEach(function () {
-    expect(COMP.systemCallbacksToBeExecuted.length).toEqual(0); // should execute every engine cycle
-    COMP.systemCallbacksToBeExecuted.length = 0;
+    expect(CONV.systemCallbacksToBeExecuted.length).toEqual(0); // should execute every engine cycle
+    CONV.systemCallbacksToBeExecuted.length = 0;
 });
 
 // mock system types to be deleted after each test
 (function () {
-    COMP.systemCallbacksToBeExecuted = [];
+    CONV.systemCallbacksToBeExecuted = [];
 
     function executeCallback(specCallback) {
         specCallback.call();
-        COMP.systemCallbacksToBeExecuted.splice(COMP.systemCallbacksToBeExecuted.indexOf(specCallback), 1);
+        CONV.systemCallbacksToBeExecuted.splice(CONV.systemCallbacksToBeExecuted.indexOf(specCallback), 1);
     }
 
     function cycle(specCallback, cycleTime) {
         specCallback = specCallback || function () {};
-        COMP.systemCallbacksToBeExecuted.push(specCallback);
+        CONV.systemCallbacksToBeExecuted.push(specCallback);
 
         window.performance.now = function () { return 0; };
         window.requestAnimationFrame = _.once(function (callback) {
@@ -25,12 +25,12 @@ afterEach(function () {
             callback.call();
             executeCallback(specCallback);
         });
-        COMP();
+        CONV();
     }
 
     function cycleMany(cycleCallback, count, specCallback, index) {
         specCallback = specCallback || {};
-        COMP.systemCallbacksToBeExecuted.push(specCallback);
+        CONV.systemCallbacksToBeExecuted.push(specCallback);
 
         cycleCallback(function () {
             if (index === count - 1) {
@@ -38,60 +38,60 @@ afterEach(function () {
                 return;
             }
             cycleMany(cycleCallback, count, specCallback, (index || 0) + 1);
-            COMP.systemCallbacksToBeExecuted.splice(COMP.systemCallbacksToBeExecuted.indexOf(specCallback), 1);
+            CONV.systemCallbacksToBeExecuted.splice(CONV.systemCallbacksToBeExecuted.indexOf(specCallback), 1);
         });
     }
 
     // cycle once
-    COMP.cycleOnce = function (specCallback) {
-        cycle(specCallback, COMP.SKIP_TICKS - 1);
+    CONV.cycleOnce = function (specCallback) {
+        cycle(specCallback, CONV.SKIP_TICKS - 1);
     };
 
     // cycle half
-    COMP.cycleHalf = function (specCallback) {
-        cycle(specCallback, COMP.SKIP_TICKS / 2 - 1);
+    CONV.cycleHalf = function (specCallback) {
+        cycle(specCallback, CONV.SKIP_TICKS / 2 - 1);
     };
 
     // spiral engine cycle is when engine avoiding spiral of death doing the maximum allowed cycles
-    COMP.spiralCycle = function (specCallback) {
-        cycle(specCallback, COMP.SKIP_TICKS * COMP.MAX_FRAMESKIP + 1);
+    CONV.spiralCycle = function (specCallback) {
+        cycle(specCallback, CONV.SKIP_TICKS * CONV.MAX_FRAMESKIP + 1);
     };
 
     // cycleMany
-    COMP.cycleMany = function (count, specCallback) {
-        cycleMany(COMP.cycleOnce, count, specCallback);
+    CONV.cycleMany = function (count, specCallback) {
+        cycleMany(CONV.cycleOnce, count, specCallback);
     };
 
     // spiralMany
-    COMP.spiralCycleMany = function (count, specCallback) {
-        cycleMany(COMP.spiralCycle, count, specCallback);
+    CONV.spiralCycleMany = function (count, specCallback) {
+        cycleMany(CONV.spiralCycle, count, specCallback);
     };
 
     // callbacks to before executes before cycle continues 
-    COMP.beforeCycleContinues = function (specCallbacks) {
-        COMP.systemCallbacksToBeExecuted = specCallbacks.concat(COMP.systemCallbacksToBeExecuted);
+    CONV.beforeCycleContinues = function (specCallbacks) {
+        CONV.systemCallbacksToBeExecuted = specCallbacks.concat(CONV.systemCallbacksToBeExecuted);
     };
 
-    COMP.afterCycleContinues = function (specCallbacks) {
-        COMP.systemCallbacksToBeExecuted = COMP.systemCallbacksToBeExecuted.concat(specCallbacks);
+    CONV.afterCycleContinues = function (specCallbacks) {
+        CONV.systemCallbacksToBeExecuted = CONV.systemCallbacksToBeExecuted.concat(specCallbacks);
     };
 
     // array of specCallbacks each callback representing engine cycle
     // continues cycle starts engine only once and cycles from there
-    COMP.cycleContinues = function (specCallbacks) {
+    CONV.cycleContinues = function (specCallbacks) {
         var animationFrameCallback;
 
-        _.combine(COMP.systemCallbacksToBeExecuted, specCallbacks);
+        _.combine(CONV.systemCallbacksToBeExecuted, specCallbacks);
 
         window.performance.now = function () { return 0; };
 
         window.requestAnimationFrame = _.once(function (callback) {
             animationFrameCallback = callback;
         });
-        COMP();
+        CONV();
 
-        _.each(COMP.systemCallbacksToBeExecuted.slice(), function (specCallback, i) {
-            window.performance.now = function () { return COMP.SKIP_TICKS * (i + 1); }; // milliseconds
+        _.each(CONV.systemCallbacksToBeExecuted.slice(), function (specCallback, i) {
+            window.performance.now = function () { return CONV.SKIP_TICKS * (i + 1); }; // milliseconds
             animationFrameCallback();
             executeCallback(specCallback);
         });

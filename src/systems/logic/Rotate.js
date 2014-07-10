@@ -2,7 +2,7 @@
 
 // Uses Transformer to do Euler rotation
 // -----------------------------------------
-new COMP.System.Logic({
+new CONV.System.Logic({
     name: 'Rotate',
 
     dependencies: ['Transformer', 'HIDRotate'],

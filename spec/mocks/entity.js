@@ -2,19 +2,19 @@
 
 // mock system types to be deleted after each test
 (function () {
-    var entityConstructor = COMP.Entity;
+    var entityConstructor = CONV.Entity;
 
-    COMP.Entity = function () {
+    CONV.Entity = function () {
         entityConstructor.apply(this, arguments);
-        COMP.Entity.mockedEntities.push(this);
+        CONV.Entity.mockedEntities.push(this);
     };
-    COMP.Entity.mockedEntities = [];
+    CONV.Entity.mockedEntities = [];
 
-    COMP.Entity.prototype = entityConstructor.prototype;
-    COMP.Entity.prototype.originalRemove = COMP.Entity.prototype.remove;
-    COMP.Entity.prototype.remove = function() {
-        COMP.Entity.prototype.originalRemove.apply(this);
-        COMP.Entity.mockedEntities.splice(COMP.Entity.mockedEntities.indexOf(this), 1);
+    CONV.Entity.prototype = entityConstructor.prototype;
+    CONV.Entity.prototype.originalRemove = CONV.Entity.prototype.remove;
+    CONV.Entity.prototype.remove = function() {
+        CONV.Entity.prototype.originalRemove.apply(this);
+        CONV.Entity.mockedEntities.splice(CONV.Entity.mockedEntities.indexOf(this), 1);
     };
 
 })();

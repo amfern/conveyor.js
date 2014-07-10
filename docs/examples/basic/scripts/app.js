@@ -2,7 +2,7 @@
 
 /* player
 -------------------------------------------------------------------------- */
-var player = new COMP.Entity({
+var player = new CONV.Entity({
     name: 'player',
 
     // components composing this entity
@@ -29,7 +29,7 @@ var player = new COMP.Entity({
 
 /* camera
 -------------------------------------------------------------------------- */
-var cameraContainer = new COMP.Entity({
+var cameraContainer = new CONV.Entity({
     name: 'cameraContainer',
 
     // components composing this entity
@@ -43,7 +43,7 @@ var cameraContainer = new COMP.Entity({
 
 cameraContainer.Hierarchy = player;
 
-var camera = new COMP.Entity({
+var camera = new CONV.Entity({
     name: 'camera',
 
     // components composing this entity
@@ -58,7 +58,7 @@ camera.Hierarchy = cameraContainer;
 
 /* static mesh
 -------------------------------------------------------------------------- */
-var staticMesh = new COMP.Entity({
+var staticMesh = new CONV.Entity({
     name: 'staticMesh',
     components: ['Mesh'], // components composing this entity
 });
@@ -74,4 +74,4 @@ staticMesh.TransformWorld.updateMatrix();
 
 /* start engine
 -------------------------------------------------------------------------- */
-COMP();
+CONV();

@@ -53,7 +53,7 @@
     }, false);
 
     // MouseState
-    new COMP.System.IO({
+    new CONV.System.IO({
         name: 'Mouse',
         isStatic: true,
         dependencies: [],

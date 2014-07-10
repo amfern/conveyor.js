@@ -1,4 +1,4 @@
-Comp js
+CONV.js [»»»»]
 ===
 
 Game engine implementing ECM(EntitySystemComponents) paradigm.
@@ -6,10 +6,10 @@ Game engine implementing ECM(EntitySystemComponents) paradigm.
 
 ### How to use
 You need to:
-* define all systems `new COMP.System.IO|Interpolation|Logic`
-* define all entities `new COMP.Entity`
-* start the engine `COMP()`
-* define all entities `new COMP.Entity`
+* define all systems `new CONV.System.IO|Interpolation|Logic`
+* define all entities `new CONV.Entity`
+* start the engine `CONV()`
+* define all entities `new CONV.Entity`
 
 note: doing it in other order will not work
 
@@ -30,7 +30,7 @@ more code
 ### Developers
 
 Install dependencies
-comp.js uses [npm](https://www.npmjs.org/)([nodejs](http://nodejs.org/)) and [bower](http://bower.io/) to manage dependancies
+CONV.js uses [npm](https://www.npmjs.org/)([nodejs](http://nodejs.org/)) and [bower](http://bower.io/) to manage dependancies
 
 `sudo npm install`
 `bower install`
@@ -61,9 +61,7 @@ Browse examples
 - systems can remove/add other systems during runtime, but they can't restart the engine, as it may cause stack overflow, solution: engine will restart it self after each cycle if system is added or removed(when unregisterSystem/registerSystem called set a restart flag to true).
 - should we have something else to upgrade transformWorld beside hierarchy?
 - if we move to DB for storing components we can elevate the use of of events. with events we can collect only the entities which component has been changed in relative to which components the system depends, and pass it to system so it could optionally iterate only over them instead of every thing(in addition all entities are passed) - but then we have to figure out what changed, maybe it is best just to compute it and be done?.
-- maybe rename the project to conveyor and use some cool doodle like [> > >] to represent conveyor
-- maybe it is possible to  enchantment performance by avoiding cache-misses by aggregating the systems's components together
-- never use same component instance for more then one entity, make core handle the creation of duplicated components each engine loop. ??? is it talking about static systems? i believe so.
+- maybe it is possible to enhance performance by avoiding cache-misses by aggregating the systems's components together? http://gamesfromwithin.com/data-oriented-design
 
 
 ### Develop Notes
