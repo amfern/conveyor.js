@@ -1,7 +1,7 @@
 {
-  "name": "comp",
+  "name": "conveyor",
   "version": "0.0.1",
-  "title": "comp",
+  "title": "Conveyor.js",
   "homepage": "http://chris.enytc.com",
   "description": "A JavaScript Library",
   "author": {

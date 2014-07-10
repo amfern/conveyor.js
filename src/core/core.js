@@ -8,7 +8,7 @@ function StaticEntity() {
 
 // Core of the engine, responsible for game loop and processing system entities
 // -----------------------------------------
-window.COMP = (function () {
+window.CONV = (function () {
     var TICKS_PER_SECOND = 25,
         SKIP_TICKS = 1000 / TICKS_PER_SECOND,
         MAX_FRAMESKIP = 5,

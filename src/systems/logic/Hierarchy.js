@@ -17,7 +17,7 @@
         return Transform.matrix;
     }
 
-    new COMP.System.Logic({
+    new CONV.System.Logic({
         name: 'Hierarchy',
 
         dependencies: ['Transform', 'Rotate', 'Translate'],

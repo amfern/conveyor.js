@@ -2,7 +2,7 @@
 
 // 3D transformation
 // -----------------------------------------
-new COMP.System.Logic({
+new CONV.System.Logic({
     name: 'Transformer',
 
     dependencies: [],

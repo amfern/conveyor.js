@@ -36,7 +36,7 @@
         camera: initializeCamera()
     };
 
-    new COMP.System.IO({
+    new CONV.System.IO({
         name: 'Renderer',
         isStatic: true,
         

@@ -5,7 +5,7 @@
 (function () {
     var component = new THREE.Object3D();
 
-    new COMP.System.Interpolate({
+    new CONV.System.Interpolate({
         name: 'RendererCamera',
 
         isStatic: true,

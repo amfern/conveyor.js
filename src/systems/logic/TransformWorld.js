@@ -2,7 +2,7 @@
 
 // 3D world position system relative to the world
 // -----------------------------------------
-new COMP.System.Logic({
+new CONV.System.Logic({
     name: 'TransformWorld',
 
     component: function () {

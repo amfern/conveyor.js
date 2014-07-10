@@ -3,7 +3,7 @@
 
 // Sets Transformer rotation according to triggered combos
 // -----------------------------------------
-new COMP.System.Logic({
+new CONV.System.Logic({
     name: 'HIDRotate',
 
     dependencies: ['Transformer'],

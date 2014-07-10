@@ -13,7 +13,7 @@
         return new THREE.Mesh(geometry, material);
     }
 
-    new COMP.System.Interpolate({
+    new CONV.System.Interpolate({
         name: 'Mesh',
         
         dependencies: ['Interpolate', 'InterpolateHierarchy', 'RendererMeshes'],

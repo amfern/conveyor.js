@@ -2,7 +2,7 @@
 
 // 3D position for interpolation systems to use
 // -----------------------------------------
-new COMP.System.Interpolate({
+new CONV.System.Interpolate({
     name: 'TransformInterpolation',
 
     requiredDependencies: ['Transform'],

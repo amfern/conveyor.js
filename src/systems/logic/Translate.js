@@ -2,7 +2,7 @@
 
 // Uses Transformer to translate along the xyz axis
 // -----------------------------------------
-new COMP.System.Logic({
+new CONV.System.Logic({
     name: 'Translate',
 
     dependencies: ['Transformer', 'HIDTranslate', 'Rotate'],

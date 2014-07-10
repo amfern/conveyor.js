@@ -2,7 +2,7 @@
 
 // 3D position system before engine cycle has changed it
 // -----------------------------------------
-new COMP.System.Logic({
+new CONV.System.Logic({
     name: 'TransformPristine',
 
     dependencies: [],

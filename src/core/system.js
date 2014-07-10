@@ -1,6 +1,6 @@
 'use strict';
 
-COMP.System = function (config) {
+CONV.System = function (config) {
     if (_.isEmpty(config.name)) {
         throw new Error('empty system name is not allowed');
     }
@@ -48,44 +48,44 @@ COMP.System = function (config) {
 // Logic
 // --------------------------
 
-COMP.System.Logic = function (config) {
-    COMP.System.call(this, config);
-    COMP._registerLogicSystem(this);
+CONV.System.Logic = function (config) {
+    CONV.System.call(this, config);
+    CONV._registerLogicSystem(this);
 };
 
-COMP.System.Logic.prototype = {
-    constructor: COMP.System.Logic,
+CONV.System.Logic.prototype = {
+    constructor: CONV.System.Logic,
     remove: function () {
-        COMP._unregisterLogicSystem(this);
+        CONV._unregisterLogicSystem(this);
     }
 };
 
 // Interpolate
 // --------------------------
 
-COMP.System.Interpolate = function (config) {
-    COMP.System.call(this, config);
-    COMP._registerInterpolateSystem(this);
+CONV.System.Interpolate = function (config) {
+    CONV.System.call(this, config);
+    CONV._registerInterpolateSystem(this);
 };
 
-COMP.System.Interpolate.prototype = {
-    constructor: COMP.System.Interpolate,
+CONV.System.Interpolate.prototype = {
+    constructor: CONV.System.Interpolate,
     remove: function () {
-        COMP._unregisterInterpolateSystem(this);
+        CONV._unregisterInterpolateSystem(this);
     }
 };
 
 // IO
 // --------------------------
 
-COMP.System.IO = function (config) {
-    COMP.System.call(this, config);
-    COMP._registerIOSystem(this);
+CONV.System.IO = function (config) {
+    CONV.System.call(this, config);
+    CONV._registerIOSystem(this);
 };
 
-COMP.System.IO.prototype = {
-    constructor: COMP.System.IO,
+CONV.System.IO.prototype = {
+    constructor: CONV.System.IO,
     remove: function () {
-        COMP._unregisterIOSystem(this);
+        CONV._unregisterIOSystem(this);
     }
 };

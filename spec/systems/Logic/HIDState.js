@@ -28,17 +28,17 @@ describe('HIDState', function () {
 
     afterEach(function () {
         mouseMoveEvent(0, 0);
-        COMP.cycleOnce();
+        CONV.cycleOnce();
         _.clearAll(IOkeyboard);
         _.clearAll(keyboardState);
         resetIOMouse(IOmouse);
         resetMouseState(mouseState);
         _.clearAll(state);
-        COMP.cycleOnce();
+        CONV.cycleOnce();
     });
 
     it('should capture HID state of mouseMove, mouseClick, keydown', function () {
-        COMP.cycleContinues([
+        CONV.cycleContinues([
             function () {
                 expect(state).toEqual({
                     mmoved: {

@@ -2,7 +2,7 @@
 
 // Object3D interpolate  system
 // -----------------------------------------
-new COMP.System.Interpolate({
+new CONV.System.Interpolate({
     name: 'Interpolate',
 
     dependencies: ['TransformInterpolation'],

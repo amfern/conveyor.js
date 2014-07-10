@@ -14,7 +14,7 @@
             );
     }
 
-    new COMP.System.Logic({
+    new CONV.System.Logic({
         name: 'HIDState',
         isStatic: true,
 

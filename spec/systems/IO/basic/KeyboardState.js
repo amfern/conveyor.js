@@ -13,7 +13,7 @@ describe('keyboardState', function () {
             IOkeyboard = s;
         });
 
-        COMP.cycleOnce();
+        CONV.cycleOnce();
     });
 
     afterEach(function () {
@@ -23,7 +23,7 @@ describe('keyboardState', function () {
 
     describe('keyboardState', function () {
         it('should capture keydowns', function () {
-            COMP.cycleContinues([
+            CONV.cycleContinues([
                 function () {
                     evt = keydownEvent(13);
                 },
@@ -40,7 +40,7 @@ describe('keyboardState', function () {
         });
 
         it('should capture keyups', function () {
-            COMP.cycleContinues([
+            CONV.cycleContinues([
 
                 function () {
                     evt = keyupEvent(13);
@@ -58,7 +58,7 @@ describe('keyboardState', function () {
         });
 
         it('should keep the states after cycle', function () {
-            COMP.cycleContinues([
+            CONV.cycleContinues([
 
                 function () {
                     evt = keydownEvent(13);
@@ -86,7 +86,7 @@ describe('keyboardState', function () {
     });
 
     it('should capture keydowns', function () {
-        COMP.cycleContinues([
+        CONV.cycleContinues([
 
             function () {
                 evt = keydownEvent(36);

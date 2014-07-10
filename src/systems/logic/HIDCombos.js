@@ -5,7 +5,7 @@
 (function () {
     var component = {};
 
-    new COMP.System.Logic({
+    new CONV.System.Logic({
         name: 'HIDCombos',
 
         isStatic: true,

@@ -311,7 +311,7 @@
     }
 
 
-    new COMP.System.Logic({
+    new CONV.System.Logic({
         name: 'HIDComboState',
         isStatic: true,
 

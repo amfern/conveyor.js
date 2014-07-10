@@ -20,7 +20,7 @@
     "white": true,
     "globals": { 
         // libs
-        "COMP": true,
+        "CONV": true,
         "_": true,
         "THREE": true,
         "window": true,

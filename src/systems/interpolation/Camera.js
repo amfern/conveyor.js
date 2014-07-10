@@ -2,7 +2,7 @@
 
 // 3D position system
 // -----------------------------------------
-new COMP.System.Interpolate({
+new CONV.System.Interpolate({
     name: 'Camera',
 
     dependencies: ['Interpolate', 'InterpolateHierarchy'],

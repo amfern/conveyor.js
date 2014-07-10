@@ -1,6 +1,6 @@
 'use strict';
 
-COMP.Entity = function (config) {
+CONV.Entity = function (config) {
     // set defaults, unique entity name
     this.name = config.name || '';
     
@@ -21,16 +21,16 @@ COMP.Entity = function (config) {
         this.components = _.object(this.components, []);
     }
 
-    COMP._registerEntity(this);
+    CONV._registerEntity(this);
 };
-COMP.Entity.prototype = {
-    constructor: COMP.Entity,
+CONV.Entity.prototype = {
+    constructor: CONV.Entity,
 
     remove: function () {
-        COMP._unregisterEntity(this);
+        CONV._unregisterEntity(this);
     },
 
     update: function () {
-        return COMP._updateEntity(this);
+        return CONV._updateEntity(this);
     }
 };

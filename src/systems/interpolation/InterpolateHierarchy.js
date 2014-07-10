@@ -17,7 +17,7 @@
         return Transform.matrix;
     }
 
-    new COMP.System.Interpolate({
+    new CONV.System.Interpolate({
         name: 'InterpolateHierarchy',
 
         dependencies: ['TransformInterpolation', 'Interpolate', 'TransformWorldInterpolation'],
