@@ -59,15 +59,11 @@ Browse examples
 - allow to change engine SKIP_TICK and other const variables.
 - removing system but leaving other systems that depend on it may cause issues: (ie: start engine -> remove system -> restart engine -> dependency system not found -> exception thrown).
 - systems can remove/add other systems during runtime, but they can't restart the engine, as it may cause stack overflow, solution: engine will restart it self after each cycle if system is added or removed(when unregisterSystem/registerSystem called set a restart flag to true).
-- add staticEntity as invalid entity names or give static entity special treatment.
 - should we have something else to upgrade transformWorld beside hierarchy?
 - if we move to DB for storing components we can elevate the use of of events. with events we can collect only the entities which component has been changed in relative to which components the system depends, and pass it to system so it could optionally iterate only over them instead of every thing(in addition all entities are passed) - but then we have to figure out what changed, maybe it is best just to compute it and be done?.
 - maybe rename the project to conveyor and use some cool doodle like [> > >] to represent conveyor
 - maybe it is possible to  enchantment performance by avoiding cache-misses by aggregating the systems's components together
 - never use same component instance for more then one entity, make core handle the creation of duplicated components each engine loop. ??? is it talking about static systems? i believe so.
-- git doesn't save softlinks??? apparently not
-- create cleanup function for when component is destroyed.
-- maybe add some running ID for each entity
 
 
 ### Develop Notes
