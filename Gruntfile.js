@@ -16,7 +16,11 @@ module.exports = function (grunt) {
         // Define Directory
         dirs: {
             src: 'src',
-            build: 'dist'
+            build: 'dist',
+            lib: 'lib',
+            spec: 'spec',
+            docs: 'docs',
+            examples: '<%= dirs.docs %>/examples'
         },
 
         // Metadata
@@ -60,7 +64,7 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    '<%= dirs.build %>/<%= pkgFullName %>.min.js': '<%= dirs.build %>/<%= pkgFullName %>.js'
+                    '<%= dirs.build %>/<%= pkg.name %>.min.js': '<%= dirs.build %>/<%= pkg.name %>.js'
                 }
             }
         },
@@ -92,14 +96,14 @@ module.exports = function (grunt) {
                     // --------------------------------------------
                     'src/entities/**/*.js' // engine entities
                 ],
-                dest: '<%= dirs.build %>/<%= pkgFullName %>.js'
+                dest: '<%= dirs.build %>/<%= pkg.name %>.js'
             }
         },
 
         copy: {
-            main: {
-                src: '<%= dirs.build %>/<%= pkgFullName %>.js',
-                dest: '<%= dirs.build %>/<%= pkg.name %>-latest.js',
+            copyToExamples: {
+                src: '<%= dirs.build %>/<%= pkg.name %>.js',
+                dest: '<%= dirs.examples %>/<%= pkg.name %>.js'
             },
         },
 
@@ -126,29 +130,29 @@ module.exports = function (grunt) {
 
         jasmine: {
             core: {
-                src: ['<%= pkgCoreFiles %>', 'spec/mocks/**/*.js'],
+                src: ['<%= pkgCoreFiles %>', '<%= dirs.spec %>/mocks/**/*.js'],
                 options: {
-                    specs: ['spec/core/**/*.js'],
-                    helpers: 'spec/helpers/**/*.js',
+                    specs: ['<%= dirs.spec %>/core/**/*.js'],
+                    helpers: '<%= dirs.spec %>/helpers/**/*.js',
                     vendor: ['<%= pkgVendores %>'],
-                    outfile: 'spec/core.html'
+                    outfile: '<%= dirs.spec %>/core.html'
                 }
             },
             systems: {
                 src: [
                     '<%= pkgCoreFiles %>',
                     '<%= pkgSystemFiles %>',
-                    'spec/mocks/**/*.js'
+                    '<%= dirs.spec %>/mocks/**/*.js'
                 ],
                 options: {
-                    specs: ['spec/systems/**/*.js'],
-                    helpers: 'spec/helpers/**/*.js',
+                    specs: ['<%= dirs.spec %>/systems/**/*.js'],
+                    helpers: '<%= dirs.spec %>/helpers/**/*.js',
                     vendor: ['<%= pkgVendores %>'],
-                    outfile: 'spec/systems.html'
+                    outfile: '<%= dirs.spec %>/systems.html'
                 }
             },
             options: {
-                outfile: 'spec/spec.html'
+                outfile: '<%= dirs.spec %>/spec.html'
             }
         },
 
@@ -157,9 +161,9 @@ module.exports = function (grunt) {
             specCore: {
                 files: [
                     '<%= pkgCoreFiles %>',
-                    'spec/core/**/*.js',
-                    'spec/helpers/**/*.js',
-                    'spec/mocks/**/*.js'
+                    '<%= dirs.spec %>/core/**/*.js',
+                    '<%= dirs.spec %>/helpers/**/*.js',
+                    '<%= dirs.spec %>/mocks/**/*.js'
                 ],
                 tasks: ['jasmine:core:build', 'compile'],
                 options: {
@@ -171,14 +175,21 @@ module.exports = function (grunt) {
                 files: [
                     '<%= pkgCoreFiles %>',
                     '<%= pkgSystemFiles %>',
-                    'spec/systems/**/*.js',
-                    'spec/helpers/**/*.js',
-                    'spec/mocks/**/*.js'
+                    '<%= dirs.spec %>/systems/**/*.js',
+                    '<%= dirs.spec %>/helpers/**/*.js',
+                    '<%= dirs.spec %>/mocks/**/*.js'
                 ],
                 tasks: ['jasmine:systems:build', 'compile'],
                 options: {
                     livereload: true,
                     atBegin: true
+                }
+            },
+            examples: {
+                files: '<%= dirs.examples %>/**/**',
+                tasks: '',
+                options: {
+                    livereload: true
                 }
             }
         },
@@ -188,6 +199,7 @@ module.exports = function (grunt) {
             server: {
                 options: {
                     port: 9001,
+                    // base: ['<%= dirs.examples %>', '<%= dirs.spec %>'],
                     base: '.',
                     hostname: '*',
                     livereload: true
@@ -200,8 +212,8 @@ module.exports = function (grunt) {
     // --------------------------
 
     // concatenate, minify and validate files
-    grunt.registerTask('compile', ['jshint', 'concat', 'copy']);
-    grunt.registerTask('build', ['clean:build', 'bower:install', 'compile', 'jasmine', 'uglify']);
+    grunt.registerTask('compile', ['jshint', 'concat']);
+    grunt.registerTask('build', ['clean:build', 'bower:install', 'compile', 'jasmine', 'uglify', 'copy:copyToExamples']);
 
     grunt.registerTask('specBase', ['bower:install', 'connect']);
     grunt.registerTask('spec', ['specBase', 'watch']);
