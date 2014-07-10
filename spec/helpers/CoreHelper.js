@@ -10,12 +10,12 @@ afterEach(function () {
 
     // remove all systems created during test
     _.each(COMP.Entity.mockedEntities, function (mEnt) {
-        mEnt.remove();
+        mEnt.originalRemove();
     });
     _.each(COMP.System.mockedSystems, function (mSys) {
-        mSys.remove();
+        mSys.originalRemove();
     });
-    COMP.System.mockedEntities = [];
+    COMP.Entity.mockedEntities = [];
     COMP.System.mockedSystems = [];
 });
 
