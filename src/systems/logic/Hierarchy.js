@@ -6,12 +6,12 @@
 (function () {
     function calculateMatrixWorld(entity) {
         var Transform = entity.Transform,
-            parent = entity.Hierarchy;
+            Parent = entity.Parent;
 
         Transform.updateMatrix();
 
-        if (parent) {
-            return new THREE.Matrix4().multiplyMatrices(calculateMatrixWorld(parent), Transform.matrix);
+        if (Parent) {
+            return new THREE.Matrix4().multiplyMatrices(calculateMatrixWorld(Parent), Transform.matrix);
         }
 
         return Transform.matrix;
@@ -20,7 +20,7 @@
     new CONV.System.Logic({
         name: 'Hierarchy',
 
-        dependencies: ['Transform', 'Rotate', 'Translate'],
+        dependencies: ['Rotate', 'Translate'],
         
         requiredDependencies: ['Transform', 'TransformWorld'],
 

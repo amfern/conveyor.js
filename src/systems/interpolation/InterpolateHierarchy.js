@@ -6,12 +6,12 @@
 (function () {
     function calculateMatrixWorld(entity) {
         var Transform = entity.TransformInterpolation,
-            parent = entity.Hierarchy;
+            Parent = entity.Parent;
 
         Transform.updateMatrix();
 
-        if (parent) {
-            return new THREE.Matrix4().multiplyMatrices(calculateMatrixWorld(parent), Transform.matrix);
+        if (Parent) {
+            return new THREE.Matrix4().multiplyMatrices(calculateMatrixWorld(Parent), Transform.matrix);
         }
 
         return Transform.matrix;
@@ -20,9 +20,9 @@
     new CONV.System.Interpolate({
         name: 'InterpolateHierarchy',
 
-        dependencies: ['TransformInterpolation', 'Interpolate', 'TransformWorldInterpolation'],
+        dependencies: [],
         
-        requiredDependencies: ['TransformInterpolation', 'TransformWorldInterpolation', 'Interpolate'],
+        requiredDependencies: ['TransformWorldInterpolation', 'Interpolate', 'Parent'],
 
         // parent entity
         component: function () {

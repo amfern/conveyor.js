@@ -37,24 +37,23 @@ var cameraContainer = new CONV.Entity({
         'ActiveKeyBinds': ['pitchUp', 'pitchDown'],
         'HIDRotate': undefined,
         'Rotate': undefined,
+        'Parent': player,
         'InterpolateHierarchy': undefined
     }
 });
 
-cameraContainer.Hierarchy = player;
-
-var camera = new CONV.Entity({
+new CONV.Entity({
     name: 'camera',
 
     // components composing this entity
-    components: [
-        'InterpolateHierarchy',
-        'Camera'
-    ],
+    components: {
+        'Transform': {x: 0, y: 0, z: 500},
+        'Parent': cameraContainer,
+        'InterpolateHierarchy': undefined,
+        'Camera': undefined
+    },
 });
 
-camera.Transform.position.z = 500;
-camera.Hierarchy = cameraContainer;
 
 /* static mesh
 -------------------------------------------------------------------------- */

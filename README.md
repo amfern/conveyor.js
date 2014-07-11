@@ -59,14 +59,16 @@ Browse examples
 - allow to change engine SKIP_TICK and other const variables.
 - removing system but leaving other systems that depend on it may cause issues: (ie: start engine -> remove system -> restart engine -> dependency system not found -> exception thrown).
 - systems can remove/add other systems during runtime, but they can't restart the engine, as it may cause stack overflow, solution: engine will restart it self after each cycle if system is added or removed(when unregisterSystem/registerSystem called set a restart flag to true).
-- should we have something else to upgrade transformWorld beside hierarchy?
 - if we move to DB for storing components we can elevate the use of of events. with events we can collect only the entities which component has been changed in relative to which components the system depends, and pass it to system so it could optionally iterate only over them instead of every thing(in addition all entities are passed) - but then we have to figure out what changed, maybe it is best just to compute it and be done?.
 - maybe it is possible to enhance performance by avoiding cache-misses by aggregating the systems's components together? http://gamesfromwithin.com/data-oriented-design
+- HIERARCHY: when caluclating matrices create a buffer to check if somethink was already calcualted
+- should we have something else to update transformWorld beside hierarchy? ye a static transform
+- all systems should address the default value that may come to them
+- InterpolateHierarchy should inhirate functions from Hierarchy
+
 
 
 ### Develop Notes
-This engine implements it's own version of [Data-Oriented Design](http://gamesfromwithin.com/data-oriented-design) with addition of semi-fixed game loop and Entity component system.
-
 This engine works as a giant factory filled with conveyor belts, transporting small packages which represented by a component class, each system creates it own component and different component are tied together to create entity.
 Thus components makes their way along the belt towards different stations represented by System class.
 Entities journy starts at the Input systems, and are passed from system to system in fashined order, on the way entities's components are manipulated by the systems, until eventualy they reach IO systems again and a frame is created, this loop will repeat it self for each frame.
