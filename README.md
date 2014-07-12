@@ -1,4 +1,4 @@
-CONV.js [»»»»]
+conveyor.js [»»»»]
 ===
 
 Game engine implementing ECM(EntitySystemComponents) paradigm.
@@ -30,7 +30,7 @@ more code
 ### Developers
 
 Install dependencies
-CONV.js uses [npm](https://www.npmjs.org/)([nodejs](http://nodejs.org/)) and [bower](http://bower.io/) to manage dependancies
+conveyor.js uses [npm](https://www.npmjs.org/)([nodejs](http://nodejs.org/)) and [bower](http://bower.io/) to manage dependancies
 
 `sudo npm install`
 `bower install`
@@ -61,11 +61,7 @@ Browse examples
 - systems can remove/add other systems during runtime, but they can't restart the engine, as it may cause stack overflow, solution: engine will restart it self after each cycle if system is added or removed(when unregisterSystem/registerSystem called set a restart flag to true).
 - if we move to DB for storing components we can elevate the use of of events. with events we can collect only the entities which component has been changed in relative to which components the system depends, and pass it to system so it could optionally iterate only over them instead of every thing(in addition all entities are passed) - but then we have to figure out what changed, maybe it is best just to compute it and be done?.
 - maybe it is possible to enhance performance by avoiding cache-misses by aggregating the systems's components together? http://gamesfromwithin.com/data-oriented-design
-- HIERARCHY: when caluclating matrices create a buffer to check if somethink was already calcualted
-- should we have something else to update transformWorld beside hierarchy? ye a static transform
-- all systems should address the default value that may come to them
-- InterpolateHierarchy should inhirate functions from Hierarchy
-
+- systems reference should be in CONV namespace; add test for that;
 
 
 ### Develop Notes

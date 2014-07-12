@@ -7,11 +7,9 @@ new CONV.System.Interpolate({
 
     requiredDependencies: ['TransformWorld'],
 
-    component: function () { },
+    component: function () {
+        return new THREE.Object3D();
+    },
 
-    process: function (entities) {
-        _.each(entities, function (e) {
-            e.TransformWorldInterpolation = e.TransformWorld.clone();
-        });
-    }
+    process: function () { }
 });

@@ -334,22 +334,6 @@ window.CONV = (function () {
         return _.extend(entity, components);
     }
 
-    // clear all entities of all systems
-    function clearEntities() {
-        _.each(systemsByName, function (sys) {
-            sys.entities = [];
-        });
-    }
-
-    // clear all systems(which clears entities also)
-    function clearSystems() {
-        tempLogicSystems = [];
-        tempInterpolationSystems = [];
-        tempIOSystems = [];
-        systemsByName = {};
-    }
-
-
     function mainLoop() {
         nextGameTick = window.performance.now();
         
@@ -373,8 +357,6 @@ window.CONV = (function () {
     mainLoop._registerEntity = registerEntity;
     mainLoop._unregisterEntity = unregisterEntity;
     mainLoop._updateEntity = updateEntity;
-    mainLoop._clearEntities = clearEntities;
-    mainLoop._clearSystems = clearSystems;
     mainLoop.TICKS_PER_SECOND = TICKS_PER_SECOND;
     mainLoop.SKIP_TICKS = SKIP_TICKS;
     mainLoop.MAX_FRAMESKIP = MAX_FRAMESKIP;

@@ -17,12 +17,12 @@ var player = new CONV.Entity({
             'moveUp',
             'moveDown'
         ],
-        'HIDRotate': undefined,
-        'HIDTranslate': undefined,
-        'Rotate': undefined,
-        'Translate': undefined,
-        'InterpolateHierarchy': undefined,
-        'Mesh': undefined
+        'HIDRotate': null,
+        'HIDTranslate': null,
+        'Rotate': null,
+        'Translate': null,
+        'HierarchyInterpolate': null,
+        'Mesh': null
     },
 });
 
@@ -35,10 +35,10 @@ var cameraContainer = new CONV.Entity({
     // components composing this entity
     components: {
         'ActiveKeyBinds': ['pitchUp', 'pitchDown'],
-        'HIDRotate': undefined,
-        'Rotate': undefined,
+        'HIDRotate': null,
+        'Rotate': null,
         'Parent': player,
-        'InterpolateHierarchy': undefined
+        'HierarchyInterpolate': null
     }
 });
 
@@ -49,8 +49,8 @@ new CONV.Entity({
     components: {
         'Transform': {x: 0, y: 0, z: 500},
         'Parent': cameraContainer,
-        'InterpolateHierarchy': undefined,
-        'Camera': undefined
+        'HierarchyInterpolate': null,
+        'Camera': null
     },
 });
 

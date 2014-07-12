@@ -1,14 +1,13 @@
-/*jshint bitwise: false*/
 'use strict';
 
 // Calcualtes world matrix
 // -----------------------------------------
-new CONV.System.Logic({
-    name: 'Hierarchy',
+new CONV.System.Interpolate({
+    name: 'HierarchyInterpolate',
 
     dependencies: [],
     
-    requiredDependencies: ['TransformToWorld', 'HierarchyOrderEntities'],
+    requiredDependencies: ['TransformToWorldInterpolation', 'HierarchyOrderEntities'],
 
     // parent entity
     component: function () {
@@ -22,11 +21,10 @@ new CONV.System.Logic({
         }
 
         entities = _.first(entities).HierarchyOrderEntities;
-
-        // calculate world matrices for all
+            
         _.each(entities, function (e) {
             if(e.Parent) {
-                e.TransformWorld.applyMatrix(e.Parent.TransformWorld.matrix);
+                e.TransformWorldInterpolation.applyMatrix(e.Parent.TransformWorldInterpolation.matrix);
             }
         });
     }

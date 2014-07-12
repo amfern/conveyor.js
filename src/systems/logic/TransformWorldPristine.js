@@ -13,7 +13,7 @@ new CONV.System.Logic({
 
     process: function (entities) {
         _.each(entities, function (e) {
-            e.TransformWorldPristine = e.TransformWorld.clone();
+            e.TransformWorldPristine.copy(e.TransformWorld);
         });
     }
 });
