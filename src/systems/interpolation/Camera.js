@@ -5,7 +5,7 @@
 new CONV.System.Interpolate({
     name: 'Camera',
 
-    dependencies: ['Interpolate', 'InterpolateHierarchy'],
+    dependencies: ['Interpolate', 'HierarchyInterpolate'],
 
     requiredDependencies: ['TransformWorldInterpolation', 'RendererCamera'],
 

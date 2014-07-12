@@ -7,11 +7,13 @@ new CONV.System.Interpolate({
 
     requiredDependencies: ['Transform'],
 
-    component: function () { },
+    component: function () {
+        return new THREE.Object3D();
+    },
 
     process: function (entities) {
         _.each(entities, function (e) {
-            e.TransformInterpolation = e.Transform.clone();
+            e.TransformInterpolation.copy(e.Transform);
         });
     }
 });

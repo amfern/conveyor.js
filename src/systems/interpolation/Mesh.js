@@ -16,7 +16,7 @@
     new CONV.System.Interpolate({
         name: 'Mesh',
         
-        dependencies: ['Interpolate', 'InterpolateHierarchy', 'RendererMeshes'],
+        dependencies: ['Interpolate', 'HierarchyInterpolate', 'RendererMeshes'],
         requiredDependencies: ['TransformWorldInterpolation', 'RendererMeshes'],
 
         component: function () {
