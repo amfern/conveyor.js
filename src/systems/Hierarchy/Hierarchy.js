@@ -21,6 +21,7 @@ new CONV.System.Logic({
             return;
         }
 
+        // get entities ordered by hierarchy order system
         entities = _.first(entities).HierarchyOrderEntities;
 
         // calculate world matrices for all
