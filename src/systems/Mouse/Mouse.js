@@ -60,8 +60,6 @@
 
         component: function () {
             return state;
-        },
-
-        process: function () { }
+        }
     });
 })();

@@ -12,8 +12,6 @@
 
         component: function () {
             return component;
-        },
-
-        process: function () { }
+        }
     });
 })();

@@ -10,19 +10,16 @@ CONV.System = function (config) {
         if (config.name === name) { throw new Error('"' + name + '" is saved system name'); }
     });
 
-    // The heart of the system where entities are processed.
-    // while loop that loops through all components of entities
-    // -----------------------------------------
-    if (typeof(config.process) !== 'function') {
-        throw new Error('process function is mandatory');
-    }
-
     // set defaults
     this.name = config.name;
     
     // static system have no need to process other entities, they have one entity.
     // that entity is shared between all static systems and created upon engine initialization
     this.isStatic = config.isStatic || false;
+
+    // new component generator for this system
+    this.component = config.component;
+    this.process = config.process;
 
     // components thats are required by system proccess function to run
     this.requiredDependencies = config.requiredDependencies || [];
@@ -32,16 +29,12 @@ CONV.System = function (config) {
 
     this.dependencies = _.uniq(this.requiredDependencies.concat(this.dependencies));
     
-    // new component generator for this system
-    this.component = config.component || function () { return {}; };
-    
     // if process function spawns thread inside its up to the developer to call 
     // yield when done processing
     this.thread = config.thread || false;
     
     // ran by engine when it first starts
     this.initialize = config.initialize || function () {};
-    this.process = config.process;
     this.entities = [];
 };
 

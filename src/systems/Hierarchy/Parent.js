@@ -11,7 +11,5 @@ new CONV.System.Logic({
 
     component: function (defaultParent) {
         return defaultParent || null;
-    },
-
-    process: function () { }
+    }
 });

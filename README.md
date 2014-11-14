@@ -68,22 +68,6 @@ Performance:
     - components array should be in the system and referenced by entity.id(generate this as three.js does), unlike the situation right now where systems contains entities and then references to it's component through entity
     or i create array of entities compromised only of the requiredDependencies's components and pass it into the proccess() input.(yes, yes a struct)
     creating thus structs means copying lots of data, it cancels out the cache performance boost.
-    
-    ------------------------------------------------------------
-        Systems and components should be split, because not all systems have components, nor all components belong to system.
-
-        This means instead of defining entity out of components, we define it out of systems and thus systems have required components.
-
-        But the question remains - what do we do with the initial components values.
-        Do we define "componentsInitials" array and "systems" array? no.
-        User defines collection(array or object) of "components". if it names matches any system name, this system will be added, if a components exists with the same name it will be added also. If system not found but component exists, just the component will be added. If nothing found throw an error...
-        This "components" collection also acts as default component value definition.
-
-        Redefined System-entity-component relationships:
-        Entity - have array systems/components it depends on, and after initialized acts as the glue between components when system is processing them, by string the component in self.
-        System - have array of components it requires and array of systems it depends on it
-        Component - Defines the data
-    ------------------------------------------------------------
 Develop Environment:
     - maybe use connect-assets or any other better tool as build script
 

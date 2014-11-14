@@ -9,7 +9,5 @@ new CONV.System.Interpolate({
 
     component: function () {
         return new THREE.Object3D();
-    },
-
-    process: function () { }
+    }
 });

@@ -1,13 +1,25 @@
 'use strict';
 
 describe('core register systems', function () {
-    var systemLogic1, systemLogic2, systemLogic3, systemLogic4, systemLogic5, systemLogic6, systemLogic7, systemLogic8, systemLogic9,
+    var systemLogic1, systemLogic2, systemLogic3, systemLogic4, systemLogic5,
+        systemLogic6, systemLogic7, systemLogic8, systemLogic9, systemLogic10,
+
         systemStaticLogic1, systemStaticLogic2,
-        systemInterpolation1, systemInterpolation2, systemInterpolation3, systemInterpolation4, systemInterpolation5, systemInterpolation6, systemInterpolation7, systemInterpolation8, systemInterpolation9,
+        
+        systemInterpolation1, systemInterpolation2, systemInterpolation3,
+        systemInterpolation4, systemInterpolation5, systemInterpolation6,
+        systemInterpolation7, systemInterpolation8, systemInterpolation9,
+        systemInterpolation10,
+
         systemStaticInterpolation1, systemStaticInterpolation2,
-        systemIO1, systemIO2, systemIO3, systemIO4, systemIO5, systemIO6, systemIO7, systemIO8, systemIO9,
+
+        systemIO1, systemIO2, systemIO3, systemIO4, systemIO5, systemIO6,
+        systemIO7, systemIO8, systemIO9, systemIO10,
+
         systemStaticIO1, systemStaticIO2,
+
         entity1, entity2, entity3, entity4, entity5, entity6, entity7,
+
         systemExecutionPattern = [],
         componentExecutionPattern = [];
 
@@ -131,7 +143,7 @@ describe('core register systems', function () {
         systemLogic9 = new CONV.System.Logic({
             name: 'EpicSystemLogic9',
             dependencies: ['EpicSystemLogic1'],
-            requiredDependencies: ['EpicSystemLogic3'],
+            requiredDependencies: ['EpicSystemLogic10'],
             component: function () {
                 return 'L9c';
             },
@@ -139,7 +151,17 @@ describe('core register systems', function () {
                 systemExecutionPattern.push('L9');
                 _.each(entities, function (e) {
                     componentExecutionPattern.push(e.EpicSystemLogic9 + '-' + e.name);
+                    componentExecutionPattern.push(e.EpicSystemLogic10 + '-' + e.name);
                 });
+            }
+        });
+
+        systemLogic10 = new CONV.System.Logic({
+            name: 'EpicSystemLogic10',
+            dependencies: [],
+            requiredDependencies: ['EpicSystemLogic3'],
+            component: function () {
+                return 'L10c';
             }
         });
 
@@ -295,7 +317,7 @@ describe('core register systems', function () {
         systemInterpolation9 = new CONV.System.Interpolate({
             name: 'EpicSystemInterpolate9',
             dependencies: ['EpicSystemInterpolate1'],
-            requiredDependencies: ['EpicSystemInterpolate3'],
+            requiredDependencies: ['EpicSystemInterpolate10'],
             component: function () {
                 return 'I9c';
             },
@@ -304,7 +326,17 @@ describe('core register systems', function () {
                 systemExecutionPattern.push('I9');
                 _.each(entities, function (e) {
                     componentExecutionPattern.push(e.EpicSystemInterpolate9 + '-' + e.name);
+                    componentExecutionPattern.push(e.EpicSystemInterpolate10 + '-' + e.name);
                 });
+            }
+        });
+
+        systemInterpolation10 = new CONV.System.Interpolate({
+            name: 'EpicSystemInterpolate10',
+            dependencies: [],
+            requiredDependencies: ['EpicSystemInterpolate3'],
+            component: function () {
+                return 'I10c';
             }
         });
 
@@ -454,7 +486,7 @@ describe('core register systems', function () {
         systemIO9 = new CONV.System.IO({
             name: 'EpicSystemIO9',
             dependencies: ['EpicSystemIO1'],
-            requiredDependencies: ['EpicSystemIO3'],
+            requiredDependencies: ['EpicSystemIO10'],
             component: function () {
                 return 'IO9c';
             },
@@ -462,7 +494,17 @@ describe('core register systems', function () {
                 systemExecutionPattern.push('IO9');
                 _.each(entities, function (e) {
                     componentExecutionPattern.push(e.EpicSystemIO9 + '-' + e.name);
+                    componentExecutionPattern.push(e.EpicSystemIO10 + '-' + e.name);
                 });
+            }
+        });
+
+        systemIO10 = new CONV.System.Interpolate({
+            name: 'EpicSystemIO10',
+            dependencies: [],
+            requiredDependencies: ['EpicSystemIO3'],
+            component: function () {
+                return 'IO10c';
             }
         });
 
@@ -603,9 +645,9 @@ describe('core register systems', function () {
         CONV.cycleOnce(function () {
             // should execute logic and IO systems in order
             expect(systemExecutionPattern).toEqual([
-                'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9'
+                'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7'
             ]);
 
             systemExecutionPattern = [];
@@ -615,13 +657,13 @@ describe('core register systems', function () {
         CONV.spiralCycle(function () {
             // should execute logic systems maximum times to avoid spiral of death
             expect(systemExecutionPattern).toEqual([
-                'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9'
+                'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7'
             ]);
 
             systemExecutionPattern = [];
@@ -640,22 +682,25 @@ describe('core register systems', function () {
                 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6',
                 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L3c-entity7',
                 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6',
+                'L9c-entity7',
+                'L10c-entity7',
                 'L5c-entity4', 'L5c-entity5',
                 'L7c-entity6',
-                'L9c-entity7',
                 'SI2c-staticEntity', 'SI1c-staticEntity',
                 'I6c-entity5',
                 'I2c-entity6',
                 'I3c-entity7',
                 'I9c-entity7',
+                'I10c-entity7',
                 'SIO2c-staticEntity', 'SIO1c-staticEntity',
                 'IO8c-entity4', 'IO8c-entity5',
                 'IO2c-entity5', 'IO2c-entity6',
                 'IO3c-entity5', 'IO3c-entity6', 'IO3c-entity7',
                 'IO1c-entity5', 'IO1c-entity6',
+                'IO9c-entity7',
+                'IO10c-entity7',
                 'IO5c-entity5',
-                'IO7c-entity5',
-                'IO9c-entity7'
+                'IO7c-entity5'
             ]);
 
             systemExecutionPattern = [];
@@ -664,13 +709,13 @@ describe('core register systems', function () {
 
         CONV.spiralCycle(function () {
             expect(componentExecutionPattern).toEqual([
-                'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity2', 'L8c-custome-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L3c-entity7', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L5c-entity4', 'L5c-entity5', 'L7c-entity6', 'L9c-entity7',
-                'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity2', 'L8c-custome-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L3c-entity7', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L5c-entity4', 'L5c-entity5', 'L7c-entity6', 'L9c-entity7',
-                'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity2', 'L8c-custome-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L3c-entity7', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L5c-entity4', 'L5c-entity5', 'L7c-entity6', 'L9c-entity7',
-                'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity2', 'L8c-custome-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L3c-entity7', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L5c-entity4', 'L5c-entity5', 'L7c-entity6', 'L9c-entity7',
-                'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity2', 'L8c-custome-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L3c-entity7', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L5c-entity4', 'L5c-entity5', 'L7c-entity6', 'L9c-entity7',
-                'SI2c-staticEntity', 'SI1c-staticEntity', 'I6c-entity5', 'I2c-entity6', 'I3c-entity7', 'I9c-entity7',
-                'SIO2c-staticEntity', 'SIO1c-staticEntity', 'IO8c-entity4', 'IO8c-entity5', 'IO2c-entity5', 'IO2c-entity6', 'IO3c-entity5', 'IO3c-entity6', 'IO3c-entity7', 'IO1c-entity5', 'IO1c-entity6', 'IO5c-entity5', 'IO7c-entity5', 'IO9c-entity7'
+                'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity2', 'L8c-custome-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L3c-entity7', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L5c-entity4', 'L5c-entity5', 'L7c-entity6',
+                'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity2', 'L8c-custome-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L3c-entity7', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L5c-entity4', 'L5c-entity5', 'L7c-entity6',
+                'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity2', 'L8c-custome-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L3c-entity7', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L5c-entity4', 'L5c-entity5', 'L7c-entity6',
+                'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity2', 'L8c-custome-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L3c-entity7', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L5c-entity4', 'L5c-entity5', 'L7c-entity6',
+                'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-entity2', 'L8c-custome-entity6', 'L6c-entity4', 'L6c-entity5', 'L4c-entity4', 'L2c-entity1', 'L2c-entity3', 'L2c-entity4', 'L2c-entity5', 'L2c-entity6', 'L3c-entity1', 'L3c-entity4', 'L3c-entity5', 'L3c-entity6', 'L3c-entity7', 'L1c-entity1', 'L1c-entity4', 'L1c-entity5', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L5c-entity4', 'L5c-entity5', 'L7c-entity6',
+                'SI2c-staticEntity', 'SI1c-staticEntity', 'I6c-entity5', 'I2c-entity6', 'I3c-entity7', 'I9c-entity7', 'I10c-entity7',
+                'SIO2c-staticEntity', 'SIO1c-staticEntity', 'IO8c-entity4', 'IO8c-entity5', 'IO2c-entity5', 'IO2c-entity6', 'IO3c-entity5', 'IO3c-entity6', 'IO3c-entity7', 'IO1c-entity5', 'IO1c-entity6', 'IO9c-entity7', 'IO10c-entity7', 'IO5c-entity5', 'IO7c-entity5'
             ]);
 
             systemExecutionPattern = [];
@@ -692,11 +737,11 @@ describe('core register systems', function () {
                 // should execute components in order
                 expect(componentExecutionPattern).toEqual([
                     'SL2c-staticEntity', 'SL1c-staticEntity',
-                    'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
+                    'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L7c-entity6',
                     'SI2c-staticEntity', 'SI1c-staticEntity', 'I2c-entity6',
-                    'I3c-entity7', 'I9c-entity7',
+                    'I3c-entity7', 'I9c-entity7', 'I10c-entity7',
                     'SIO2c-staticEntity', 'SIO1c-staticEntity',
-                    'IO2c-entity6', 'IO3c-entity6', 'IO3c-entity7', 'IO1c-entity6', 'IO9c-entity7'
+                    'IO2c-entity6', 'IO3c-entity6', 'IO3c-entity7', 'IO1c-entity6', 'IO9c-entity7', 'IO10c-entity7'
                 ]);
 
                 systemExecutionPattern = [];
@@ -705,14 +750,14 @@ describe('core register systems', function () {
 
             CONV.spiralCycle(function () {
                 expect(componentExecutionPattern).toEqual([
-                    'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
-                    'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
-                    'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
-                    'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
-                    'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
-                    'SI2c-staticEntity', 'SI1c-staticEntity', 'I2c-entity6', 'I3c-entity7', 'I9c-entity7',
+                    'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L7c-entity6',
+                    'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L7c-entity6',
+                    'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L7c-entity6',
+                    'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L7c-entity6',
+                    'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L7c-entity6',
+                    'SI2c-staticEntity', 'SI1c-staticEntity', 'I2c-entity6', 'I3c-entity7', 'I9c-entity7', 'I10c-entity7',
                     'SIO2c-staticEntity', 'SIO1c-staticEntity',
-                    'IO2c-entity6', 'IO3c-entity6', 'IO3c-entity7', 'IO1c-entity6', 'IO9c-entity7'
+                    'IO2c-entity6', 'IO3c-entity6', 'IO3c-entity7', 'IO1c-entity6', 'IO9c-entity7', 'IO10c-entity7'
                 ]);
 
                 systemExecutionPattern = [];
@@ -738,9 +783,9 @@ describe('core register systems', function () {
                 CONV.cycleOnce(function () {
                     // should execute components in order
                     expect(componentExecutionPattern).toEqual([
-                        'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
-                        'SI2c-staticEntity', 'SI1c-staticEntity', 'I8c-entity6', 'I2c-entity6', 'I3c-entity7', 'I3c-entity6', 'I1c-entity6', 'I7c-custome-entity6', 'I9c-entity7',
-                        'SIO2c-staticEntity', 'SIO1c-staticEntity', 'IO2c-entity6', 'IO3c-entity6', 'IO3c-entity7', 'IO1c-entity6', 'IO9c-entity7'
+                        'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L7c-entity6',
+                        'SI2c-staticEntity', 'SI1c-staticEntity', 'I8c-entity6', 'I2c-entity6', 'I3c-entity7', 'I3c-entity6', 'I1c-entity6', 'I9c-entity7', 'I10c-entity7', 'I7c-custome-entity6',
+                        'SIO2c-staticEntity', 'SIO1c-staticEntity', 'IO2c-entity6', 'IO3c-entity6', 'IO3c-entity7', 'IO1c-entity6', 'IO9c-entity7', 'IO10c-entity7'
                     ]);
 
                     systemExecutionPattern = [];
@@ -749,14 +794,14 @@ describe('core register systems', function () {
 
                 CONV.spiralCycle(function () {
                     expect(componentExecutionPattern).toEqual([
-                        'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
-                        'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
-                        'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
-                        'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
-                        'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L7c-entity6', 'L9c-entity7',
-                        'SI2c-staticEntity', 'SI1c-staticEntity', 'I8c-entity6', 'I2c-entity6', 'I3c-entity7', 'I3c-entity6', 'I1c-entity6', 'I7c-custome-entity6', 'I9c-entity7',
+                        'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L7c-entity6',
+                        'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L7c-entity6',
+                        'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L7c-entity6',
+                        'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L7c-entity6',
+                        'SL2c-staticEntity', 'SL1c-staticEntity', 'L8c-custome-entity6', 'L2c-entity6', 'L3c-entity6', 'L3c-entity7', 'L1c-entity6', 'L9c-entity7', 'L10c-entity7', 'L7c-entity6',
+                        'SI2c-staticEntity', 'SI1c-staticEntity', 'I8c-entity6', 'I2c-entity6', 'I3c-entity7', 'I3c-entity6', 'I1c-entity6', 'I9c-entity7', 'I10c-entity7', 'I7c-custome-entity6',
                         'SIO2c-staticEntity', 'SIO1c-staticEntity',
-                        'IO2c-entity6', 'IO3c-entity6', 'IO3c-entity7', 'IO1c-entity6', 'IO9c-entity7'
+                        'IO2c-entity6', 'IO3c-entity6', 'IO3c-entity7', 'IO1c-entity6', 'IO9c-entity7', 'IO10c-entity7'
 
                     ]);
 
@@ -768,25 +813,25 @@ describe('core register systems', function () {
             it('should run cycles 5 times', function () {
                 CONV.cycleMany(5, function () {
                     expect(systemExecutionPattern).toEqual([
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7',
 
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7',
 
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7',
 
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7',
 
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9'
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7'
                     ]);
 
                     systemExecutionPattern = [];
@@ -797,45 +842,45 @@ describe('core register systems', function () {
             it('should run spiral cycles 5 times', function () {
                 CONV.spiralCycleMany(5, function () {
                     expect(systemExecutionPattern).toEqual([
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7',
 
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7',
 
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7',
 
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7',
 
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L5', 'L7', 'L9',
-                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L5', 'L7',
+                        'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                        'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7',
                     ]);
 
                     systemExecutionPattern = [];
@@ -856,9 +901,9 @@ describe('core register systems', function () {
                 it('should remove system', function () {
                     CONV.cycleOnce(function () {
                         expect(systemExecutionPattern).toEqual([
-                            'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L7', 'L9',
-                            'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                            'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9'
+                            'SL2', 'SL1', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9', 'L7',
+                            'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                            'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7'
                         ]);
 
                         systemExecutionPattern = [];
@@ -879,8 +924,8 @@ describe('core register systems', function () {
                     CONV.cycleOnce(function () {
                         expect(systemExecutionPattern).toEqual([
                             'SL2', 'L8', 'L6', 'L4', 'L2', 'L3', 'L1', 'L9',
-                            'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I5', 'I7', 'I9',
-                            'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO5', 'IO7', 'IO9'
+                            'SI2', 'SI1', 'I8', 'I6', 'I4', 'I2', 'I3', 'I1', 'I9', 'I5', 'I7',
+                            'SIO2', 'SIO1', 'IO8', 'IO6', 'IO4', 'IO2', 'IO3', 'IO1', 'IO9', 'IO5', 'IO7'
                         ]);
 
                         systemExecutionPattern = [];

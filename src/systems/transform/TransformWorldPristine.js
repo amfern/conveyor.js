@@ -9,8 +9,6 @@ new CONV.System.Logic({
 
     requiredDependencies: ['TransformWorld'],
 
-    component: function () { },
-
     process: function (entities) {
         _.each(entities, function (e) {
             e.TransformWorldPristine.copy(e.TransformWorld);

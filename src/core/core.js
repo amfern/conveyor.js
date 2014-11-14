@@ -26,6 +26,20 @@ window.CONV = (function () {
 
     // Private
     // --------------------------
+    function getProcessOnlySystems(systems) {
+        return _.filter(systems, function(system) {
+            return system.process;
+        });
+    }
+
+    function initComponent(system, defaults) {
+        if(system.component) {
+            return system.component(defaults);
+        }
+
+        return null;
+    }
+
     function systemIndex(systems, systemName) {
         return _.findIndex(systems, function (system) {
             return system.name === systemName;
@@ -48,7 +62,7 @@ window.CONV = (function () {
 
         // static systems enjoy their own component
         if(system.isStatic) {
-            staticEntity[system.name] = system.component();
+            staticEntity[system.name] = initComponent(system);
         }
 
         return system;
@@ -146,7 +160,6 @@ window.CONV = (function () {
 
     // goes over all systems and validates them
     function validateSystems(tempSystemCollection) {
-        // add systems in the correct order for dependencies
         _.each(tempSystemCollection, function (tempSys) {
             validateSystem(tempSys);
         });
@@ -216,7 +229,7 @@ window.CONV = (function () {
 
             system.entities.push(entity);
 
-            components[componentName] = system.component(entity.components[componentName]);
+            components[componentName] = initComponent(system, entity.components[componentName]);
             return components;
         }, {});
     }
@@ -342,9 +355,13 @@ window.CONV = (function () {
         validateSystems(tempInterpolationSystems);
         validateSystems(tempIOSystems);
 
-        firstLogicCallback = prepareSystem(tempLogicSystems, processLogic);
-        firstInterpolationCallback = prepareSystem(tempInterpolationSystems, processIO);
-        firstIOCallback = prepareSystem(tempIOSystems, processNextFrame);
+        var logicProcessOnlySystems = getProcessOnlySystems(tempLogicSystems),
+            interpolationProcessOnlySystems = getProcessOnlySystems(tempInterpolationSystems),
+            IOProcessOnlySystems = getProcessOnlySystems(tempIOSystems);
+
+        firstLogicCallback = prepareSystem(logicProcessOnlySystems, processLogic);
+        firstInterpolationCallback = prepareSystem(interpolationProcessOnlySystems, processIO);
+        firstIOCallback = prepareSystem(IOProcessOnlySystems, processNextFrame);
 
         processNextFrame();
     }

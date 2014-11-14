@@ -10,7 +10,6 @@ new CONV.System.Logic({
 
     requiredDependencies: ['Transformer', 'HIDComboState', 'MouseState', 'ActiveKeyBinds'],
 
-    component: function () { },
 
     process: function (entities) {
         _.each(entities, function (e) {

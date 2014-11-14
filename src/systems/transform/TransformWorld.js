@@ -7,7 +7,5 @@ new CONV.System.Logic({
 
     component: function () {
         return new THREE.Object3D();
-    },
-
-    process: function () { }
+    }
 });

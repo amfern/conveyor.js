@@ -10,8 +10,6 @@ new CONV.System.Logic({
 
     requiredDependencies: ['Transformer', 'HIDComboState', 'ActiveKeyBinds'],
 
-    component: function () {},
-
     process: function (entities) {
         _.each(entities, function (e) {
             var translate = e.Transformer.position,

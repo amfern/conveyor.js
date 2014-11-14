@@ -7,8 +7,6 @@ new CONV.System.Logic({
 
     dependencies: [],
 
-    component: function () { },
-
     process: function (entities) {
         _.each(entities, function (e) {
             e.Transformer = {

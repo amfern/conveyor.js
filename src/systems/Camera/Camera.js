@@ -9,8 +9,6 @@ new CONV.System.Interpolate({
 
     requiredDependencies: ['TransformWorldInterpolation', 'RendererCamera'],
 
-    component: function () { },
-
     process: function (entities) {
         var entity = _.first(entities);
 

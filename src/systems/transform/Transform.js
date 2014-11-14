@@ -27,7 +27,5 @@ new CONV.System.Logic({
         component.position.z = defaults.z;
 
         return component;
-    },
-
-    process: function () { }
+    }
 });

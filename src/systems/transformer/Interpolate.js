@@ -9,8 +9,6 @@ new CONV.System.Interpolate({
 
     requiredDependencies: ['TransformInterpolation', 'TransformPristine'],
 
-    component: function () {},
-
     process: function (entities, interpolation) {
         var before, after;
 

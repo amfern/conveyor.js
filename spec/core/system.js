@@ -151,12 +151,6 @@ describe('System', function () {
         })).toThrow(new Error('"yield" is saved system name'));
     });
 
-    it('should raise exception for missing process function', function () {
-        expect(CONV.System.bind(null, {
-            name: 'epicName'
-        })).toThrow(new Error('process function is mandatory'));
-    });
-
     it('should raise exception for missing name', function () {
         expect(CONV.System.bind(null, {
             process: function () {}
@@ -175,10 +169,6 @@ describe('System', function () {
 
         it('should fill default dependencies', function () {
             expect(genericSystem.dependencies).toEqual([]);
-        });
-
-        it('should fill default component function', function () {
-            expect(typeof (genericSystem.component)).toEqual('function');
         });
     });
 
