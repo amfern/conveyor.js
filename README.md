@@ -70,6 +70,7 @@ Performance:
     creating thus structs means copying lots of data, it cancels out the cache performance boost.
 Develop Environment:
     - maybe use connect-assets or any other better tool as build script
+    - fix HID testing by using async callbacks instead of while loop, this way test will not break at randomsid
 
 
 ### Roadmap

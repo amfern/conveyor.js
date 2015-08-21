@@ -37,7 +37,7 @@ describe('HIDComboState', function () {
 
     describe('', function () {
         describe('register combo', function () {
-            it('Should register combo and set handler same as combo index', function () {
+            it('Should register combo and set handler same as combo index', function (done) {
                 CONV.cycleContinues([
                     function () {
                         combosState.handler1 = {
@@ -56,7 +56,7 @@ describe('HIDComboState', function () {
                         expectTriggered('handler1', false);
 
                         keydownEvent(1);
-                        _(100000).times(function () {});
+                        _(1000000).times(function () {});
                     }, function() {
                         expectTriggered('handler1', true);
                     }
@@ -66,7 +66,7 @@ describe('HIDComboState', function () {
 
         describe('should trigger', function () {
             describe('unordered combo', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -85,9 +85,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -108,7 +108,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -130,9 +130,9 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', true);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -141,9 +141,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
 
                         },
@@ -156,7 +156,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', true);
 
                             // remove one key
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -166,7 +166,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -188,9 +188,9 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', true);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -199,7 +199,7 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             // expect the combo to be not triggered
@@ -207,7 +207,7 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -219,7 +219,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', true);
 
                             // remove one key
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -230,7 +230,7 @@ describe('HIDComboState', function () {
                 });
 
                 // hmm i don't really have a way of telling if default values were filled
-                it('should fill in default values', function () {
+                it('should fill in default values', function (done) {
                     CONV.cycleContinues([
                         function () {
                             combosState.handler1 = {
@@ -240,18 +240,18 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         }, function() {
                             expectTriggered('handler1', true);
                         }
                     ]);
                 });
 
-                it('should register duplicated combos', function () {
+                it('should register duplicated combos', function (done) {
                     CONV.cycleContinues([
                         function () {
                             combosState.handler1 = {
@@ -281,11 +281,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         }, function() {
                             expectTriggered('handler1', true);
                             expectTriggered('handler2', true);
@@ -295,7 +295,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered combo', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -314,11 +314,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -327,16 +327,16 @@ describe('HIDComboState', function () {
 
                             // trigger combo again in different order
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
                             // expect the combo to be not triggered
                             expectTriggered('handler1', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -353,7 +353,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -375,11 +375,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', true);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -388,18 +388,18 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
                             // expect the combo to be not triggered
                             expectTriggered('handler1', true);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -407,7 +407,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -417,7 +417,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -439,11 +439,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -452,7 +452,7 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -460,16 +460,16 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', false);
 
                             // trigger combo
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
                             // expect the combo to be not triggered
                             expectTriggered('handler1', true);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -477,7 +477,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -489,7 +489,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered sequence combo', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -508,11 +508,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -521,11 +521,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo again in sequence
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
                         },
                         function () {
@@ -534,16 +534,16 @@ describe('HIDComboState', function () {
 
                             // trigger combo again in different order
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
                             // expect the combo to be not triggered
                             expectTriggered('handler1', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -560,7 +560,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -582,11 +582,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', true);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -595,16 +595,16 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
                             // expect the combo to be not triggered
                             expectTriggered('handler1', true);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -612,7 +612,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -622,7 +622,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -644,11 +644,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -657,7 +657,7 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             // expect the combo to be not triggered
@@ -665,14 +665,14 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
                             // expect the combo to be not triggered
                             expectTriggered('handler1', true);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -680,7 +680,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -692,7 +692,7 @@ describe('HIDComboState', function () {
             });
 
             describe('unordered combo and keep triggered', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -742,7 +742,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -751,7 +751,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -763,7 +763,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -806,9 +806,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -817,7 +817,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
                         },
                         function () {
@@ -826,7 +826,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', true);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -835,7 +835,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', true);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -847,7 +847,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -890,9 +890,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -901,7 +901,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
                         },
                         function () {
@@ -910,7 +910,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -919,7 +919,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -933,7 +933,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered combo and keep triggered', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -975,7 +975,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -983,11 +983,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -995,7 +995,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', true);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -1004,13 +1004,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -1021,7 +1021,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1063,11 +1063,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -1076,7 +1076,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', true);
@@ -1084,11 +1084,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -1096,7 +1096,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', true);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -1105,13 +1105,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -1122,7 +1122,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1164,11 +1164,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -1177,7 +1177,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -1185,11 +1185,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -1197,7 +1197,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', true);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -1206,13 +1206,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -1225,7 +1225,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered combo sequence and keep triggered', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1267,7 +1267,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -1275,11 +1275,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -1287,7 +1287,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', true);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -1296,13 +1296,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -1311,13 +1311,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order and in sequence
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
                         },
                         function () {
@@ -1328,7 +1328,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1370,11 +1370,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -1382,7 +1382,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
                         },
                         function () {
@@ -1391,11 +1391,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -1403,7 +1403,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', true);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -1412,13 +1412,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -1427,13 +1427,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order and in sequence
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
                         },
                         function () {
@@ -1444,7 +1444,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1486,11 +1486,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -1498,7 +1498,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
                         },
                         function () {
@@ -1507,11 +1507,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -1519,7 +1519,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', true);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -1528,13 +1528,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -1543,13 +1543,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order and in sequence
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
                         },
                         function () {
@@ -1581,7 +1581,7 @@ describe('HIDComboState', function () {
             });
 
             describe('unordered combos', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1600,9 +1600,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -1636,7 +1636,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1655,9 +1655,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -1666,9 +1666,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -1696,7 +1696,7 @@ describe('HIDComboState', function () {
 
                             // re-trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -1712,7 +1712,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1731,9 +1731,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -1742,9 +1742,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -1772,7 +1772,7 @@ describe('HIDComboState', function () {
 
                             // re-trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -1798,7 +1798,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered combos', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1817,11 +1817,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -1846,7 +1846,7 @@ describe('HIDComboState', function () {
                         function () {
                             // expect the combo to be not triggered
                             expectTriggered('handler1', false);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -1854,7 +1854,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', false);
                             // remove one key
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -1864,7 +1864,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1883,9 +1883,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -1894,11 +1894,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -1923,7 +1923,7 @@ describe('HIDComboState', function () {
                         function () {
                             // expect the combo to be not triggered
                             expectTriggered('handler1', false);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -1931,7 +1931,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', false);
                             // remove one key
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -1941,7 +1941,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1960,9 +1960,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -1971,11 +1971,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -2000,7 +2000,7 @@ describe('HIDComboState', function () {
                         function () {
                             // expect the combo to be not triggered
                             expectTriggered('handler1', false);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -2009,7 +2009,7 @@ describe('HIDComboState', function () {
 
                             // remove one key
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -2018,9 +2018,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -2033,9 +2033,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             // expect the combo to be not triggered because now it is in order
@@ -2046,7 +2046,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered sequence combos', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2065,11 +2065,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -2078,11 +2078,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -2107,7 +2107,7 @@ describe('HIDComboState', function () {
                         function () {
                             // expect the combo to be not triggered
                             expectTriggered('handler1', false);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -2115,7 +2115,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', false);
                             // remove one key
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -2125,7 +2125,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2144,11 +2144,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -2157,11 +2157,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -2170,11 +2170,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -2199,7 +2199,7 @@ describe('HIDComboState', function () {
                         function () {
                             // expect the combo to be not triggered
                             expectTriggered('handler1', false);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -2207,7 +2207,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', false);
                             // remove one key
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -2217,7 +2217,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2236,11 +2236,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -2249,11 +2249,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -2262,11 +2262,11 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -2291,7 +2291,7 @@ describe('HIDComboState', function () {
                         function () {
                             // expect the combo to be not triggered
                             expectTriggered('handler1', false);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -2299,7 +2299,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler1', false);
                             // remove one key
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -2308,9 +2308,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -2323,13 +2323,13 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             // expect the combo to be not triggered because now it is in order
@@ -2342,7 +2342,7 @@ describe('HIDComboState', function () {
 
         describe('should trigger exclusive', function () {
             describe('unordered combos', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2385,14 +2385,14 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -2400,7 +2400,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -2411,7 +2411,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2453,13 +2453,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -2468,14 +2468,14 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', true);
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -2483,7 +2483,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -2494,7 +2494,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2536,13 +2536,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -2551,14 +2551,14 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -2566,7 +2566,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -2577,7 +2577,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keydown and keyup and release should be exclusive only among their trigger type', function () {
+                it('keydown and keyup and release should be exclusive only among their trigger type', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2623,7 +2623,7 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -2631,7 +2631,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', true);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
                         },
                         function () {
@@ -2644,7 +2644,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered combos', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2686,7 +2686,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -2694,11 +2694,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -2714,13 +2714,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -2731,7 +2731,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2772,11 +2772,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -2786,7 +2786,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', true);
@@ -2794,11 +2794,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -2814,13 +2814,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -2831,7 +2831,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2872,11 +2872,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -2886,7 +2886,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -2894,11 +2894,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -2914,13 +2914,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -2933,7 +2933,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered sequence combos', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2975,7 +2975,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -2983,11 +2983,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -3003,13 +3003,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -3018,13 +3018,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
                         },
                         function () {
@@ -3035,7 +3035,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -3077,11 +3077,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -3091,7 +3091,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', true);
@@ -3099,11 +3099,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -3119,13 +3119,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -3134,13 +3134,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
                         },
                         function () {
@@ -3151,7 +3151,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -3193,11 +3193,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -3207,7 +3207,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -3215,11 +3215,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -3235,13 +3235,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -3250,13 +3250,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
                         },
                         function () {
@@ -3270,7 +3270,7 @@ describe('HIDComboState', function () {
 
             describe('once', function () {
                 describe('unordered combos', function () {
-                    it('keydown', function () {
+                    it('keydown', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -3313,14 +3313,14 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -3328,7 +3328,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', true);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -3355,7 +3355,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function () {
+                    it('keyup', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -3398,16 +3398,16 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 // trigger combo
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 // trigger combo
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -3417,14 +3417,14 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', true);
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -3432,7 +3432,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', true);
                                 expectTriggered('handler3', true);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -3445,7 +3445,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -3461,7 +3461,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function () {
+                    it('release', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -3504,16 +3504,16 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 // trigger combo
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 // trigger combo
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -3523,14 +3523,14 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -3538,7 +3538,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', true);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -3551,7 +3551,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', true);
                                 expectTriggered('handler3', true);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -3569,7 +3569,7 @@ describe('HIDComboState', function () {
                 });
 
                 describe('ordered combos', function () {
-                    it('keydown', function () {
+                    it('keydown', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -3611,7 +3611,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -3619,11 +3619,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -3639,13 +3639,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -3671,9 +3671,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -3684,7 +3684,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keydup', function () {
+                    it('keydup', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -3726,13 +3726,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -3741,7 +3741,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', true);
@@ -3749,11 +3749,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -3769,13 +3769,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -3793,9 +3793,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -3803,9 +3803,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -3816,7 +3816,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function () {
+                    it('release', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -3858,13 +3858,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -3873,7 +3873,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -3881,11 +3881,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -3893,7 +3893,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', true);
                                 expectTriggered('handler3', true);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -3902,13 +3902,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -3926,9 +3926,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -3936,9 +3936,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -3951,7 +3951,7 @@ describe('HIDComboState', function () {
                 });
 
                 describe('ordered sequence combos', function () {
-                    it('keydown', function () {
+                    it('keydown', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -3993,7 +3993,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -4001,11 +4001,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -4013,7 +4013,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', true);
                                 expectTriggered('handler3', true);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -4022,13 +4022,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -4046,9 +4046,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -4056,9 +4056,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -4069,7 +4069,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function () {
+                    it('keyup', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -4106,13 +4106,13 @@ describe('HIDComboState', function () {
                                 };
 
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -4121,7 +4121,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', true);
@@ -4129,11 +4129,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -4141,7 +4141,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', true);
                                 expectTriggered('handler3', true);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -4150,13 +4150,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -4174,9 +4174,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -4184,9 +4184,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -4197,7 +4197,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function () {
+                    it('release', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -4234,13 +4234,13 @@ describe('HIDComboState', function () {
                                 };
 
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -4249,7 +4249,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -4257,11 +4257,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -4269,7 +4269,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', true);
                                 expectTriggered('handler3', true);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -4278,13 +4278,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -4302,9 +4302,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -4312,9 +4312,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -4330,7 +4330,7 @@ describe('HIDComboState', function () {
 
         describe('should trigger solitary', function () {
             describe('unordered combos', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4373,14 +4373,14 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
                             expectTriggered('handler2', false);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -4388,7 +4388,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -4399,7 +4399,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4442,13 +4442,13 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             // expect the combo to be not triggered
@@ -4458,7 +4458,7 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -4467,9 +4467,9 @@ describe('HIDComboState', function () {
 
                             delete combosState.handler1;
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
                         },
                         function () {
@@ -4477,7 +4477,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -4488,7 +4488,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4531,13 +4531,13 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             // expect the combo to be not triggered
@@ -4547,7 +4547,7 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -4556,9 +4556,9 @@ describe('HIDComboState', function () {
 
                             delete combosState.handler1;
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
                         },
                         function () {
@@ -4566,7 +4566,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -4579,7 +4579,7 @@ describe('HIDComboState', function () {
             });
 
             describe('unordered combos', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4621,7 +4621,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -4629,11 +4629,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -4649,13 +4649,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -4666,7 +4666,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4709,13 +4709,13 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             // expect the combo to be not triggered
@@ -4724,7 +4724,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -4732,11 +4732,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -4746,9 +4746,9 @@ describe('HIDComboState', function () {
 
                             delete combosState.handler1;
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -4756,7 +4756,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -4765,13 +4765,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -4782,7 +4782,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4825,13 +4825,13 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             // expect the combo to be not triggered
@@ -4840,7 +4840,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -4848,11 +4848,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -4862,9 +4862,9 @@ describe('HIDComboState', function () {
 
                             delete combosState.handler1;
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -4872,7 +4872,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler2', true);
                             expectTriggered('handler3', false);
 
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -4881,13 +4881,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -4900,7 +4900,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered sequence combos', function () {
-                it('keydown', function () {
+                it('keydown', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4942,7 +4942,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -4950,11 +4950,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
                         },
                         function () {
@@ -4970,13 +4970,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', true);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(3);
                         },
                         function () {
@@ -4987,7 +4987,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function () {
+                it('keyup', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -5030,13 +5030,13 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             // expect the combo to be not triggered
@@ -5045,7 +5045,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -5053,11 +5053,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -5069,9 +5069,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -5079,13 +5079,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -5096,7 +5096,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function () {
+                it('release', function (done) {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -5139,13 +5139,13 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             // expect the combo to be not triggered
@@ -5154,7 +5154,7 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -5162,11 +5162,11 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
                         },
                         function () {
@@ -5178,9 +5178,9 @@ describe('HIDComboState', function () {
 
                             // trigger combo
                             keydownEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keydownEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                         },
                         function () {
                             expectTriggered('handler1', false);
@@ -5188,13 +5188,13 @@ describe('HIDComboState', function () {
                             expectTriggered('handler3', false);
 
                             // trigger combo again in different order
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(1);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(2);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(4);
-                            _(100000).times(function () {});
+                            _(1000000).times(function () {});
                             keyupEvent(3);
                         },
                         function () {
@@ -5208,7 +5208,7 @@ describe('HIDComboState', function () {
 
             describe('once', function () {
                 describe('unordered combos', function () {
-                    it('keydown', function () {
+                    it('keydown', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -5251,14 +5251,14 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -5271,7 +5271,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -5289,9 +5289,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -5300,7 +5300,7 @@ describe('HIDComboState', function () {
 
                                 delete combosState.handler2;
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', true);
@@ -5310,7 +5310,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function () {
+                    it('keyup', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -5353,13 +5353,13 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -5369,14 +5369,14 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -5389,7 +5389,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -5407,9 +5407,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -5418,7 +5418,7 @@ describe('HIDComboState', function () {
 
                                 delete combosState.handler1;
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -5428,7 +5428,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function () {
+                    it('release', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -5471,13 +5471,13 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -5487,14 +5487,14 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -5507,7 +5507,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -5525,9 +5525,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -5536,7 +5536,7 @@ describe('HIDComboState', function () {
 
                                 delete combosState.handler1;
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -5548,7 +5548,7 @@ describe('HIDComboState', function () {
                 });
 
                 describe('unordered combos', function () {
-                    it('keydown', function () {
+                    it('keydown', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -5590,7 +5590,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -5598,11 +5598,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -5618,13 +5618,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -5650,9 +5650,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -5661,7 +5661,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', true);
 
                                 delete combosState.handler2;
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -5672,7 +5672,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function () {
+                    it('keyup', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -5715,13 +5715,13 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -5730,7 +5730,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', true);
@@ -5738,11 +5738,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -5758,13 +5758,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -5783,18 +5783,18 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -5803,7 +5803,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', true);
 
                                 delete combosState.handler2;
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -5814,7 +5814,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function () {
+                    it('release', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -5857,13 +5857,13 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -5872,7 +5872,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -5880,11 +5880,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -5900,13 +5900,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -5925,18 +5925,18 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -5945,7 +5945,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', true);
 
                                 delete combosState.handler2;
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -5958,7 +5958,7 @@ describe('HIDComboState', function () {
                 });
 
                 describe('ordered sequence combos', function () {
-                    it('keydown', function () {
+                    it('keydown', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6000,7 +6000,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -6008,11 +6008,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -6028,13 +6028,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -6060,9 +6060,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -6071,7 +6071,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', true);
 
                                 delete combosState.handler2;
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -6082,7 +6082,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function () {
+                    it('keyup', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6125,13 +6125,13 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -6140,7 +6140,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', true);
@@ -6148,11 +6148,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -6160,7 +6160,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -6169,13 +6169,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -6201,9 +6201,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -6212,7 +6212,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 delete combosState.handler2;
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -6223,7 +6223,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function () {
+                    it('release', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6266,13 +6266,13 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -6281,7 +6281,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -6289,11 +6289,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -6301,7 +6301,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -6310,13 +6310,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -6342,9 +6342,9 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -6353,7 +6353,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', true);
 
                                 delete combosState.handler2;
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -6368,7 +6368,7 @@ describe('HIDComboState', function () {
 
             describe('exclusive', function () {
                 describe('unordered combos', function () {
-                    it('keydown', function () {
+                    it('keydown', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6411,14 +6411,14 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -6426,7 +6426,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', true);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -6437,7 +6437,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function () {
+                    it('keyup', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6480,13 +6480,13 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -6496,14 +6496,14 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', true);
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -6511,7 +6511,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -6522,7 +6522,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function () {
+                    it('release', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6565,13 +6565,13 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -6581,14 +6581,14 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -6596,7 +6596,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', true);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -6609,7 +6609,7 @@ describe('HIDComboState', function () {
                 });
 
                 describe('ordered combos', function () {
-                    it('keydown', function () {
+                    it('keydown', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6651,7 +6651,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -6659,11 +6659,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -6679,13 +6679,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', true);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -6696,7 +6696,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function () {
+                    it('keyup', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6739,13 +6739,13 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -6753,7 +6753,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
                             },
                             function () {
@@ -6762,11 +6762,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -6782,13 +6782,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -6799,7 +6799,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function () {
+                    it('release', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6842,13 +6842,13 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -6856,7 +6856,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
                             },
                             function () {
@@ -6865,11 +6865,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -6885,13 +6885,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', true);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -6904,7 +6904,7 @@ describe('HIDComboState', function () {
                 });
 
                 describe('ordered sequence combos', function () {
-                    it('keydown', function () {
+                    it('keydown', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6946,7 +6946,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -6954,11 +6954,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
                             },
                             function () {
@@ -6974,13 +6974,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', true);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -6988,7 +6988,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -6999,7 +6999,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function () {
+                    it('keyup', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -7042,13 +7042,13 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -7057,7 +7057,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', true);
@@ -7065,11 +7065,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -7085,13 +7085,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -7099,7 +7099,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -7110,7 +7110,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function () {
+                    it('release', function (done) {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -7153,13 +7153,13 @@ describe('HIDComboState', function () {
 
                                 // trigger combo
                                 keydownEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 // expect the combo to be not triggered
@@ -7168,7 +7168,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                             },
                             function () {
                                 expectTriggered('handler1', false);
@@ -7176,11 +7176,11 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', false);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
                             },
                             function () {
@@ -7196,13 +7196,13 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler3', true);
 
                                 // trigger combo again in different order
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(1);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(2);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(4);
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keyupEvent(3);
                             },
                             function () {
@@ -7210,7 +7210,7 @@ describe('HIDComboState', function () {
                                 expectTriggered('handler2', false);
                                 expectTriggered('handler3', false);
 
-                                _(100000).times(function () {});
+                                _(1000000).times(function () {});
                                 keydownEvent(3);
                             },
                             function () {
@@ -7224,7 +7224,7 @@ describe('HIDComboState', function () {
 
                 describe('once', function () {
                     describe('unordered combos', function () {
-                        it('keydown', function () {
+                        it('keydown', function (done) {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -7267,14 +7267,14 @@ describe('HIDComboState', function () {
 
                                     // trigger combo
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     expectTriggered('handler1', false);
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(3);
                                 },
                                 function () {
@@ -7282,7 +7282,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', true);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
                                 },
                                 function () {
@@ -7295,7 +7295,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
                                 },
                                 function () {
@@ -7311,7 +7311,7 @@ describe('HIDComboState', function () {
                             ]);
                         });
 
-                        it('keyup', function () {
+                        it('keyup', function (done) {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -7354,13 +7354,13 @@ describe('HIDComboState', function () {
 
                                     // trigger combo
                                     keydownEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(4);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     // expect the combo to be not triggered
@@ -7370,14 +7370,14 @@ describe('HIDComboState', function () {
 
                                     // trigger combo
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     expectTriggered('handler1', true);
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
                                 },
                                 function () {
@@ -7385,7 +7385,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
                                 },
                                 function () {
@@ -7400,11 +7400,11 @@ describe('HIDComboState', function () {
 
                                     // trigger combo
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     expectTriggered('handler1', false);
@@ -7413,7 +7413,7 @@ describe('HIDComboState', function () {
 
                                     delete combosState.handler1;
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
                                 },
                                 function () {
@@ -7421,7 +7421,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', true);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(3);
                                 },
                                 function () {
@@ -7432,7 +7432,7 @@ describe('HIDComboState', function () {
                             ]);
                         });
 
-                        it('release', function () {
+                        it('release', function (done) {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -7475,13 +7475,13 @@ describe('HIDComboState', function () {
 
                                     // trigger combo
                                     keydownEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(4);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     // expect the combo to be not triggered
@@ -7491,14 +7491,14 @@ describe('HIDComboState', function () {
 
                                     // trigger combo
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     expectTriggered('handler1', false);
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
                                 },
                                 function () {
@@ -7506,7 +7506,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', true);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
                                 },
                                 function () {
@@ -7521,11 +7521,11 @@ describe('HIDComboState', function () {
 
                                     // trigger combo
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     expectTriggered('handler1', false);
@@ -7534,7 +7534,7 @@ describe('HIDComboState', function () {
 
                                     delete combosState.handler1;
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
                                 },
                                 function () {
@@ -7542,7 +7542,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', true);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(3);
                                 },
                                 function () {
@@ -7555,7 +7555,7 @@ describe('HIDComboState', function () {
                     });
 
                     describe('ordered combos', function () {
-                        it('keydown', function () {
+                        it('keydown', function (done) {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -7597,7 +7597,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     expectTriggered('handler1', false);
@@ -7605,11 +7605,11 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     // trigger combo again in different order
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
                                 },
                                 function () {
@@ -7617,7 +7617,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
                                 },
                                 function () {
@@ -7626,13 +7626,13 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     // trigger combo again in different order
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(4);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(3);
                                 },
                                 function () {
@@ -7650,9 +7650,9 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
                                 },
                                 function () {
@@ -7660,9 +7660,9 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
                                 },
                                 function () {
@@ -7673,7 +7673,7 @@ describe('HIDComboState', function () {
                             ]);
                         });
 
-                        it('keyup', function () {
+                        it('keyup', function (done) {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -7716,13 +7716,13 @@ describe('HIDComboState', function () {
 
                                     // trigger combo
                                     keydownEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(4);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     // expect the combo to be not triggered
@@ -7731,7 +7731,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     expectTriggered('handler1', true);
@@ -7739,11 +7739,11 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     // trigger combo again in different order
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
                                 },
                                 function () {
@@ -7751,7 +7751,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(3);
                                 },
                                 function () {
@@ -7760,13 +7760,13 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     // trigger combo again in different order
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(4);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
                                 },
                                 function () {
@@ -7792,9 +7792,9 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
                                 },
                                 function () {
@@ -7805,7 +7805,7 @@ describe('HIDComboState', function () {
                             ]);
                         });
 
-                        it('release', function () {
+                        it('release', function (done) {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -7848,13 +7848,13 @@ describe('HIDComboState', function () {
 
                                     // trigger combo
                                     keydownEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(4);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     // expect the combo to be not triggered
@@ -7863,7 +7863,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     expectTriggered('handler1', false);
@@ -7871,11 +7871,11 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     // trigger combo again in different order
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
                                 },
                                 function () {
@@ -7883,7 +7883,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(3);
                                 },
                                 function () {
@@ -7892,13 +7892,13 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     // trigger combo again in different order
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(4);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
                                 },
                                 function () {
@@ -7924,9 +7924,9 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
                                 },
                                 function () {
@@ -7939,7 +7939,7 @@ describe('HIDComboState', function () {
                     });
 
                     describe('ordered sequence combos', function () {
-                        it('keydown', function () {
+                        it('keydown', function (done) {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -7981,7 +7981,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     expectTriggered('handler1', false);
@@ -7989,11 +7989,11 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     // trigger combo again in different order
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
                                 },
                                 function () {
@@ -8001,7 +8001,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
                                 },
                                 function () {
@@ -8010,13 +8010,13 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     // trigger combo again in different order
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(4);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(3);
                                 },
                                 function () {
@@ -8034,9 +8034,9 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
                                 },
                                 function () {
@@ -8044,9 +8044,9 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
                                 },
                                 function () {
@@ -8057,7 +8057,7 @@ describe('HIDComboState', function () {
                             ]);
                         });
 
-                        it('keyup', function () {
+                        it('keyup', function (done) {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -8100,13 +8100,13 @@ describe('HIDComboState', function () {
 
                                     // trigger combo
                                     keydownEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(4);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     // expect the combo to be not triggered
@@ -8115,7 +8115,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     expectTriggered('handler1', true);
@@ -8123,11 +8123,11 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     // trigger combo again in different order
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
                                 },
                                 function () {
@@ -8135,7 +8135,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(3);
                                 },
                                 function () {
@@ -8144,13 +8144,13 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     // trigger combo again in different order
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(4);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
                                 },
                                 function () {
@@ -8168,9 +8168,9 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
                                 },
                                 function () {
@@ -8178,9 +8178,9 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
                                 },
                                 function () {
@@ -8191,7 +8191,7 @@ describe('HIDComboState', function () {
                             ]);
                         });
 
-                        it('release', function () {
+                        it('release', function (done) {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -8234,13 +8234,13 @@ describe('HIDComboState', function () {
 
                                     // trigger combo
                                     keydownEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(4);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     // expect the combo to be not triggered
@@ -8249,7 +8249,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                 },
                                 function () {
                                     expectTriggered('handler1', false);
@@ -8257,11 +8257,11 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     // trigger combo again in different order
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
                                 },
                                 function () {
@@ -8269,7 +8269,7 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(3);
                                 },
                                 function () {
@@ -8278,13 +8278,13 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler3', false);
 
                                     // trigger combo again in different order
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(4);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(3);
                                 },
                                 function () {
@@ -8302,9 +8302,9 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keydownEvent(2);
                                 },
                                 function () {
@@ -8312,9 +8312,9 @@ describe('HIDComboState', function () {
                                     expectTriggered('handler2', false);
                                     expectTriggered('handler3', false);
 
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(1);
-                                    _(100000).times(function () {});
+                                    _(1000000).times(function () {});
                                     keyupEvent(2);
                                 },
                                 function () {
@@ -8352,7 +8352,7 @@ describe('HIDComboState', function () {
         });
 
 
-        it('should capture HID combo state of mouseMove, mouseClick, keydown', function () {
+        it('should capture HID combo state of mouseMove, mouseClick, keydown', function (done) {
             CONV.cycleContinues([
                 function () {
                     // register combo
