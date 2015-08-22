@@ -191,8 +191,8 @@ window.CONV = (function () {
             var processEntities = sys.isStatic ? staticEntity : sys.entities;
 
             return function () {
-                // to do it multithreaded, run this method in a thread
-                sys.process(processEntities, interpolation); // process system
+                // process system
+                sys.process(processEntities, interpolation);
                 
                 // yield if not threaded system
                 if (!sys.thread) {

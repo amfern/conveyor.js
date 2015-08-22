@@ -7,14 +7,15 @@ Game engine implementing ECM(EntitySystemComponents) paradigm.
 ### How to use
 You need to:
 * define all systems `new CONV.System.IO|Interpolation|Logic`
-* define all entities `new CONV.Entity`
+* define all entities `new CONV.Entity` (optional)
 * start the engine `CONV()`
-* define all entities `new CONV.Entity`
+* define all entities `new CONV.Entity` (optional)
 
 note: doing it in other order will not work
 
 
 ```javascript
+example
 cooode 
 code 
 more code
@@ -48,8 +49,8 @@ note: running `grunt debug` or `grunt build` will install bower packages
 
 Browse examples
 
-`http://<localhost>:9001/<basic|logic|interpolation|IO>/<example name>.html`
-`basic example: http://10.0.0.45:9001/basic/index.html`
+`http://<localhost>:9001/docs/examples/<basic|logic|interpolation|IO>/<example name>.html`
+`basic example: http://10.0.0.45:9001/docs/examples/basic/index.html`
 
 ### TODO
 Features:
@@ -63,12 +64,31 @@ Allow users to register and unregister systems during runtime:
     - systems can remove/add other systems during runtime, but they can't restart the engine, as it may cause stack overflow, solution: engine will restart it self after each cycle if system is added or removed(when unregisterSystem/registerSystem called set a restart flag to true).
 Performance:
     - if we move to DB for storing components we can elevate the use of of events. with events we can collect only the entities which component has been changed in relative to which components the system depends, and pass it to system so it could optionally iterate only over them instead of every thing(in addition all entities are passed) - but then we have to figure out what changed, maybe it is best just to compute it and be done?.
+    or maybe use js6 proxy features and follow gmake design to compute only what has changed
+    after the last computation, add changeTimestamp which updated upon changing any member of the component, then if changeTimestamp is bigger then currentCycleStart timestamp it mean there
+    was a change and it to be processed
     - maybe it is possible to enhance performance by avoiding cache-misses by aggregating the systems's components together? http://gamesfromwithin.com/data-oriented-design
-    - consider exploring the direction of GO-lang because their concurency model is much better then waiting for each system to finish
+    - consider exploring the direction of GO-lang because their concurency model is much better then waiting for each system to finish, java sript has similar model, it called asyn and await
     - components array should be in the system and referenced by entity.id(generate this as three.js does), unlike the situation right now where systems contains entities and then references to it's component through entity
     or i create array of entities compromised only of the requiredDependencies's components and pass it into the proccess() input.(yes, yes a struct)
-    creating thus structs means copying lots of data, it cancels out the cache performance boost.
+    grouping components by system will have better memory locality
+    - this engines is allways showing a step behind the logic(user input) is this how all    engines are built?
+To achieve multithreading
+    - define what currentCycleStart???? is it updated for each system type????
+    - create systems that depends on all systems of it type, so when it is done
+    it will call the next type of systems to start processing
+    - add "doneTimestamp" member to systems
+    yield callback should check if all systems's dependencies are done
+    by comparing their change timestamps,
+    if it is bigger then currentCycleStart timestamp then its done
+    if all are done then call process function and update doneTimestamp,
+    otherwise do nothing
+    - the first call(yield) to process systems will traverse all systems
+    calling their process function, so systems without dependancies will start processing
+    ????does it do it once on engine boot or for each type of system?????
+    - using threadQueue, insert each process() into queue
 Develop Environment:
+    - update npm and bower libraries
     - maybe use connect-assets or any other better tool as build script
     - fix HID testing by using async callbacks instead of while loop, this way test will not break at randomsid
 
@@ -93,6 +113,9 @@ AI is just evolution and survival of ideas, the good ones will be used more ofte
 
 Never start game with tutorial or story, start it with gameplay and action, let the player experience the fun of your game before diving into the story
 
+Game should interact with the player though the game and not UI, UI shouldn't exist at all
+
+
 
 
 
@@ -100,11 +123,13 @@ Best practices when creating new system:
 - data is always in the entity
 - logic is always in the process system
 - you can store variables in the system but only if it static and not changed between entities
-- system can change only components of other systems it depends directly or indirectly(never change system that are in-front of you)
+- system can change only components of other systems it depends directly or indirectly(never change entity of a systems that are succeeding yours)
 - it's ok to set initial value just to make the system function, but initial value that specified by user takes precedence.
 - IO systems are for high frequency input gathering but not processing, all processing of input should be done in Logic systems, high frequency is mandatory to catch as much keys as possible and later calculate the changes from previous state to current
 - system's dependencies will also include requiredDependencies by design.
 - system that act a collection for other systems(RenderMeshes) are never reseted. Their component should be of object type containing array per dependent system, so each system can reset it own collection without interfering with others, in-spite it can, as the whole component is accessible to it
+- data is state-less, meaning systems recalculates every thing every loop(for example changing keybind doesn't require to call any function)
+- data life cycle consist of one system that defines the data and later systems that change it
 
 create cycleContinuous:
 - you pass array of function representing each engine loop
@@ -120,7 +145,7 @@ The Input to player movement should be instant like in mario and not prince of p
 
 The MIT License (MIT)
 
-Copyright (c) 2014 amfern
+Copyright (c) 2015 amfern
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
