@@ -6,7 +6,7 @@ new CONV.System.Interpolate({
     name: 'HierarchyInterpolate',
 
     dependencies: [],
-    
+
     requiredDependencies: ['TransformToWorldInterpolation', 'HierarchyOrderEntities'],
 
     // parent entity
@@ -21,7 +21,7 @@ new CONV.System.Interpolate({
         }
 
         entities = _.first(entities).HierarchyOrderEntities;
-            
+
         _.each(entities, function (e) {
             if(e.Parent) {
                 e.TransformWorldInterpolation.applyMatrix(e.Parent.TransformWorldInterpolation.matrix);

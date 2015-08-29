@@ -6,12 +6,12 @@
 // When the combo pressed, the key under which it is registered will be added to component
 // as indication of triggered combo.
 // passing additional values will effect the behavior of the key
-// 
-// HIDCombos object expected to contain: 
+//
+// HIDCombos object expected to contain:
 // key   - unique combo undentifier
 // value - {
 //              "keys"*             : null,   - array of keys
-                
+
 //              "trigger"           : null,   - {down|up|release}
 //                                                 down - combo trigger on all of the keys down
 //                                                   up - combo trigger on all of the keys up
@@ -22,25 +22,25 @@
 //                                              for release before triggering again
 
 //              "isOrdered"         : false,  - will trigger only if clicked in the correct order
-                
+
 //              "isSequence"        : false,  - when "isOrdered" is true will trigger only if key
 //                                              were clicked in one sequence meaning, no other key
 //                                              then specified in the combo were clicked in-between
-                
+
 //              "isExclusive"       : false,  - Normally when pressing a key, any and all combos that
 //                                              match will have their callbacks called. For instance,
 //                                              pressing 'shift' and then 's' would activate the following
 //                                              combos if they existed: "shift", "shift s" and "s".
 //                                              When we set isExclusive to true, we will not call the
 //                                              callbacks for any combos that are also exclusive and less specific.
-                
+
 //              "isSolitary"        : false   - This option will check that ONLY the combo's keys are
 //                                              being pressed when set to true. When set to the default
 //                                              value of false, a combo can be activated even if extraneous
 //                                              keys are pressed
 //          }
 // *only keys value is mandatory the rest are optional
-// 
+//
 // General combos mechanics behavior is borrowed from keypress.js
 // -----------------------------------------
 (function () {
@@ -331,7 +331,7 @@
 
             // reset triggered handlers
             component.length = 0;
-            
+
             // push all handlers of triggered combos to HIDComboState's components
             _.each(triggeredCombos, function (combo) {
                 _.combine(component, combo.handlers);

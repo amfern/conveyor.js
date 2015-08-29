@@ -3,7 +3,7 @@
 CONV.Entity = function (config) {
     // set defaults, unique entity name
     this.name = config.name || '';
-    
+
     // collection of all components associated with this entity,
     // no need to specify dependencies, core will figure it out.
     // it could come in a form of array or object containing initial values.

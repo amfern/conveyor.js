@@ -1,7 +1,7 @@
 'use strict';
 
 // Collection of keys represents mousestate
-// 
+//
 // key   - unique key indentifier(keycode)
 // value - {
 //              up        : timestamp of last time key was up
@@ -51,7 +51,7 @@
                 up: mouse.up
             };
         }
-     
+
         // update down timestamp only if state changed to not pressed from pressed
         return {
             pressed: false,

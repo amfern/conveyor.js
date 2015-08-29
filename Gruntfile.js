@@ -123,7 +123,7 @@ module.exports = function (grunt) {
             }
         },
 
-        // clean 
+        // clean
         clean: {
             build: ['<%= dirs.build %>/']
         },

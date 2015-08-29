@@ -1,7 +1,7 @@
 'use strict';
 
 // Collection of keys represents keyboardstate
-// 
+//
 // key   - unique key indentifier(keycode)
 // value - {
 //              up        : timestamp of last time key was up

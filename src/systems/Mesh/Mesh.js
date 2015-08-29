@@ -15,7 +15,7 @@
 
     new CONV.System.Interpolate({
         name: 'Mesh',
-        
+
         dependencies: ['Interpolate', 'HierarchyInterpolate', 'RendererMeshes'],
         requiredDependencies: ['TransformWorldInterpolation', 'RendererMeshes'],
 
@@ -37,9 +37,9 @@
             _.each(entities, function (e) {
                 var Mesh = e.Mesh,
                     TransformWorldInterpolation = e.TransformWorldInterpolation;
-                
+
                 Mesh.matrixWorld = TransformWorldInterpolation.matrix;
-                
+
                 RendererMeshes.push(Mesh);
             });
         }

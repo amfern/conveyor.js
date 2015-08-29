@@ -22,7 +22,7 @@
         state[e.keyCode] = state[e.keyCode] || _.clone(defaultHidState);
         state[e.keyCode].up = e.timeStamp;
         state[e.keyCode].pressed = false;
-        
+
         e.preventDefault();
     }, false);
 

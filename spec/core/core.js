@@ -5,7 +5,7 @@ describe('core register systems', function () {
         systemLogic6, systemLogic7, systemLogic8, systemLogic9, systemLogic10,
 
         systemStaticLogic1, systemStaticLogic2,
-        
+
         systemInterpolation1, systemInterpolation2, systemInterpolation3,
         systemInterpolation4, systemInterpolation5, systemInterpolation6,
         systemInterpolation7, systemInterpolation8, systemInterpolation9,

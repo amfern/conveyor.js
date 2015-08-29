@@ -6,7 +6,7 @@ new CONV.System.Interpolate({
     name: 'TransformToWorldInterpolation',
 
     dependencies: [],
-    
+
     requiredDependencies: ['TransformWorldInterpolation', 'Interpolate'],
 
     // parent entity

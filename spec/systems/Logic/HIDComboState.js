@@ -273,7 +273,7 @@ describe('HIDComboState', function () {
                                 isExclusive: false,
                                 isSolitary: false
                             };
-                        
+
                             expectTriggered('handler1', false);
                             expectTriggered('handler2', false);
                         }, function() {
@@ -2590,7 +2590,7 @@ describe('HIDComboState', function () {
                                 isExclusive: true,
                                 isSolitary: false
                             };
-                            
+
                             combosState.handler2 = {
                                 keys: ['k1', 'k2'],
                                 trigger: 'up',

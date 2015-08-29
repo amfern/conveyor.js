@@ -12,7 +12,7 @@ CONV.System = function (config) {
 
     // set defaults
     this.name = config.name;
-    
+
     // static system have no need to process other entities, they have one entity.
     // that entity is shared between all static systems and created upon engine initialization
     this.isStatic = config.isStatic || false;
@@ -28,11 +28,11 @@ CONV.System = function (config) {
     this.dependencies = config.dependencies || [];
 
     this.dependencies = _.uniq(this.requiredDependencies.concat(this.dependencies));
-    
-    // if process function spawns thread inside its up to the developer to call 
+
+    // if process function spawns thread inside its up to the developer to call
     // yield when done processing
     this.thread = config.thread || false;
-    
+
     // ran by engine when it first starts
     this.initialize = config.initialize || function () {};
     this.entities = [];

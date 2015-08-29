@@ -16,7 +16,7 @@ describe('HIDState', function () {
         tapIntoSystem('HIDState', function (s) {
             state = s;
         });
-        
+
         tapIntoSystem('KeyboardState', function (s) {
             keyboardState = s;
         });

@@ -193,7 +193,7 @@ window.CONV = (function () {
             return function () {
                 // process system
                 sys.process(processEntities, interpolation);
-                
+
                 // yield if not threaded system
                 if (!sys.thread) {
                     sys.yield();
@@ -261,7 +261,7 @@ window.CONV = (function () {
                 nextGameTick += SKIP_TICKS;
                 loops++;
                 firstLogicCallback();
-                    
+
                 return;
             }
         }
@@ -350,7 +350,7 @@ window.CONV = (function () {
 
     function mainLoop() {
         nextGameTick = window.performance.now();
-        
+
         validateSystems(tempLogicSystems);
         validateSystems(tempInterpolationSystems);
         validateSystems(tempIOSystems);

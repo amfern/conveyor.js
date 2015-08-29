@@ -7,7 +7,7 @@
     // returns arranged array of entities by their parent in-before them self
     function arrangeEntitiesByParent(entities) {
         var arrangedEntities = [];
-        
+
         _.each(entities, function(e) {
             // add entities only if it doesn't exists
             if(!~arrangedEntities.indexOf(e)) {
@@ -24,14 +24,14 @@
         if(!entity.Parent) {
             return arrangedEntities.unshift(entity);
         }
-        
+
         var parentIndex = arrangedEntities.indexOf(entity.Parent);
-        
+
         // if parent not added yet to arrangedEntities add it
         if(!~parentIndex) {
             parentIndex = addEntitiesByParentOrder(arrangedEntities, entity.Parent);
         }
-        
+
         parentIndex++;
 
         // insert the entity after it's parent
@@ -39,12 +39,12 @@
 
         return parentIndex;
     }
-    
+
     new CONV.System.Logic({
         name: 'HierarchyOrderEntities',
 
         dependencies: [],
-        
+
         requiredDependencies: ['Parent'],
 
         // parent entity

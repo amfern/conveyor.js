@@ -19,7 +19,7 @@ function mouseEvent(type, screenX, screenY, clientX, clientY, button, clickCount
 
     evt.initMouseEvent(
         type, // eventName
-        true, // bubbles 
+        true, // bubbles
         true, // cancelable
         window.document, // document.defaultView
         clickCount, // click count (2 for double-click)

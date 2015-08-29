@@ -67,7 +67,7 @@ afterEach(function () {
         cycleMany(CONV.spiralCycle, count, specCallback);
     };
 
-    // callbacks to before executes before cycle continues 
+    // callbacks to before executes before cycle continues
     CONV.beforeCycleContinues = function (specCallbacks) {
         CONV.systemCallbacksToBeExecuted = specCallbacks.concat(CONV.systemCallbacksToBeExecuted);
     };

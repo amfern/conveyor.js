@@ -7,7 +7,7 @@
 
     function initializeRenderer() {
         var renderer = new THREE.WebGLRenderer();
-            
+
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.autoClear = false;
 
@@ -22,7 +22,7 @@
     function initializeScene() {
         var scene = new THREE.Scene();
         scene.autoUpdate = false;
-        
+
         return scene;
     }
 
@@ -39,7 +39,7 @@
     new CONV.System.IO({
         name: 'Renderer',
         isStatic: true,
-        
+
         dependencies: [],
 
         component: function () {

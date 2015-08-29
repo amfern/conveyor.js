@@ -1,6 +1,6 @@
 'use strict';
 
-// Collection of whitelisted  keybinds 
+// Collection of whitelisted  keybinds
 // -----------------------------------------
 new CONV.System.Logic({
     name: 'Parent',

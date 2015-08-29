@@ -7,7 +7,7 @@ new CONV.System.Logic({
     name: 'Hierarchy',
 
     dependencies: [],
-    
+
     requiredDependencies: ['TransformToWorld', 'HierarchyOrderEntities'],
 
     // parent entity
