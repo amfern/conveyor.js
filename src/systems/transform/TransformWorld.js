@@ -6,6 +6,6 @@ new CONV.System.Logic({
     name: 'TransformWorld',
 
     component: function () {
-        return new THREE.Object3D();
+        return new THREE.Matrix4();
     }
 });

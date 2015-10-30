@@ -8,6 +8,6 @@ new CONV.System.Interpolate({
     requiredDependencies: ['TransformWorld'],
 
     component: function () {
-        return new THREE.Object3D();
+        return new THREE.Matrix4();
     }
 });

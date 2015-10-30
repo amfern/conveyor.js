@@ -9,23 +9,12 @@ new CONV.System.Logic({
 
     requiredDependencies: ['TransformWorld'],
 
-    component: function (defaults) {
-        var component = new THREE.Object3D();
-
-        // sanitize input
-        defaults = defaults || {};
-
-        defaults = {
-            x: defaults.x || 0,
-            y: defaults.y || 0,
-            z: defaults.z || 0
+    component: function (transform) {
+        transform = transform || {};
+        return {
+            position: transform.position || new THREE.Vector3(),
+            rotate: transform.rotate || new THREE.Quaternion(),
+            scale: transform.scale || new THREE.Vector3(1,1,1)
         };
-
-        // set initial position
-        component.position.x = defaults.x;
-        component.position.y = defaults.y;
-        component.position.z = defaults.z;
-
-        return component;
     }
 });

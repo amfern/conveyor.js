@@ -8,7 +8,7 @@ new CONV.System.Logic({
 
     dependencies: [],
 
-    requiredDependencies: ['TransformToWorld', 'HierarchyOrderEntities'],
+    requiredDependencies: ['TransformMatrix', 'HierarchyOrderEntities'],
 
     // parent entity
     component: function () {
@@ -27,7 +27,8 @@ new CONV.System.Logic({
         // calculate world matrices for all
         _.each(entities, function (e) {
             if(e.Parent) {
-                e.TransformWorld.applyMatrix(e.Parent.TransformWorld.matrix);
+                e.TransformMatrix.multiplyMatrices(
+                    e.Parent.TransformMatrix, e.TransformMatrix);
             }
         });
     }

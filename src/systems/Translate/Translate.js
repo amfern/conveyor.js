@@ -5,7 +5,7 @@
 new CONV.System.Logic({
     name: 'Translate',
 
-    dependencies: ['Transformer', 'HIDTranslate', 'Rotate'],
+    dependencies: ['Transformer', 'HIDTranslate', 'Rotate', 'TransformPristine'],
 
     requiredDependencies: ['Transform', 'Transformer'],
 
@@ -17,13 +17,15 @@ new CONV.System.Logic({
 
     process: function (entities) {
         _.each(entities, function (e) {
-            var Transform = e.Transform,
-                position = e.Transformer.position,
-                velocity = e.Translate.velocity;
+            var position = e.Transform.position,
+                rotate = e.Transform.rotate,
+                translation = e.Transformer.translation,
+                velocity = e.Translate.velocity,
+                directionalTranslate = new THREE.Vector3();
 
-            Transform.translateX(position.x * velocity);
-            Transform.translateY(position.y * velocity);
-            Transform.translateZ(position.z * velocity);
+            directionalTranslate.copy(translation).normalize().applyQuaternion(rotate);
+
+	    position.add(directionalTranslate.multiplyScalar(velocity));
         });
     }
 });

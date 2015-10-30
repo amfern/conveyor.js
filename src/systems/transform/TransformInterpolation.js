@@ -8,7 +8,7 @@ new CONV.System.Interpolate({
     requiredDependencies: ['Transform'],
 
     component: function () {
-        return new THREE.Object3D();
+        return new THREE.Matrix4();
     },
 
     process: function (entities) {
