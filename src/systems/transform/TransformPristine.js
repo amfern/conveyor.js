@@ -11,7 +11,13 @@ new CONV.System.Logic({
 
     process: function (entities) {
         _.each(entities, function (e) {
-            e.TransformPristine.copy(e.Transform);
+            var Transform = e.Transform;
+
+            e.TransformPristine = {
+                position: Transform.position,
+                rotate: Transform.rotate,
+                scale: Transform.scale
+            };
         });
     }
 });

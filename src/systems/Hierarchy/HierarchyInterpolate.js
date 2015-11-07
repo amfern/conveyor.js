@@ -5,9 +5,9 @@
 new CONV.System.Interpolate({
     name: 'HierarchyInterpolate',
 
-    dependencies: [],
+    dependencies: ['Interpolate'],
 
-    requiredDependencies: ['TransformToWorldInterpolation', 'HierarchyOrderEntities'],
+    requiredDependencies: ['TransformMatrix', 'HierarchyOrderEntities'],
 
     // parent entity
     component: function () {
@@ -24,7 +24,9 @@ new CONV.System.Interpolate({
 
         _.each(entities, function (e) {
             if(e.Parent) {
-                e.TransformWorldInterpolation.multiply(e.Parent.TransformWorldInterpolation);
+                e.TransformMatrix.multiplyMatrices(
+                    e.Parent.TransformMatrix,
+                    e.TransformMatrix);
             }
         });
     }

@@ -7,7 +7,7 @@ new CONV.System.Interpolate({
 
     dependencies: ['Interpolate', 'HierarchyInterpolate'],
 
-    requiredDependencies: ['TransformWorldInterpolation', 'RendererCamera', 'TransformMatrix'],
+    requiredDependencies: ['RendererCamera', 'TransformMatrix'],
 
     process: function (entities) {
         var entity = _.first(entities);
@@ -18,8 +18,6 @@ new CONV.System.Interpolate({
 
         var RendererCamera = entity.RendererCamera;
 
-        RendererCamera.matrix = new THREE.Matrix4();
-        // RendererCamera.applyMatrix(entity.TransformWorldInterpolation);
-        RendererCamera.applyMatrix(entity.TransformMatrix);
+        RendererCamera.copy(entity.TransformMatrix);
     }
 });

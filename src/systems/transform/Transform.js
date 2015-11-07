@@ -5,9 +5,9 @@
 new CONV.System.Logic({
     name: 'Transform',
 
-    dependencies: ['TransformWorldPristine'],
+    dependencies: [],
 
-    requiredDependencies: ['TransformWorld'],
+    requiredDependencies: [],
 
     component: function (transform) {
         transform = transform || {};
