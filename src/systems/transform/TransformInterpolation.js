@@ -8,7 +8,11 @@ new CONV.System.Interpolate({
     requiredDependencies: ['Transform'],
 
     component: function () {
-        return new THREE.Matrix4();
+        return {
+            position: new THREE.Vector3(),
+            rotate:  new THREE.Quaternion(),
+            scale: new THREE.Vector3(1,1,1)
+        };
     },
 
     process: function (entities) {

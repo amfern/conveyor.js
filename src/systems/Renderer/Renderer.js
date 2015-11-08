@@ -56,7 +56,7 @@
 
             // update camera transform based on RendererCamera component
             camera.matrix = new THREE.Matrix4();
-            camera.applyMatrix(RendererCamera.matrix);
+            camera.applyMatrix(RendererCamera);
 
             // add all meshes to the scene
             _.each(rendererMeshes, function (mesh) {
