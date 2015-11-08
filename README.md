@@ -16,8 +16,8 @@ note: doing it in other order will not work
 
 ```javascript
 example
-cooode 
-code 
+cooode
+code
 more code
 ```
 
@@ -62,6 +62,7 @@ Features:
 Allow users to register and unregister systems during runtime:
     - removing system but leaving other systems that depend on it may cause issues: (ie: start engine -> remove system -> restart engine -> dependency system not found -> exception thrown).
     - systems can remove/add other systems during runtime, but they can't restart the engine, as it may cause stack overflow, solution: engine will restart it self after each cycle if system is added or removed(when unregisterSystem/registerSystem called set a restart flag to true).
+    - What is i need to control proccessing order between normal system and static system
 Performance:
     - if we move to DB for storing components we can elevate the use of of events. with events we can collect only the entities which component has been changed in relative to which components the system depends, and pass it to system so it could optionally iterate only over them instead of every thing(in addition all entities are passed) - but then we have to figure out what changed, maybe it is best just to compute it and be done?.
     or maybe use js6 proxy features and follow gmake design to compute only what has changed

@@ -5,9 +5,9 @@
 new CONV.System.Interpolate({
     name: 'TransformToWorldInterpolation',
 
-    dependencies: [],
+    dependencies: ['Interpolate'],
 
-    requiredDependencies: ['TransformWorldInterpolation', 'Interpolate'],
+    requiredDependencies: ['TransformWorldInterpolation', 'TransformInterpolation'],
 
     // parent entity
     component: function () {

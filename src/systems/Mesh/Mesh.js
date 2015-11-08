@@ -16,8 +16,8 @@
     new CONV.System.Interpolate({
         name: 'Mesh',
 
-        dependencies: ['Interpolate', 'HierarchyInterpolate', 'RendererMeshes'],
-        requiredDependencies: ['TransformWorldInterpolation', 'RendererMeshes'],
+        dependencies: ['Interpolate', 'HierarchyInterpolate', 'RendererMeshes', 'TransformToWorldInterpolation'],
+        requiredDependencies: ['TransformWorldInterpolation', 'RendererMeshes', 'TransformMatrix'],
 
         component: function () {
             return initialize();
@@ -35,10 +35,12 @@
             RendererMeshes = RendererMeshes.Mesh = [];
 
             _.each(entities, function (e) {
-                var Mesh = e.Mesh,
-                    TransformWorldInterpolation = e.TransformWorldInterpolation;
+                var Mesh = e.Mesh;
+                    // TransformWorldInterpolation = e.TransformWorldInterpolation;
 
-                Mesh.matrixWorld = TransformWorldInterpolation.matrix;
+
+                Mesh.matrixWorld.copy(e.TransformMatrix);
+                // console.log(Mesh.matrixWorld.elements);
 
                 RendererMeshes.push(Mesh);
             });

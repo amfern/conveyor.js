@@ -10,14 +10,13 @@ new CONV.System.Logic({
 
     requiredDependencies: ['Transformer', 'HIDComboState', 'MouseState', 'ActiveKeyBinds'],
 
-
     process: function (entities) {
         _.each(entities, function (e) {
-            var rotation = e.Transformer.rotation,
-                HIDComboState = e.HIDComboState,
+            var HIDComboState = e.HIDComboState,
                 MouseState = e.MouseState,
                 ActiveKeyBinds = e.ActiveKeyBinds,
-                triggered = {};
+                triggered = {},
+                rotation = e.Transformer.rotation;
 
             _.each(ActiveKeyBinds, function (keyBindName) {
                 triggered[keyBindName] = !!~HIDComboState.indexOf(keyBindName);
@@ -25,15 +24,15 @@ new CONV.System.Logic({
 
 
             if (triggered.pitchUp || triggered.pitchDown) {
-                rotation.y += -MouseState.movementY;
+                rotation.x = -MouseState.movementY;
             }
 
             if (triggered.yawLeft || triggered.yawRight) {
-                rotation.x += -MouseState.movementX;
+                rotation.y = -MouseState.movementX;
             }
 
             if (triggered.rollLeft || triggered.rollRight) {
-                rotation.z += -MouseState.movementZ;
+                rotation.z = -MouseState.movementZ;
             }
         });
     }

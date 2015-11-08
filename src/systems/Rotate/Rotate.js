@@ -5,7 +5,7 @@
 new CONV.System.Logic({
     name: 'Rotate',
 
-    dependencies: ['Transformer', 'HIDRotate'],
+    dependencies: ['HIDRotate', 'TransformPristine'],
 
     requiredDependencies: ['Transform', 'Transformer'],
 
@@ -17,13 +17,16 @@ new CONV.System.Logic({
 
     process: function (entities) {
         _.each(entities, function (e) {
-            var Transform = e.Transform,
+            var rotate = e.Transform.rotate,
                 rotation = e.Transformer.rotation,
-                velocity = e.Rotate.velocity;
+                velocity = e.Rotate.velocity,
+                scaledRotation = new THREE.Vector3(),
+                euler = new THREE.Euler();
 
-            Transform.rotateOnAxis(new THREE.Vector3(1, 0, 0), rotation.y * velocity);
-            Transform.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotation.x * velocity);
-            Transform.rotateOnAxis(new THREE.Vector3(0, 0, 1), rotation.z * velocity);
+            scaledRotation.copy(rotation).multiplyScalar(velocity);
+            euler.set(scaledRotation.x, scaledRotation.y, scaledRotation.z);
+
+            rotate.multiply(new THREE.Quaternion().setFromEuler(euler));
         });
     }
 });

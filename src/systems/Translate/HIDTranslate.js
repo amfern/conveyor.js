@@ -12,22 +12,23 @@ new CONV.System.Logic({
 
     process: function (entities) {
         _.each(entities, function (e) {
-            var translate = e.Transformer.position,
+            var Transformer = e.Transformer,
                 HIDComboState = e.HIDComboState,
                 ActiveKeyBinds = e.ActiveKeyBinds,
-                triggered = {};
+                triggered = {},
+                translation;
 
             _.each(ActiveKeyBinds, function (keyBindName) {
                 triggered[keyBindName] = !!~HIDComboState.indexOf(keyBindName);
             });
 
-            translate.x += +triggered.moveRight || -triggered.moveLeft;
+            translation = new THREE.Vector3(
+                triggered.moveRight || -triggered.moveLeft,
+                triggered.moveUp || -triggered.moveDown,
+                -triggered.moveForward || +triggered.moveBack
+            );
 
-            translate.y += +triggered.moveUp || -triggered.moveDown;
-
-            translate.z += -triggered.moveForward || +triggered.moveBack;
-
-            translate.normalize();
+            Transformer.translation.add(translation);
         });
     }
 });

@@ -21,8 +21,8 @@ var player = new CONV.Entity({
         'HIDTranslate': null,
         'Rotate': null,
         'Translate': null,
-        'HierarchyInterpolate': null,
-        'Mesh': null
+        'Mesh': null,
+        'Hierarchy': null
     },
 });
 
@@ -38,7 +38,7 @@ var cameraContainer = new CONV.Entity({
         'HIDRotate': null,
         'Rotate': null,
         'Parent': player,
-        'HierarchyInterpolate': null
+        'Hierarchy': null
     }
 });
 
@@ -47,9 +47,11 @@ new CONV.Entity({
 
     // components composing this entity
     components: {
-        'Transform': {x: 0, y: 0, z: 500},
+        'Transform': {
+            position: new THREE.Vector3(0, 0, 500)
+        },
         'Parent': cameraContainer,
-        'HierarchyInterpolate': null,
+        'Hierarchy': null,
         'Camera': null
     },
 });
@@ -66,9 +68,6 @@ var geometry = new THREE.PlaneGeometry( 2000, 2000 );
 var material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
 
 staticMesh.Mesh = new THREE.Mesh(geometry, material);
-
-staticMesh.TransformWorld.position.z = -1500;
-staticMesh.TransformWorld.updateMatrix();
 
 
 /* start engine

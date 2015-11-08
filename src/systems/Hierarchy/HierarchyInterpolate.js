@@ -24,7 +24,7 @@ new CONV.System.Interpolate({
 
         _.each(entities, function (e) {
             if(e.Parent) {
-                e.TransformWorldInterpolation.applyMatrix(e.Parent.TransformWorldInterpolation.matrix);
+                e.TransformWorldInterpolation.multiply(e.Parent.TransformWorldInterpolation);
             }
         });
     }

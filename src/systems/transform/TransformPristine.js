@@ -9,10 +9,6 @@ new CONV.System.Logic({
 
     requiredDependencies: ['Transform'],
 
-    component: function () {
-        return new THREE.Object3D();
-    },
-
     process: function (entities) {
         _.each(entities, function (e) {
             e.TransformPristine.copy(e.Transform);

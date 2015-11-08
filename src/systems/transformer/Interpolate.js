@@ -10,17 +10,24 @@ new CONV.System.Interpolate({
     requiredDependencies: ['TransformInterpolation', 'TransformPristine'],
 
     process: function (entities, interpolation) {
-        var before, after;
-
         _.each(entities, function (e) {
-            before = e.TransformPristine;
-            after = e.TransformInterpolation;
+            var before = e.TransformPristine,
+                after = e.TransformInterpolation,
+                beforePosition = new THREE.Vector3(),
+                beforeQuaternion = new THREE.Quaternion(),
+                beforeScale = new THREE.Vector3(),
+                afterPosition = new THREE.Vector3(),
+                afterQuaternion = new THREE.Quaternion(),
+                afterScale = new THREE.Vector3();
 
-            after.scale.lerp(before.scale, 1 - interpolation);
-            after.position.lerp(before.position, 1 - interpolation);
-            after.quaternion.slerp(before.quaternion, 1 - interpolation);
+            before.decompose(beforePosition, beforeQuaternion, beforeScale);
+            after.decompose(afterPosition, afterQuaternion, afterScale);
 
-            after.updateMatrix();
+            afterPosition.lerp(beforePosition, 1 - interpolation);
+            afterQuaternion.slerp(beforeQuaternion, 1 - interpolation);
+            afterScale.lerp(beforeScale, 1 - interpolation);
+
+            after.compose(afterPosition, afterQuaternion, afterScale);
         });
     },
 });

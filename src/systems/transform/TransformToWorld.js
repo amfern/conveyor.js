@@ -2,7 +2,7 @@
 
 // Calcualtes world matrix
 // -----------------------------------------
-new CONV.System.Interpolate({
+new CONV.System.Logic({
     name: 'TransformToWorld',
 
     dependencies: ['Rotate', 'Translate'],
