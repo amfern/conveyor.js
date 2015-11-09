@@ -5,7 +5,7 @@
 new CONV.System.Logic({
     name: 'TransformMatrix',
 
-    dependencies: ['Rotate', 'Translate'],
+    dependencies: ['Rotate', 'Translate', 'Physics'],
 
     requiredDependencies: ['Transform'],
 
