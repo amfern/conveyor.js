@@ -19,6 +19,8 @@ var player = new CONV.Entity({
         ],
         'HIDRotate': null,
         'HIDTranslate': null,
+        'Velocity': null,
+        'AngularVelocity': null,
         'Rotate': null,
         'Translate': null,
         'Mesh': null,
@@ -37,6 +39,7 @@ var cameraContainer = new CONV.Entity({
         'ActiveKeyBinds': ['pitchUp', 'pitchDown'],
         'HIDRotate': null,
         'Rotate': null,
+        'AngularVelocity': null,
         'Parent': player,
         'Hierarchy': null
     }

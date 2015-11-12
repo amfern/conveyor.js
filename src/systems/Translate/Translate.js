@@ -5,27 +5,19 @@
 new CONV.System.Logic({
     name: 'Translate',
 
-    dependencies: ['Transformer', 'HIDTranslate', 'Rotate', 'TransformPristine'],
+    dependencies: ['TransformPristine', 'Velocity'],
 
     requiredDependencies: ['Transform', 'Transformer'],
 
     component: function () {
-        return {
-            velocity: 10
-        };
     },
 
     process: function (entities) {
         _.each(entities, function (e) {
             var position = e.Transform.position,
-                rotate = e.Transform.rotate,
-                translation = e.Transformer.translation,
-                velocity = e.Translate.velocity,
-                directionalTranslate = new THREE.Vector3();
+                translation = e.Transformer.translation;
 
-            directionalTranslate.copy(translation).normalize().applyQuaternion(rotate);
-
-	    position.add(directionalTranslate.multiplyScalar(velocity));
+	    position.add(translation);
         });
     }
 });
