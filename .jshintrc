@@ -23,6 +23,7 @@
         "CONV": true,
         "_": true,
         "THREE": true,
+        "CANNON": true,
         "window": true,
 
         // grunt
