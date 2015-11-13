@@ -4,13 +4,12 @@
 // Wraps THREE.js as graphic output
 // -----------------------------------------
 (function () {
-    function initialize() {
-        var material, geometry;
+    function newMaterial() {
+        return new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    }
 
-        material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-        geometry = new THREE.CubeGeometry(200, 200, 200);
-
-        return new THREE.Mesh(geometry, material);
+    function newGeometry() {
+        return new THREE.BoxGeometry(200, 200, 200);
     }
 
     new CONV.System.Interpolate({
@@ -19,8 +18,11 @@
         dependencies: ['HierarchyInterpolate'],
         requiredDependencies: ['RendererMeshes', 'TransformMatrix'],
 
-        component: function () {
-            return initialize();
+        component: function (params) {
+            params = params || {};
+
+            return new THREE.Mesh(params.geometry || newGeometry(),
+                                  params.material || newMaterial());
         },
 
         process: function (entities) {
