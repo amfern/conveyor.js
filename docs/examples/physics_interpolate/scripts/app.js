@@ -27,7 +27,9 @@ var player = new CONV.Entity({
         'Mesh': null,
         'Interpolate': null,
         'HierarchyInterpolate': null,
-        'Physics': null
+        'Physics': null,
+        'PhysicsClearVelocity': null,
+        'PhysicsClearAngularVelocity': null
     },
 });
 

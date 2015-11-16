@@ -41,8 +41,13 @@
                     z: Transform.rotate._z
                 });
 
-                Physics.velocity.copy(Transformer.translation);
-                Physics.angularVelocity.copy(Transformer.rotation);
+                if (Transformer.translation.lengthSq()) {
+                    Physics.velocity.copy(Transformer.translation);
+                }
+
+                if (Transformer.rotation.lengthSq()) {
+                    Physics.angularVelocity.copy(Transformer.rotation);
+                }
 
                 world.addBody(Physics);
             });

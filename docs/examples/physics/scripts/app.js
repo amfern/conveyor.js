@@ -26,7 +26,9 @@ var player = new CONV.Entity({
         'AngularVelocity': null,
         'Mesh': null,
         'Hierarchy': null,
-        'Physics': null
+        'Physics': null,
+        'PhysicsClearVelocity': null,
+        'PhysicsClearAngularVelocity': null
     },
 });
 
