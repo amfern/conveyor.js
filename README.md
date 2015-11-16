@@ -123,10 +123,9 @@ Develop Environment:
 
 
 ### Roadmap
-1. bootstrap game systems
-2. simple physic system
-3. sound system output
-4. simple AI system
+1. recreate cannon.js fps demo
+2. sound system output
+3. simple AI system
 5. build the demo game
 
 

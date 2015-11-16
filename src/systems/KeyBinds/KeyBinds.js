@@ -40,6 +40,12 @@
             },
             rollLeft: {
                 keys: ['mwheelMovedLeft']
+            },
+            attack: {
+                keys: ['m0']
+            },
+            altAttack: {
+                keys: ['m2']
             }
         };
 
