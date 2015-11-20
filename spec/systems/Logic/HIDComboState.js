@@ -37,7 +37,7 @@ describe('HIDComboState', function () {
 
     describe('', function () {
         describe('register combo', function () {
-            it('Should register combo and set handler same as combo index', function (done) {
+            it('Should register combo and set handler same as combo index', function () {
                 CONV.cycleContinues([
                     function () {
                         combosState.handler1 = {
@@ -66,7 +66,7 @@ describe('HIDComboState', function () {
 
         describe('should trigger', function () {
             describe('unordered combo', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -108,7 +108,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -166,7 +166,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -230,7 +230,7 @@ describe('HIDComboState', function () {
                 });
 
                 // hmm i don't really have a way of telling if default values were filled
-                it('should fill in default values', function (done) {
+                it('should fill in default values', function () {
                     CONV.cycleContinues([
                         function () {
                             combosState.handler1 = {
@@ -251,7 +251,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('should register duplicated combos', function (done) {
+                it('should register duplicated combos', function () {
                     CONV.cycleContinues([
                         function () {
                             combosState.handler1 = {
@@ -295,7 +295,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered combo', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -353,7 +353,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -417,7 +417,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -489,7 +489,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered sequence combo', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -560,7 +560,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -622,7 +622,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -692,7 +692,7 @@ describe('HIDComboState', function () {
             });
 
             describe('unordered combo and keep triggered', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -763,7 +763,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -847,7 +847,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -933,7 +933,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered combo and keep triggered', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1021,7 +1021,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1122,7 +1122,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1225,7 +1225,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered combo sequence and keep triggered', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1328,7 +1328,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1444,7 +1444,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1581,7 +1581,7 @@ describe('HIDComboState', function () {
             });
 
             describe('unordered combos', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1636,7 +1636,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1712,7 +1712,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1798,7 +1798,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered combos', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1864,7 +1864,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -1941,7 +1941,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2046,7 +2046,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered sequence combos', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2125,7 +2125,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2217,7 +2217,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2342,7 +2342,7 @@ describe('HIDComboState', function () {
 
         describe('should trigger exclusive', function () {
             describe('unordered combos', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2411,7 +2411,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2494,7 +2494,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2577,7 +2577,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keydown and keyup and release should be exclusive only among their trigger type', function (done) {
+                it('keydown and keyup and release should be exclusive only among their trigger type', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2644,7 +2644,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered combos', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2731,7 +2731,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2831,7 +2831,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -2933,7 +2933,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered sequence combos', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -3035,7 +3035,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -3151,7 +3151,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -3270,7 +3270,7 @@ describe('HIDComboState', function () {
 
             describe('once', function () {
                 describe('unordered combos', function () {
-                    it('keydown', function (done) {
+                    it('keydown', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -3355,7 +3355,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function (done) {
+                    it('keyup', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -3461,7 +3461,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function (done) {
+                    it('release', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -3569,7 +3569,7 @@ describe('HIDComboState', function () {
                 });
 
                 describe('ordered combos', function () {
-                    it('keydown', function (done) {
+                    it('keydown', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -3684,7 +3684,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keydup', function (done) {
+                    it('keydup', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -3816,7 +3816,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function (done) {
+                    it('release', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -3951,7 +3951,7 @@ describe('HIDComboState', function () {
                 });
 
                 describe('ordered sequence combos', function () {
-                    it('keydown', function (done) {
+                    it('keydown', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -4069,7 +4069,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function (done) {
+                    it('keyup', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -4197,7 +4197,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function (done) {
+                    it('release', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -4330,7 +4330,7 @@ describe('HIDComboState', function () {
 
         describe('should trigger solitary', function () {
             describe('unordered combos', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4399,7 +4399,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4488,7 +4488,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4579,7 +4579,7 @@ describe('HIDComboState', function () {
             });
 
             describe('unordered combos', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4666,7 +4666,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4782,7 +4782,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4900,7 +4900,7 @@ describe('HIDComboState', function () {
             });
 
             describe('ordered sequence combos', function () {
-                it('keydown', function (done) {
+                it('keydown', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -4987,7 +4987,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('keyup', function (done) {
+                it('keyup', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -5096,7 +5096,7 @@ describe('HIDComboState', function () {
                     ]);
                 });
 
-                it('release', function (done) {
+                it('release', function () {
                     CONV.cycleContinues([
                         function () {
                             // register combo
@@ -5208,7 +5208,7 @@ describe('HIDComboState', function () {
 
             describe('once', function () {
                 describe('unordered combos', function () {
-                    it('keydown', function (done) {
+                    it('keydown', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -5310,7 +5310,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function (done) {
+                    it('keyup', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -5428,7 +5428,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function (done) {
+                    it('release', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -5548,7 +5548,7 @@ describe('HIDComboState', function () {
                 });
 
                 describe('unordered combos', function () {
-                    it('keydown', function (done) {
+                    it('keydown', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -5672,7 +5672,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function (done) {
+                    it('keyup', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -5814,7 +5814,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function (done) {
+                    it('release', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -5958,7 +5958,7 @@ describe('HIDComboState', function () {
                 });
 
                 describe('ordered sequence combos', function () {
-                    it('keydown', function (done) {
+                    it('keydown', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6082,7 +6082,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function (done) {
+                    it('keyup', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6223,7 +6223,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function (done) {
+                    it('release', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6368,7 +6368,7 @@ describe('HIDComboState', function () {
 
             describe('exclusive', function () {
                 describe('unordered combos', function () {
-                    it('keydown', function (done) {
+                    it('keydown', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6437,7 +6437,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function (done) {
+                    it('keyup', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6522,7 +6522,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function (done) {
+                    it('release', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6609,7 +6609,7 @@ describe('HIDComboState', function () {
                 });
 
                 describe('ordered combos', function () {
-                    it('keydown', function (done) {
+                    it('keydown', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6696,7 +6696,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function (done) {
+                    it('keyup', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6799,7 +6799,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function (done) {
+                    it('release', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6904,7 +6904,7 @@ describe('HIDComboState', function () {
                 });
 
                 describe('ordered sequence combos', function () {
-                    it('keydown', function (done) {
+                    it('keydown', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -6999,7 +6999,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('keyup', function (done) {
+                    it('keyup', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -7110,7 +7110,7 @@ describe('HIDComboState', function () {
                         ]);
                     });
 
-                    it('release', function (done) {
+                    it('release', function () {
                         CONV.cycleContinues([
                             function () {
                                 // register combo
@@ -7224,7 +7224,7 @@ describe('HIDComboState', function () {
 
                 describe('once', function () {
                     describe('unordered combos', function () {
-                        it('keydown', function (done) {
+                        it('keydown', function () {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -7311,7 +7311,7 @@ describe('HIDComboState', function () {
                             ]);
                         });
 
-                        it('keyup', function (done) {
+                        it('keyup', function () {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -7432,7 +7432,7 @@ describe('HIDComboState', function () {
                             ]);
                         });
 
-                        it('release', function (done) {
+                        it('release', function () {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -7555,7 +7555,7 @@ describe('HIDComboState', function () {
                     });
 
                     describe('ordered combos', function () {
-                        it('keydown', function (done) {
+                        it('keydown', function () {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -7673,7 +7673,7 @@ describe('HIDComboState', function () {
                             ]);
                         });
 
-                        it('keyup', function (done) {
+                        it('keyup', function () {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -7805,7 +7805,7 @@ describe('HIDComboState', function () {
                             ]);
                         });
 
-                        it('release', function (done) {
+                        it('release', function () {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -7939,7 +7939,7 @@ describe('HIDComboState', function () {
                     });
 
                     describe('ordered sequence combos', function () {
-                        it('keydown', function (done) {
+                        it('keydown', function () {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -8057,7 +8057,7 @@ describe('HIDComboState', function () {
                             ]);
                         });
 
-                        it('keyup', function (done) {
+                        it('keyup', function () {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -8191,7 +8191,7 @@ describe('HIDComboState', function () {
                             ]);
                         });
 
-                        it('release', function (done) {
+                        it('release', function () {
                             CONV.cycleContinues([
                                 function () {
                                     // register combo
@@ -8352,7 +8352,7 @@ describe('HIDComboState', function () {
         });
 
 
-        it('should capture HID combo state of mouseMove, mouseClick, keydown', function (done) {
+        it('should capture HID combo state of mouseMove, mouseClick, keydown', function () {
             CONV.cycleContinues([
                 function () {
                     // register combo
