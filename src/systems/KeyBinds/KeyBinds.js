@@ -45,6 +45,10 @@
                 keys: ['m0'],
                 isOnce: true
             },
+            auxAttack: {
+                keys: ['m1'],
+                isOnce: true
+            },
             altAttack: {
                 keys: ['m2'],
                 isOnce: true

@@ -1,5 +1,113 @@
 'use strict';
 
+// ball emitter when attacking
+// ----------------------------------------
+(function () {
+    var mBallCount = 0,
+        mGeometry = new THREE.SphereGeometry(100),
+        mMaterial = new THREE.MeshBasicMaterial({color: 'red'});
+
+
+    function newBallEntity(initialPosition, initialVelocity) {
+        return {
+            name: 'ball' + mBallCount++,
+            components: {
+                'Transform': {
+                    position: initialPosition
+                },
+                'Transform': {
+                    position: initialPosition
+                },
+                'Physics': {
+                    mass: 1, // kg
+                    shape: new CANNON.Sphere(100), // m
+                    velocity: initialVelocity
+                },
+                'Mesh': {
+                    geometry: mGeometry,
+                    material: mMaterial
+                },
+                'Interpolate': null
+            }
+        };
+    }
+    new CONV.System.Logic({
+        name: 'BallEmitter',
+
+        dependencies: ['Hierarchy', 'Physics'],
+
+        requiredDependencies: ['TransformMatrix', 'HIDComboState', "BallsCreator"],
+
+        component: function (props) {
+            return {
+                velocity: 10
+            };
+        },
+
+        process: function (entities) {
+            var entity = _.first(entities);
+
+            if (!entity) {
+                return;
+            }
+
+            var BallsCreator = entity.BallsCreator;
+
+            _.each(entities, function(e) {
+                var TransformMatrix = e.TransformMatrix,
+                    HIDComboState = e.HIDComboState,
+                    ActiveKeyBinds = e.ActiveKeyBinds,
+                    BallEmitter = e.BallEmitter,
+                    triggered = {},
+                    position = new THREE.Vector3(),
+                    quaternion = new THREE.Quaternion(),
+                    scale = new THREE.Vector3(),
+                    initialVelocity;
+
+                _.each(ActiveKeyBinds, function (keyBindName) {
+                    triggered[keyBindName] = !!~HIDComboState.indexOf(keyBindName);
+                });
+
+                if (!triggered.attack) {
+                    return;
+                }
+
+                TransformMatrix.decompose(position, quaternion, scale);
+                // shoot to the front of the object
+                initialVelocity = new THREE.Vector3(0,0, -100).applyQuaternion(quaternion);
+                BallsCreator.push(newBallEntity(position, initialVelocity));
+            });
+        }
+    });
+})();
+
+// system which actually creates the balls entity
+// ----------------------------------------
+(function () {
+    var mBalls = [];
+
+    new CONV.System.Logic({
+        name: 'BallsCreator',
+
+        // static because entities should be added before or after engine
+        // cycle never in the middle
+        isStatic: true,
+
+        component: function (props) {
+            return mBalls;
+        },
+
+        process: function (entities) {
+            _.each(mBalls, function(ball) {
+                new CONV.Entity(ball);
+            });
+
+            // reset array to let
+            mBalls.length = 0;
+        }
+    });
+})();
+
 /* player
 -------------------------------------------------------------------------- */
 var player = new CONV.Entity({
@@ -21,6 +129,7 @@ var player = new CONV.Entity({
             'moveDown'
         ],
         'HIDRotate': null,
+        'Hierarchy': null,
         'HIDTranslate': null,
         'Velocity': null,
         'AngularVelocity': null,
@@ -28,8 +137,7 @@ var player = new CONV.Entity({
         'Interpolate': null,
         'HierarchyInterpolate': null,
         'Physics': null,
-        'PhysicsClearAngularVelocity': null,
-        'BallEmitter': null
+        'PhysicsClearAngularVelocity': null
     },
 });
 
@@ -63,6 +171,26 @@ new CONV.Entity({
         'Interpolate': null,
         'HierarchyInterpolate': null,
         'Camera': null
+    },
+});
+
+
+/* ball emitter
+ -------------------------------------------------------------------------- */
+var ballEmmiter = new CONV.Entity({
+    name: 'ballEmmiter',
+
+    // components composing this entity
+    components: {
+        'Transform': {
+            position: new THREE.Vector3(0, 0, -300)
+        },
+        'ActiveKeyBinds': [
+            'attack'
+        ],
+        'Hierarchy': null,
+        'Parent': cameraContainer,
+        'BallEmitter': null
     },
 });
 
@@ -109,73 +237,6 @@ _(10).times(function(i){
     });
 
 });
-
-// ball emitter when attacking
-// ----------------------------------------
-(function () {
-    var mBallCount = 0,
-        mGeometry = new THREE.SphereGeometry(100),
-        mMaterial = new THREE.MeshBasicMaterial();
-
-
-    function newBallEntity(initialPosition, initialVelocity) {
-        new CONV.Entity({
-            name: 'ball' + mBallCount++,
-            components: {
-                'Transform': {
-                    position: initialPosition
-                },
-                'Physics': {
-                    mass: 1, // kg
-                    shape: new CANNON.Sphere(100), // m
-                    velocity: initialVelocity
-                },
-                'Mesh': {
-                    geometry: mGeometry,
-                    material: mMaterial
-                },
-                'Interpolate': null
-            }
-        });
-    }
-    new CONV.System.Logic({
-        name: 'BallEmitter',
-
-        dependencies: ['Hierarchy', 'Physics'],
-
-        requiredDependencies: ['TransformMatrix', 'HIDComboState'],
-
-        component: function (props) {
-            return {
-                velocity: 10
-            };
-        },
-
-        process: function (entities) {
-            _.each(entities, function(e) {
-                var TransformMatrix = e.TransformMatrix,
-                    HIDComboState = e.HIDComboState,
-                    ActiveKeyBinds = e.ActiveKeyBinds,
-                    BallEmitter = e.BallEmitter,
-                    triggered = {},
-                    position = new THREE.Vector3(),
-                    quaternion = new THREE.Quaternion(),
-                    scale = new THREE.Vector3();
-
-                _.each(ActiveKeyBinds, function (keyBindName) {
-                    triggered[keyBindName] = !!~HIDComboState.indexOf(keyBindName);
-                });
-
-                TransformMatrix.decompose(position, quaternion, scale);
-
-                if (triggered.attack) {
-                    // shoot to the front of the object
-                    newBallEntity(position, new THREE.Vector3(0,0,-100).applyQuaternion(quaternion));
-                }
-            });
-        }
-    });
-})();
 
 /* start engine
 -------------------------------------------------------------------------- */
