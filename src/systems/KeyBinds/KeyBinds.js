@@ -42,21 +42,23 @@
                 keys: ['mwheelMovedLeft']
             },
             attack: {
-                keys: ['m0']
+                keys: ['m0'],
+                isOnce: true
             },
             altAttack: {
-                keys: ['m2']
+                keys: ['m2'],
+                isOnce: true
             }
         };
 
-    function generateKeyBind(keys) {
+    function generateKeyBind(keybind) {
         return {
-            keys: keys,
-            trigger: 'down',
-            isOnce: false,
-            isOrdered: false,
-            isExclusive: false,
-            isSolitary: false
+            keys: keybind.keys,
+            trigger: keybind.trigger || 'down',
+            isOnce: keybind.isOnce || false,
+            isOrdered: keybind.isOrdered || false,
+            isExclusive: keybind.isExclusive || false,
+            isSolitary: keybind.isSolitary || false
         };
     }
 
@@ -79,7 +81,7 @@
                 HIDCombos = staticEntity.HIDCombos;
 
             _.each(KeyBinds, function (keyBind, key) {
-                HIDCombos[key] = generateKeyBind(keyBind.keys);
+                HIDCombos[key] = generateKeyBind(keyBind);
             });
         }
     });
