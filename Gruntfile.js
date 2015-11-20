@@ -135,7 +135,8 @@ module.exports = function (grunt) {
                     specs: ['<%= dirs.spec %>/core/**/*.js'],
                     helpers: '<%= dirs.spec %>/helpers/**/*.js',
                     vendor: ['<%= pkgVendores %>'],
-                    outfile: '<%= dirs.spec %>/core.html'
+                    outfile: '<%= dirs.spec %>/core.html',
+                    keepRunner: true
                 }
             },
             systems: {
@@ -148,7 +149,8 @@ module.exports = function (grunt) {
                     specs: ['<%= dirs.spec %>/systems/**/*.js'],
                     helpers: '<%= dirs.spec %>/helpers/**/*.js',
                     vendor: ['<%= pkgVendores %>'],
-                    outfile: '<%= dirs.spec %>/systems.html'
+                    outfile: '<%= dirs.spec %>/systems.html',
+                    keepRunner: true
                 }
             },
             options: {
