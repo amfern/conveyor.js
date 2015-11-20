@@ -242,6 +242,7 @@ _(10).times(function(i){
 -------------------------------------------------------------------------- */
 CONV();
 
-
 // TODO: gravity
 // TODO: lighting and shadows
+// TODO: jumping
+// TODO: joint locks
