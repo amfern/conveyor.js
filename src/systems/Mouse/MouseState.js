@@ -86,14 +86,23 @@
                 'wheelTimeStamp'
             ]));
 
-            // calculate movement
-            state.movementX = Mouse.screenX - state.screenX;
-            state.movementY = Mouse.screenY - state.screenY;
-
             state.wheelMovementX = Mouse.wheelX - state.wheelX;
             state.wheelMovementY = Mouse.wheelY - state.wheelY;
 
-            _.extend(state, _.pick(Mouse, ['clientX', 'clientY', 'screenX', 'screenY', 'wheelX', 'wheelY']));
+            _.extend(state, _.pick(Mouse, [
+                'clientX',
+                'clientY',
+                'screenX',
+                'screenY',
+                'wheelX',
+                'wheelY',
+                'movementX',
+                'movementY'
+            ]));
+
+            // Mouse movement collected, reset for the next engine cycle
+            Mouse.movementX = 0;
+            Mouse.movementY = 0;
 
             // calculate mouse movement
             state.moved = constructState(

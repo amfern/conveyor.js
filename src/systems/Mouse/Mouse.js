@@ -10,6 +10,8 @@
             up: 0
         },
         state = {
+            movementX: 0,
+            movementY: 0,
             screenX: 0,
             screenY: 0,
             clientX: 0,
@@ -35,6 +37,8 @@
     }, false);
 
     element.addEventListener('mousemove', function (e) {
+        state.movementX += e.movementX;
+        state.movementY += e.movementY;
         state.screenX = e.screenX;
         state.screenY = e.screenY;
         state.clientX = e.clientX;

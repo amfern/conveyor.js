@@ -14,26 +14,23 @@ function dispatchGenericEvent(eventName, eventObj) {
     }
 }
 
-function mouseEvent(type, screenX, screenY, clientX, clientY, button, clickCount) {
-    var evt = document.createEvent('MouseEvent');
-
-    evt.initMouseEvent(
-        type, // eventName
-        true, // bubbles
-        true, // cancelable
-        window.document, // document.defaultView
-        clickCount, // click count (2 for double-click)
-        screenX, // screenX
-        screenY, // screenY
-        clientX, // clientX
-        clientY, // clientY
-        false, // ctrlKey
-        false, // altKey
-        false, // shiftKey
-        false, // metaKey
-        button, // button (0:left,1:Middle,2:right)
-        null // relatedTargetElement
-    );
+function mouseEvent(type, screenX, screenY, clientX, clientY, button, clickCount, movementX, movementY) {
+    var evt = new MouseEvent(type, {
+        movementX: movementX,
+        movementY: movementY,
+        cancelable: true,
+        bubbles: true,
+        screenX: screenX, // screenX
+        screenY: screenY, // screenY
+        clientX: clientX, // clientX
+        clientY: clientY, // clientY
+        ctrlKey: false, // ctrlKey
+        altKey: false, // altKey
+        shiftKey: false, // shiftKey
+        metaKey: false, // metaKey
+        button: button, // button (0:left,1:Middle,2:right)
+        relatedTargetElement: null // relatedTargetElement
+    });
 
     window.document.dispatchEvent(evt);
     return evt;
@@ -54,12 +51,12 @@ function wheelEvent(deltaX, deltaY) {
     return eventObj;
 }
 
-function mouseMoveEvent(screenX, screenY) {
-    return mouseEvent('mousemove', screenX, screenY, 0, 0, 0, 0);
+function mouseMoveEvent(screenX, screenY, movementX, movementY) {
+    return mouseEvent('mousemove', screenX, screenY, 0, 0, 0, 0, movementX, movementY);
 }
 
 function mouseClickEvent(button) {
-    return mouseEvent('mousedown', 0, 0, 0, 0, button, 0);
+    return mouseEvent('mousedown', 0, 0, 0, 0, button, 0, 0, 0);
 }
 
 function resetMouseState(state) {

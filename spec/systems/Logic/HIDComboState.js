@@ -8345,7 +8345,7 @@ describe('HIDComboState', function () {
         });
 
         afterEach(function () {
-            mouseMoveEvent(0, 0);
+            mouseMoveEvent(0, 0, 0, 0);
             CONV.cycleOnce(); // cycle to invalidate input buffers
             resetMouseState(mouseState);
             resetIOMouse(IOmouse);
@@ -8371,7 +8371,7 @@ describe('HIDComboState', function () {
 
                     // trigger combo
                     keydownEvent(1);
-                    mouseMoveEvent(10, 20);
+                    mouseMoveEvent(10, 20, 25, 35);
                     wheelEvent(20, 30);
                     mouseClickEvent(0);
                 },
@@ -8379,7 +8379,8 @@ describe('HIDComboState', function () {
                     // expect the combo to be triggered
                     expectTriggered('handler1', true);
 
-                    mouseMoveEvent(11, 22);
+
+                    mouseMoveEvent(11, 22, 26, 36);
                     wheelEvent(21, 31);
                 },
                 function () {

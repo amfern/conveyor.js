@@ -13,7 +13,7 @@ describe('mouseState', function () {
 
     // reset mouse position to 0,0 after each test
     afterEach(function () {
-        mouseMoveEvent(0, 0);
+        mouseMoveEvent(0, 0, 0, 0);
         CONV.cycleOnce(); // cycle again to flush any HID states
         // reset mouse state
         resetMouseState(state);
@@ -22,7 +22,7 @@ describe('mouseState', function () {
 
     // do just a normal event dispatch test with helpers and include clientX and clientY
     it('should fill state correctly', function () {
-        evt = mouseEvent('mousemove', 1, 2, 3, 4, 0, 0);
+        evt = mouseEvent('mousemove', 1, 2, 3, 4, 0, 0, 8, 9);
         wheelEvt = wheelEvent(5, 6);
 
         CONV.cycleOnce(function () {
@@ -77,8 +77,8 @@ describe('mouseState', function () {
                     up: 0,
                     pressed: false
                 },
-                movementX: 1,
-                movementY: 2,
+                movementX: 8,
+                movementY: 9,
                 screenX: 1,
                 screenY: 2,
                 clientX: 3,
@@ -158,7 +158,7 @@ describe('mouseState', function () {
                 });
 
                 _(100000).times(function () {});
-                evt = mouseMoveEvent(10, 20);
+                evt = mouseMoveEvent(10, 20, 15, 25);
                 _(100000).times(function () {});
                 wheelEvt = wheelEvent(20, 30);
             },
@@ -214,8 +214,8 @@ describe('mouseState', function () {
                         up: 0,
                         pressed: false
                     },
-                    movementX: 10,
-                    movementY: 20,
+                    movementX: 15,
+                    movementY: 25,
                     screenX: 10,
                     screenY: 20,
                     clientX: 0,
@@ -233,12 +233,12 @@ describe('mouseState', function () {
         CONV.cycleContinues([
             function () {
                 _(100000).times(function () {});
-                evt = mouseMoveEvent(10, 20);
+                evt = mouseMoveEvent(10, 20, 15, 25);
                 wheelEvt = wheelEvent(20, 30);
             },
             function () {
                 _(100000).times(function () {});
-                evt2 = mouseMoveEvent(10, 20);
+                evt2 = mouseMoveEvent(10, 20, 0, 0);
                 wheelEvt2 = wheelEvent(0, 0);
             },
             function () {
@@ -308,12 +308,12 @@ describe('mouseState', function () {
         ]);
     });
 
-    it('should run over previous value if engine hasn\'t looped yet', function () {
+    it('should aggregate movementXY value if engine hasn\'t looped yet', function () {
         CONV.cycleContinues([
             function () {
-                evt = mouseMoveEvent(10, 20);
+                evt = mouseMoveEvent(10, 20, 15, 25);
                 _(100000).times(function () {});
-                evt2 = mouseMoveEvent(1, 45);
+                evt2 = mouseMoveEvent(1, 45, 3, 65);
                 _(100000).times(function () {});
                 wheelEvt = wheelEvent(20, 30);
                 _(100000).times(function () {});
@@ -372,8 +372,8 @@ describe('mouseState', function () {
                         up: 0,
                         pressed: false
                     },
-                    movementX: 1,
-                    movementY: 45,
+                    movementX: 18,
+                    movementY: 90,
                     screenX: 1,
                     screenY: 45,
                     clientX: 0,
@@ -390,7 +390,7 @@ describe('mouseState', function () {
     it('should capture mousemove and mousedown', function () {
         CONV.cycleContinues([
             function () {
-                evt = mouseMoveEvent(10, 20);
+                evt = mouseMoveEvent(10, 20, 15, 25);
                 _(100000).times(function () {});
                 wheelEvt = wheelEvent(20, 30);
                 _(100000).times(function () {});
@@ -450,8 +450,8 @@ describe('mouseState', function () {
                         up: 0,
                         pressed: false
                     },
-                    movementX: 10,
-                    movementY: 20,
+                    movementX: 15,
+                    movementY: 25,
                     screenX: 10,
                     screenY: 20,
                     clientX: 0,
@@ -478,7 +478,7 @@ describe('mouseState', function () {
     it('should prevent default', function () {
         CONV.cycleContinues([
             function () {
-                evt = mouseMoveEvent(10, 20);
+                evt = mouseMoveEvent(10, 20, 15, 25);
                 wheelEvt = wheelEvent(20, 30);
                 evt2 = mouseClickEvent(1);
             },
@@ -493,7 +493,7 @@ describe('mouseState', function () {
     it('should capture fresh event input', function () {
         CONV.cycleContinues([
             function () {
-                evt = mouseMoveEvent(10, 20);
+                evt = mouseMoveEvent(10, 20, 15, 25);
                 wheelEvt = wheelEvent(20, 30);
                 _(100000).times(function () {});
                 evt2 = mouseClickEvent(1);
@@ -550,8 +550,8 @@ describe('mouseState', function () {
                         up: 0,
                         pressed: false
                     },
-                    movementX: 10,
-                    movementY: 20,
+                    movementX: 15,
+                    movementY: 25,
                     screenX: 10,
                     screenY: 20,
                     clientX: 0,
@@ -569,7 +569,7 @@ describe('mouseState', function () {
             },
             function () {
                 _(100000).times(function () {});
-                evt3 = mouseMoveEvent(15, 5);
+                evt3 = mouseMoveEvent(15, 5, 35, -45);
                 wheelEvt2 = wheelEvent(25, -15);
                 _(100000).times(function () {});
                 evt4 = mouseClickEvent(2);
@@ -626,8 +626,8 @@ describe('mouseState', function () {
                         up: 0,
                         pressed: false
                     },
-                    movementX: 5,
-                    movementY: -15,
+                    movementX: 35,
+                    movementY: -45,
                     screenX: 15,
                     screenY: 5,
                     clientX: 0,

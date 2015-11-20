@@ -27,7 +27,7 @@ describe('HIDState', function () {
     });
 
     afterEach(function () {
-        mouseMoveEvent(0, 0);
+        mouseMoveEvent(0, 0, 0, 0);
         CONV.cycleOnce();
         _.clearAll(IOkeyboard);
         _.clearAll(keyboardState);
@@ -103,7 +103,7 @@ describe('HIDState', function () {
                     mwheelMovementY: 0
                 });
 
-                evt = mouseMoveEvent(10, 20);
+                evt = mouseMoveEvent(10, 20, 25, 35);
                 wheelEvt = wheelEvent(20, 30);
                 evt2 = mouseClickEvent(0);
                 evt3 = keydownEvent(13);
@@ -170,8 +170,8 @@ describe('HIDState', function () {
                         up: 0,
                         pressed: false
                     },
-                    mmovementX: 10,
-                    mmovementY: 20,
+                    mmovementX: 25,
+                    mmovementY: 35,
                     mscreenX: 10,
                     mscreenY: 20,
                     mclientX: 0,
