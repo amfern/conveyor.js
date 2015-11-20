@@ -14,9 +14,9 @@ new CONV.System.Logic({
             var Transform = e.Transform;
 
             e.TransformPristine = {
-                position: Transform.position,
-                rotate: Transform.rotate,
-                scale: Transform.scale
+                position: Transform.position.clone(),
+                rotate: Transform.rotate.clone(),
+                scale: Transform.scale.clone()
             };
         });
     }
