@@ -5,11 +5,11 @@
 new CONV.System.Interpolate({
     name: 'Interpolate',
 
-    requiredDependencies: ['TransformInterpolate', 'TransformInterpolatePristine', 'TransformMatrix'],
+    requiredDependencies: ['TransformInterpolate', 'TransformPristine', 'TransformMatrix'],
 
     process: function (entities, interpolation) {
         _.each(entities, function (e) {
-            var before = e.TransformInterpolatePristine,
+            var before = e.TransformPristine,
                 after = e.TransformInterpolate,
                 beforePosition = before.position,
                 beforeRotate = before.rotate,
