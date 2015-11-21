@@ -26,6 +26,8 @@
         state[e.button].pressed = true;
 
         e.preventDefault();
+
+        window.document.body.requestPointerLock();
     }, false);
 
     element.addEventListener('mouseup', function (e) {
