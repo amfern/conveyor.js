@@ -15,9 +15,6 @@
                 'Transform': {
                     position: initialPosition
                 },
-                'Transform': {
-                    position: initialPosition
-                },
                 'Physics': {
                     mass: 1, // kg
                     shape: new CANNON.Sphere(100), // m
@@ -133,10 +130,17 @@ var player = new CONV.Entity({
         'HIDTranslate': null,
         'Velocity': null,
         'AngularVelocity': null,
+        // 'Mesh': {
+        //     geometry: new THREE.SphereGeometry(100)
+        // },
         'Mesh': null,
         'Interpolate': null,
         'HierarchyInterpolate': null,
         'Physics': null,
+        // 'Physics': {
+        //     mass: 5, // kg
+        //     shape: new CANNON.Sphere(100) // m
+        // },
         'PhysicsClearAngularVelocity': null
     },
 });
@@ -196,13 +200,43 @@ var ballEmmiter = new CONV.Entity({
 
 
 /* ground
--------------------------------------------------------------------------- */
+ -------------------------------------------------------------------------- */
+function newDefaultContactMaterial() {
+    var material = new CANNON.ContactMaterial(
+        new CANNON.Material("default"),
+        new CANNON.Material("default"),
+        { friction: 0.3, restitution: 0.0 });
+
+    material.contactEquationStiffness = 1e9;
+    material.contactEquationRelaxation = 4;
+
+    return material;
+};
+
+function newContactMaterial() {
+    var physicsMaterial = new CANNON.Material("slipperyMaterial"),
+        contactMaterial = new CANNON.ContactMaterial(physicsMaterial,
+                                                     physicsMaterial,
+                                                     0.0, // friction coefficient
+                                                     0.3  // restitution
+                                                    );
+    return contactMaterial;
+};
+
+function newDefaultSolver() {
+    var solver = new CANNON.GSSolver();
+    solver.iterations = 7;
+    solver.tolerance = 0.1;
+
+    return new CANNON.SplitSolver(solver);
+}
+
 new CONV.Entity({
     name: 'ground',
     components: {
         'Transform': {
             rotate: new THREE.Quaternion()
-                .setFromAxisAngle(new THREE.Vector3(1,0,0), -Math.PI/2),
+                .setFromAxisAngle(new THREE.Vector3(1,0,0), -Math.PI/2)
         },
         'Mesh': {
             geometry: new THREE.PlaneGeometry( 20000, 20000 ),
@@ -211,6 +245,15 @@ new CONV.Entity({
         'Physics': {
             mass: 0,
             shape: new CANNON.Box(new CANNON.Vec3(10000, 10000, 1))
+        },
+        PhysicsWorld: {
+            // quatNormalizeSkip: 0,
+            // quatNormalizeFast: false,
+            // defaultContactMaterial: newDefaultContactMaterial(),
+            // contactMaterial: newContactMaterial(),
+            // solver: newDefaultSolver(),
+            gravity: new CANNON.Vec3(0,-20,0),
+            // broadphase: new CANNON.NaiveBroadphase()
         }
     },
 
@@ -242,7 +285,9 @@ _(10).times(function(i){
 -------------------------------------------------------------------------- */
 CONV();
 
-// TODO: gravity
-// TODO: lighting and shadows
-// TODO: jumping
+// TODO: gravity - system which contains physics properties and another non static system which alters them
+// TODO: lighting and shadows - same principle as above
+// TODO: jumping - create new system which runs after HIDTranslate and if jump key detected,
+//       it sets Tranmsformer to higher value, so Velocity system will take care of the rest
+//       break HIDTranslate to 3 different systems
 // TODO: joint locks

@@ -9,7 +9,7 @@
 
         dependencies: ['Velocity', 'AngularVelocity', 'TransformPristine'],
 
-        requiredDependencies: ['Transformer', 'Transform'],
+        requiredDependencies: ['Transformer', 'Transform', 'PhysicsWorld'],
 
         component: function (props) {
             // TODO: merge default properties with given
@@ -26,7 +26,20 @@
                 return;
             }
 
-            var world = new CANNON.World();
+            var world = new CANNON.World(),
+                entity = _.first(entities);
+
+            if (!entity) {
+                return;
+            }
+
+            var PhysicsWorld = entity.PhysicsWorld;
+            _.each(PhysicsWorld.contactMaterials, function (cm) {
+                world.addContactMaterial(cm);
+            });
+
+            // extend world with properties
+            _.extend(world, entity.PhysicsWorld);
 
             _.each(entities, function (e) {
                 var Physics = e.Physics,
