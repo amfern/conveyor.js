@@ -9,7 +9,7 @@
     }
 
     function newGeometry() {
-        return new THREE.BoxGeometry(200, 200, 200);
+        return new THREE.BoxGeometry(1, 1, 1);
     }
 
     new CONV.System.Interpolate({

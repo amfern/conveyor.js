@@ -15,7 +15,7 @@
             // TODO: merge default properties with given
             props = props || {
                 mass: 5, // kg
-                shape: new CANNON.Box(new CANNON.Vec3(100, 100, 100)) // m
+                shape: new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5)) // m
             };
 
             return new CANNON.Body(props);
@@ -65,7 +65,10 @@
                 world.addBody(Physics);
             });
 
-            _(6).times(function(){ world.step(1/6); });
+            // physics engine is ran at 100hz
+            _.times(4, function () {
+                world.step(1/CONV.TICKS_PER_SECOND/4);
+            });
 
             _.each(entities, function (e) {
                 var Physics = e.Physics,

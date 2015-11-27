@@ -11,7 +11,7 @@ new CONV.System.Logic({
 
     component: function () {
         return {
-            velocity: 10
+            velocity: 1
         };
     },
 
