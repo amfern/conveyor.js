@@ -4,7 +4,7 @@
 // ----------------------------------------
 (function () {
     var mBallCount = 0,
-        mGeometry = new THREE.SphereGeometry(100),
+        mGeometry = new THREE.SphereGeometry(0.2, 32, 32),
         mMaterial = new THREE.MeshBasicMaterial({color: 'red'});
 
 
@@ -17,7 +17,7 @@
                 },
                 'Physics': {
                     mass: 1, // kg
-                    shape: new CANNON.Sphere(100), // m
+                    shape: new CANNON.Sphere(0.2), // m
                     velocity: initialVelocity
                 },
                 'Mesh': {
@@ -37,7 +37,7 @@
 
         component: function (props) {
             return {
-                velocity: 10
+                velocity: 15
             };
         },
 
@@ -71,7 +71,7 @@
 
                 TransformMatrix.decompose(position, quaternion, scale);
                 // shoot to the front of the object
-                initialVelocity = new THREE.Vector3(0,0, -100).applyQuaternion(quaternion);
+                initialVelocity = new THREE.Vector3(0,0, -15).applyQuaternion(quaternion);
                 BallsCreator.push(newBallEntity(position, initialVelocity));
             });
         }
@@ -106,14 +106,24 @@
 })();
 
 /* player
--------------------------------------------------------------------------- */
+ -------------------------------------------------------------------------- */
+var playerMaterial = new CANNON.Material("slipperyMaterial");
+var groundMaterial = new CANNON.Material("groundMaterial");
+
+var playerGroundContact = new CANNON.ContactMaterial(groundMaterial, playerMaterial, {
+    friction: 0,
+    restitution: 0.3,
+    contactEquationStiffness: 1e8,
+    contactEquationRelaxation: 3
+});
+
 var player = new CONV.Entity({
     name: 'player',
 
     // components composing this entity
     components: {
         'Transform': {
-            position: new THREE.Vector3(0, 100, 0)
+            position: new THREE.Vector3(0, 5, 0)
         },
         'ActiveKeyBinds': [
             'yawRight',
@@ -129,20 +139,22 @@ var player = new CONV.Entity({
         'Hierarchy': null,
         'HIDTranslate': null,
         'Velocity': null,
-        'AngularVelocity': null,
-        // 'Mesh': {
-        //     geometry: new THREE.SphereGeometry(100)
-        // },
-        'Mesh': null,
+        'AngularVelocity': 0.05,
+        'Mesh': {
+            geometry: new THREE.BoxGeometry(1, 1, 1)
+        },
         'Interpolate': null,
         'HierarchyInterpolate': null,
-        'Physics': null,
-        // 'Physics': {
-        //     mass: 5, // kg
-        //     shape: new CANNON.Sphere(100) // m
-        // },
-        'PhysicsClearAngularVelocity': null
-    },
+        'Physics': {
+            mass: 5, // kg
+            shape: new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5)), // m
+            // shape: new CANNON.Sphere(0.5),
+            material: playerMaterial,
+            linearDamping: 0.9
+        },
+        'PhysicsClearAngularVelocity': null,
+        'PhysicsClearVelocity': null
+    }
 });
 
 
@@ -155,7 +167,7 @@ var cameraContainer = new CONV.Entity({
     components: {
         'ActiveKeyBinds': ['pitchUp', 'pitchDown'],
         'HIDRotate': null,
-        'AngularVelocity': null,
+        'AngularVelocity':  0.005,
         'Rotate': null,
         'Parent': player,
         'Interpolate': null,
@@ -169,7 +181,7 @@ new CONV.Entity({
     // components composing this entity
     components: {
         'Transform': {
-            position: new THREE.Vector3(0, 0, 500)
+            position: new THREE.Vector3(0, 0, 2)
         },
         'Parent': cameraContainer,
         'Interpolate': null,
@@ -187,7 +199,7 @@ var ballEmmiter = new CONV.Entity({
     // components composing this entity
     components: {
         'Transform': {
-            position: new THREE.Vector3(0, 0, -300)
+            position: new THREE.Vector3(0, 0, -0.6)
         },
         'ActiveKeyBinds': [
             'attack'
@@ -201,35 +213,35 @@ var ballEmmiter = new CONV.Entity({
 
 /* ground
  -------------------------------------------------------------------------- */
-function newDefaultContactMaterial() {
-    var material = new CANNON.ContactMaterial(
-        new CANNON.Material("default"),
-        new CANNON.Material("default"),
-        { friction: 0.3, restitution: 0.0 });
+// function newDefaultContactMaterial() {
+//     var material = new CANNON.ContactMaterial(
+//         new CANNON.Material("default"),
+//         new CANNON.Material("default"),
+//         { friction: 0.3, restitution: 0.0 });
 
-    material.contactEquationStiffness = 1e9;
-    material.contactEquationRelaxation = 4;
+//     material.contactEquationStiffness = 1e9;
+//     material.contactEquationRelaxation = 4;
 
-    return material;
-};
+//     return material;
+// };
 
-function newContactMaterial() {
-    var physicsMaterial = new CANNON.Material("slipperyMaterial"),
-        contactMaterial = new CANNON.ContactMaterial(physicsMaterial,
-                                                     physicsMaterial,
-                                                     0.0, // friction coefficient
-                                                     0.3  // restitution
-                                                    );
-    return contactMaterial;
-};
+// function newContactMaterial() {
+//     var physicsMaterial = new CANNON.Material("slipperyMaterial"),
+//         contactMaterial = new CANNON.ContactMaterial(physicsMaterial,
+//                                                      physicsMaterial,
+//                                                      0.0, // friction coefficient
+//                                                      0.3  // restitution
+//                                                     );
+//     return contactMaterial;
+// };
 
-function newDefaultSolver() {
-    var solver = new CANNON.GSSolver();
-    solver.iterations = 7;
-    solver.tolerance = 0.1;
+// function newDefaultSolver() {
+//     var solver = new CANNON.GSSolver();
+//     solver.iterations = 7;
+//     solver.tolerance = 0.1;
 
-    return new CANNON.SplitSolver(solver);
-}
+//     return new CANNON.SplitSolver(solver);
+// }
 
 new CONV.Entity({
     name: 'ground',
@@ -239,21 +251,23 @@ new CONV.Entity({
                 .setFromAxisAngle(new THREE.Vector3(1,0,0), -Math.PI/2)
         },
         'Mesh': {
-            geometry: new THREE.PlaneGeometry( 20000, 20000 ),
+            geometry: new THREE.PlaneGeometry( 300, 300, 50, 50 ),
             material: new THREE.MeshBasicMaterial()
         },
         'Physics': {
             mass: 0,
-            shape: new CANNON.Box(new CANNON.Vec3(10000, 10000, 1))
+            shape: new CANNON.Plane(),
+            material: groundMaterial
         },
         PhysicsWorld: {
-            // quatNormalizeSkip: 0,
-            // quatNormalizeFast: false,
+            quatNormalizeSkip: 0,
+            quatNormalizeFast: false,
             // defaultContactMaterial: newDefaultContactMaterial(),
             // contactMaterial: newContactMaterial(),
             // solver: newDefaultSolver(),
             gravity: new CANNON.Vec3(0,-20,0),
-            // broadphase: new CANNON.NaiveBroadphase()
+            broadphase: new CANNON.NaiveBroadphase(),
+            contactMaterials: [playerGroundContact]
         }
     },
 
@@ -266,9 +280,9 @@ _(10).times(function(i){
         components: {
             'Transform': {
                 position: new THREE.Vector3(
-                    Math.random() * 1000 - 500,
-                    100,
-                    Math.random() * 1000 - 500
+                    (Math.random()-0.5)*20,
+                    1 + (Math.random()-0.5)*1,
+                    (Math.random()-0.5)*20
                 ),
                 rotate: new THREE.Quaternion()
                     .setFromAxisAngle(new THREE.Vector3(0,1,0), Math.PI * 2 * Math.random())
@@ -285,9 +299,11 @@ _(10).times(function(i){
 -------------------------------------------------------------------------- */
 CONV();
 
-// TODO: gravity - system which contains physics properties and another non static system which alters them
 // TODO: lighting and shadows - same principle as above
 // TODO: jumping - create new system which runs after HIDTranslate and if jump key detected,
 //       it sets Tranmsformer to higher value, so Velocity system will take care of the rest
 //       break HIDTranslate to 3 different systems
 // TODO: joint locks
+// TODO: fix flipping, we can't fix it, what we can do is ignore it,
+//       by calculating translation without z rotation.
+///      and by changing camera to follow position only
