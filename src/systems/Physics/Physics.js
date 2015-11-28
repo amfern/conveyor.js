@@ -7,7 +7,7 @@
     new CONV.System.Logic({
         name: 'Physics',
 
-        dependencies: ['Velocity', 'AngularVelocity', 'TransformPristine'],
+        dependencies: ['Velocity', 'AngularVelocity', 'TransformPristine', 'HIDJump'],
 
         requiredDependencies: ['Transformer', 'Transform', 'PhysicsWorld'],
 

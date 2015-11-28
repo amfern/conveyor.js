@@ -23,6 +23,11 @@
                 keys: ['k67']
             },
 
+            moveJump: {
+                keys: ['k32'],
+                isOnce: true
+            },
+
             pitchUp: {
                 keys: ['mmovedUp']
             },
