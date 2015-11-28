@@ -5,7 +5,13 @@
 new CONV.System.Logic({
     name: 'Velocity',
 
-    dependencies: ['Transformer', 'HIDTranslate', 'Rotate'],
+    dependencies: [
+        'Transformer',
+        'HIDTranslateHorizontal',
+        'HIDTranslateVertical',
+        'HIDTranslateDepth',
+        'Rotate'
+    ],
 
     requiredDependencies: ['Transformer', 'Transform'],
 
