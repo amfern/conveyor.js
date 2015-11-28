@@ -9,9 +9,9 @@ new CONV.System.Logic({
 
     requiredDependencies: ['Transformer'],
 
-    component: function () {
+    component: function (velocity) {
         return {
-            velocity: 0.005
+            velocity: velocity || 0.005
         };
     },
 
