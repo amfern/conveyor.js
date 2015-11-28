@@ -5,7 +5,9 @@
 // http://schteppe.github.io/cannon.js/docs/classes/World.html#properites
 // ----------------------------------------
 (function () {
-    var component = {};
+    var component = {
+        contacts: []
+    };
 
     new CONV.System.Logic({
         name: 'PhysicsWorld',

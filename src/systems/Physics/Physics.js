@@ -7,7 +7,7 @@
     new CONV.System.Logic({
         name: 'Physics',
 
-        dependencies: ['Velocity', 'AngularVelocity', 'TransformPristine', 'HIDJump'],
+        dependencies: ['Velocity', 'AngularVelocity', 'TransformPristine', 'HIDJump',  'TransformerNeedContact'],
 
         requiredDependencies: ['Transformer', 'Transform', 'PhysicsWorld'],
 
@@ -34,12 +34,13 @@
             }
 
             var PhysicsWorld = entity.PhysicsWorld;
+
             _.each(PhysicsWorld.contactMaterials, function (cm) {
                 world.addContactMaterial(cm);
             });
 
             // extend world with properties
-            _.extend(world, entity.PhysicsWorld);
+            world.gravity = PhysicsWorld.gravity || world.gravity;
 
             _.each(entities, function (e) {
                 var Physics = e.Physics,
@@ -69,6 +70,8 @@
             _.times(4, function () {
                 world.step(1/CONV.TICKS_PER_SECOND/4);
             });
+
+            PhysicsWorld.contacts = world.contacts;
 
             _.each(entities, function (e) {
                 var Physics = e.Physics,
