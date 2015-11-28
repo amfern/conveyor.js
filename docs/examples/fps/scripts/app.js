@@ -105,7 +105,10 @@
     });
 })();
 
-/* player
+
+
+
+/* ground
  -------------------------------------------------------------------------- */
 var playerMaterial = new CANNON.Material("slipperyMaterial");
 var groundMaterial = new CANNON.Material("groundMaterial");
@@ -117,6 +120,38 @@ var playerGroundContact = new CANNON.ContactMaterial(groundMaterial, playerMater
     contactEquationRelaxation: 3
 });
 
+var ground = new CONV.Entity({
+    name: 'ground',
+    components: {
+        'Transform': {
+            rotate: new THREE.Quaternion()
+                .setFromAxisAngle(new THREE.Vector3(1,0,0), -Math.PI/2)
+        },
+        'Mesh': {
+            geometry: new THREE.PlaneGeometry( 300, 300, 50, 50 ),
+            material: new THREE.MeshBasicMaterial()
+        },
+        'Physics': {
+            mass: 0,
+            shape: new CANNON.Plane(),
+            material: groundMaterial
+        },
+        PhysicsWorld: {
+            // quatNormalizeSkip: 0,
+            // quatNormalizeFast: false,
+            // defaultContactMaterial: newDefaultContactMaterial(),
+            // contactMaterial: newContactMaterial(),
+            // solver: newDefaultSolver(),
+            gravity: new CANNON.Vec3(0,-20,0),
+            // broadphase: new CANNON.NaiveBroadphase(),
+            contactMaterials: [playerGroundContact]
+        }
+    },
+
+});
+
+/* player
+ -------------------------------------------------------------------------- */
 var player = new CONV.Entity({
     name: 'player',
 
@@ -127,17 +162,13 @@ var player = new CONV.Entity({
         },
         'ActiveKeyBinds': [
             'yawRight',
-            'yawLeft',
-            'moveForward',
-            'moveBack',
-            'moveLeft',
-            'moveRight',
-            'moveUp',
-            'moveDown'
+            'yawLeft'
         ],
         'HIDRotate': null,
         'Hierarchy': null,
-        'HIDTranslate': null,
+        'HIDTranslateHorizontal': null,
+        'HIDJump': null,
+        'HIDTranslateDepth': null,
         'Velocity': null,
         'AngularVelocity': 0.05,
         'Mesh': {
@@ -152,8 +183,8 @@ var player = new CONV.Entity({
             material: playerMaterial,
             linearDamping: 0.9
         },
-        'PhysicsClearAngularVelocity': null,
-        'PhysicsClearVelocity': null
+        TransformerNeedContact: [ground.Physics],
+        'PhysicsClearAngularVelocity': null
     }
 });
 
@@ -211,70 +242,8 @@ var ballEmmiter = new CONV.Entity({
 });
 
 
-/* ground
- -------------------------------------------------------------------------- */
-// function newDefaultContactMaterial() {
-//     var material = new CANNON.ContactMaterial(
-//         new CANNON.Material("default"),
-//         new CANNON.Material("default"),
-//         { friction: 0.3, restitution: 0.0 });
-
-//     material.contactEquationStiffness = 1e9;
-//     material.contactEquationRelaxation = 4;
-
-//     return material;
-// };
-
-// function newContactMaterial() {
-//     var physicsMaterial = new CANNON.Material("slipperyMaterial"),
-//         contactMaterial = new CANNON.ContactMaterial(physicsMaterial,
-//                                                      physicsMaterial,
-//                                                      0.0, // friction coefficient
-//                                                      0.3  // restitution
-//                                                     );
-//     return contactMaterial;
-// };
-
-// function newDefaultSolver() {
-//     var solver = new CANNON.GSSolver();
-//     solver.iterations = 7;
-//     solver.tolerance = 0.1;
-
-//     return new CANNON.SplitSolver(solver);
-// }
-
-new CONV.Entity({
-    name: 'ground',
-    components: {
-        'Transform': {
-            rotate: new THREE.Quaternion()
-                .setFromAxisAngle(new THREE.Vector3(1,0,0), -Math.PI/2)
-        },
-        'Mesh': {
-            geometry: new THREE.PlaneGeometry( 300, 300, 50, 50 ),
-            material: new THREE.MeshBasicMaterial()
-        },
-        'Physics': {
-            mass: 0,
-            shape: new CANNON.Plane(),
-            material: groundMaterial
-        },
-        PhysicsWorld: {
-            quatNormalizeSkip: 0,
-            quatNormalizeFast: false,
-            // defaultContactMaterial: newDefaultContactMaterial(),
-            // contactMaterial: newContactMaterial(),
-            // solver: newDefaultSolver(),
-            gravity: new CANNON.Vec3(0,-20,0),
-            broadphase: new CANNON.NaiveBroadphase(),
-            contactMaterials: [playerGroundContact]
-        }
-    },
-
-});
-
 /* boxes */
-_(10).times(function(i){
+_.times(10, function(i){
     new CONV.Entity({
         name: 'box' + i,
         components: {
@@ -296,7 +265,7 @@ _(10).times(function(i){
 });
 
 /* start engine
--------------------------------------------------------------------------- */
+ -------------------------------------------------------------------------- */
 CONV();
 
 // TODO: lighting and shadows - same principle as above
@@ -306,4 +275,7 @@ CONV();
 // TODO: joint locks
 // TODO: fix flipping, we can't fix it, what we can do is ignore it,
 //       by calculating translation without z rotation.
-///      and by changing camera to follow position only
+//       and by changing camera to follow position only
+// TODO: there is no need for activekeybinds system, all the movement systems have to be granular
+// TODO: if there is a contact with ground, nullify transformer.translation
+// TODO: in the middle of updating lodash, then we should update three
