@@ -53,7 +53,7 @@ module.exports = function (grunt) {
             'lib/performance/index.js',
             'lib/rAF/index.js',
             'lib/threejs/build/three.js',
-            'lib/lodash/dist/lodash.js'
+            'lib/lodash/lodash.js'
         ],
 
         // Minify and Concat archives

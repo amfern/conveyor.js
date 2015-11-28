@@ -61,7 +61,7 @@
             var HierarchyOrderEntities = _.first(entities).HierarchyOrderEntities;
             HierarchyOrderEntities.length = 0;
 
-            _(HierarchyOrderEntities).combine(arrangeEntitiesByParent(entities));
+            _.merge(HierarchyOrderEntities, arrangeEntitiesByParent(entities));
         }
     });
 })();

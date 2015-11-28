@@ -333,9 +333,7 @@
             component.length = 0;
 
             // push all handlers of triggered combos to HIDComboState's components
-            _.each(triggeredCombos, function (combo) {
-                _.combine(component, combo.handlers);
-            });
+            _.merge(component, _(triggeredCombos).pluck('handlers').flatten().value());
         }
     });
 })();

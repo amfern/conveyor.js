@@ -159,7 +159,7 @@ describe('mouseState', function () {
 
                 _(100000).times(function () {});
                 evt = mouseMoveEvent(10, 20, 15, 25);
-                _(100000).times(function () {});
+                _.times(100000, function () {});
                 wheelEvt = wheelEvent(20, 30);
             },
             function () {
@@ -232,12 +232,12 @@ describe('mouseState', function () {
     it('should update mouse movement state even if mouse stayed on the same place', function () {
         CONV.cycleContinues([
             function () {
-                _(100000).times(function () {});
+                _.times(100000, function () {});
                 evt = mouseMoveEvent(10, 20, 15, 25);
                 wheelEvt = wheelEvent(20, 30);
             },
             function () {
-                _(100000).times(function () {});
+                _.times(100000, function () {});
                 evt2 = mouseMoveEvent(10, 20, 0, 0);
                 wheelEvt2 = wheelEvent(0, 0);
             },
@@ -312,13 +312,13 @@ describe('mouseState', function () {
         CONV.cycleContinues([
             function () {
                 evt = mouseMoveEvent(10, 20, 15, 25);
-                _(100000).times(function () {});
+                _.times(100000, function () {});
                 evt2 = mouseMoveEvent(1, 45, 3, 65);
-                _(100000).times(function () {});
+                _.times(100000, function () {});
                 wheelEvt = wheelEvent(20, 30);
-                _(100000).times(function () {});
+                _.times(100000, function () {});
                 wheelEvt2 = wheelEvent(11, 55);
-                _(100000).times(function () {});
+                _.times(100000, function () {});
             },
             function () {
                 expect(state).toEqual({
@@ -391,11 +391,11 @@ describe('mouseState', function () {
         CONV.cycleContinues([
             function () {
                 evt = mouseMoveEvent(10, 20, 15, 25);
-                _(100000).times(function () {});
+                _.times(100000, function () {});
                 wheelEvt = wheelEvent(20, 30);
-                _(100000).times(function () {});
+                _.times(100000, function () {});
                 evt2 = mouseClickEvent(2);
-                _(100000).times(function () {});
+                _.times(100000, function () {});
                 evt3 = mouseClickEvent(1);
             },
             function () {
@@ -495,7 +495,7 @@ describe('mouseState', function () {
             function () {
                 evt = mouseMoveEvent(10, 20, 15, 25);
                 wheelEvt = wheelEvent(20, 30);
-                _(100000).times(function () {});
+                _.times(100000, function () {});
                 evt2 = mouseClickEvent(1);
             },
             function () {
@@ -568,10 +568,10 @@ describe('mouseState', function () {
                 });
             },
             function () {
-                _(100000).times(function () {});
+                _.times(100000, function () {});
                 evt3 = mouseMoveEvent(15, 5, 35, -45);
                 wheelEvt2 = wheelEvent(25, -15);
-                _(100000).times(function () {});
+                _.times(100000, function () {});
                 evt4 = mouseClickEvent(2);
             },
             function () {
